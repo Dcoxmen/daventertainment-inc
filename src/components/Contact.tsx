@@ -36,10 +36,17 @@ export default function Contact() {
     const data = new FormData(form);
 
     try {
-      const res = await fetch("/", {
+      const res = await fetch("https://formsubmit.co/ajax/davedvst@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          message: data.get("message"),
+        }),
       });
 
       if (res.ok) {
@@ -145,14 +152,9 @@ export default function Contact() {
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[80px] rounded-full pointer-events-none" />
 
               <form
-                name="contact"
-                data-netlify="true"
-                netlify-honeypot="bot-field"
                 onSubmit={handleSubmit}
                 className="space-y-8 relative z-10"
               >
-                <input type="hidden" name="form-name" value="contact" />
-                <input type="hidden" name="bot-field" />
                 <div className="space-y-6">
                   <div className="group">
                     <label
