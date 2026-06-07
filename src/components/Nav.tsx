@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   { label: "Nexus", href: "#home", icon: "home" },
@@ -37,9 +38,14 @@ export default function Nav() {
         <div className="max-w-container-max mx-auto flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16">
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full border border-primary/30 bg-surface-container flex items-center justify-center text-primary font-display text-sm font-bold flex-shrink-0">
-              D
-            </div>
+            <Image
+              src="/Daventertainment-logo.png"
+              alt="Daventertainment Inc logo"
+              width={40}
+              height={40}
+              className="rounded-full flex-shrink-0"
+              priority
+            />
             <span className="font-display text-headline-md text-primary tracking-tighter">
               Daventertainment Inc
             </span>

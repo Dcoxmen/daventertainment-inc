@@ -12,35 +12,35 @@
   --color-surface-container-high: #222a3d;
   --color-surface-container-highest: #2d3449;
   --color-surface-variant: #2d3449;
-  --color-surface-tint: #d0bcff;
+  --color-surface-tint: #d4b06a;
 
-  /* === Primary (violet/lavender) === */
-  --color-primary: #d0bcff;
-  --color-primary-fixed: #e9ddff;
-  --color-primary-fixed-dim: #d0bcff;
-  --color-primary-container: #a078ff;
-  --color-on-primary: #3c0091;
-  --color-on-primary-fixed: #23005c;
-  --color-on-primary-container: #340080;
-  --color-inverse-primary: #6d3bd7;
+  /* === Primary (warm gold — logo cream/gold text) === */
+  --color-primary: #d4b06a;
+  --color-primary-fixed: #e8cc9a;
+  --color-primary-fixed-dim: #d4b06a;
+  --color-primary-container: #9a7840;
+  --color-on-primary: #1a0d00;
+  --color-on-primary-fixed: #1a0d00;
+  --color-on-primary-container: #150a00;
+  --color-inverse-primary: #7a5520;
 
-  /* === Secondary (cyan) === */
-  --color-secondary: #4cd7f6;
-  --color-secondary-fixed: #acedff;
-  --color-secondary-fixed-dim: #4cd7f6;
-  --color-secondary-container: #03b5d3;
-  --color-on-secondary: #003640;
-  --color-on-secondary-container: #00424e;
+  /* === Secondary (royal blue — logo upper half) === */
+  --color-secondary: #6d9cf0;
+  --color-secondary-fixed: #b8d4ff;
+  --color-secondary-fixed-dim: #6d9cf0;
+  --color-secondary-container: #2855c8;
+  --color-on-secondary: #001233;
+  --color-on-secondary-container: #001840;
 
-  /* === Tertiary (orange) === */
-  --color-tertiary: #ffb690;
-  --color-tertiary-container: #ec6a06;
-  --color-on-tertiary: #552100;
-  --color-on-tertiary-container: #4a1c00;
+  /* === Tertiary (crimson — logo lower half) === */
+  --color-tertiary: #e57888;
+  --color-tertiary-container: #8c1a2e;
+  --color-on-tertiary: #330010;
+  --color-on-tertiary-container: #280010;
 
   /* === Text === */
   --color-on-surface: #dae2fd;
-  --color-on-surface-variant: #cbc3d7;
+  --color-on-surface-variant: #c8bfcc;
   --color-on-background: #dae2fd;
   --color-inverse-surface: #dae2fd;
   --color-inverse-on-surface: #283044;
@@ -51,8 +51,8 @@
   --color-on-error: #690005;
 
   /* === Outline === */
-  --color-outline: #958ea0;
-  --color-outline-variant: #494454;
+  --color-outline: #8a8898;
+  --color-outline-variant: #444054;
 
   /* === Font families === */
   --font-display: var(--font-sora), 'Sora', sans-serif;
@@ -120,8 +120,8 @@
 
   .mesh-gradient {
     background-image:
-      radial-gradient(at 0% 0%, rgba(208, 188, 255, 0.08) 0, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(76, 215, 246, 0.08) 0, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(212, 176, 106, 0.08) 0, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(109, 156, 240, 0.08) 0, transparent 50%);
   }
 
   .glass-input {
@@ -131,13 +131,13 @@
   }
 
   .glass-input:focus {
-    border-color: #d0bcff;
+    border-color: #d4b06a;
     outline: none;
-    box-shadow: 0 4px 20px -10px rgba(208, 188, 255, 0.3);
+    box-shadow: 0 4px 20px -10px rgba(212, 176, 106, 0.3);
   }
 
   .glow-violet {
-    box-shadow: 0 0 25px rgba(208, 188, 255, 0.15);
+    box-shadow: 0 0 25px rgba(212, 176, 106, 0.15);
   }
 
   .shimmer-bg {
@@ -177,6 +177,6 @@ body {
 }
 
 ::selection {
-  background-color: rgba(208, 188, 255, 0.3);
-  color: #d0bcff;
+  background-color: rgba(212, 176, 106, 0.3);
+  color: #d4b06a;
 }
