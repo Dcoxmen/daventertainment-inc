@@ -157,11 +157,19 @@ public/             — static assets (project screenshots go here)
 
 ---
 
-## Next Steps (in order — pick up here next session)
+## Session Log
 
-- [x] **Step 1:** Screenshots — placeholders in place; user will provide real images later to swap into `Projects.tsx`
-- [x] **Step 2:** Copy review — all copy approved as-is for v1
-- [ ] **Step 3:** Deploy to Netlify — see deployment notes below
+- **2026-06-06** — v1 built and deployed. Full site live on Netlify. All 4 sections complete. Copy approved. Anchor IDs updated to standard names for SEO.
+- **2026-06-07** — Content accuracy pass. Replaced fake placeholder content with real projects and skills:
+  - Project card 2: "AI-Powered Content Platform" → **PageScore — AI SEO & AEO Audit Engine** (page-score.com, live link added)
+  - Hero bento card: "GPT-Nexus Core" → **Gamified Sales Engine** (real logistics SaaS achievement)
+  - All 3 AI Integration service cards replaced: LLM Fine-tuning / RAG Pipelines / Computer Vision → **AEO Optimization / AI-Powered Web Analysis / Autonomous AI Agents**
+
+## Next Session — Pick Up Here
+
+- [ ] **Project screenshots** — user will provide real images for the 3 project cards in the Forge section. Drop into `public/` and update `Projects.tsx` to use Next.js `<Image>` instead of placeholder divs. Images should be named clearly (e.g. `project-ecommerce.png`, `project-pagescore.png`, `project-ux-frameworks.png`) and placed in `public/`.
+- [ ] **Project cards 1 & 3** — "Intelligent E-commerce Engine" and "Smart UX Frameworks" are still placeholder content. User to confirm what real projects to replace them with.
+- [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
 
 ---
 
@@ -183,8 +191,12 @@ public/             — static assets (project screenshots go here)
 5. **Connect in Netlify** — New site → Import from GitHub → select this repo → Netlify auto-detects the plugin and deploys
 
 ### Status
-- [ ] Old site removed from Netlify
-- [ ] `@netlify/plugin-nextjs` installed
-- [ ] `netlify.toml` added
-- [ ] Repo pushed to GitHub
-- [ ] New site connected in Netlify dashboard
+- [x] Old site removed from Netlify
+- [x] `@netlify/plugin-nextjs` installed
+- [x] `netlify.toml` added
+- [x] Repo pushed to GitHub
+- [x] New site connected in Netlify dashboard
+- [x] Custom domain `daventertainment.com` transferred to new site
+- [x] `www.daventertainment.com` redirecting to primary domain
+- [x] Force HTTPS enabled
+- [x] **LIVE AND WORKING** — deployed to Netlify as of 2026-06-06

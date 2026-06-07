@@ -96,10 +96,10 @@ export default function Hero() {
             </div>
             <div className="relative z-10">
               <span className="text-secondary font-code-label text-code-label mb-2 block">
-                Neural Service
+                SaaS Platform
               </span>
               <h3 className="font-headline-md text-headline-md text-on-surface">
-                GPT-Nexus Core
+                Gamified Sales Engine
               </h3>
             </div>
           </div>

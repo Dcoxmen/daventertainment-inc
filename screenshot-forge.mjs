@@ -1,0 +1,10 @@
+import { chromium } from '@playwright/test';
+const browser = await chromium.launch();
+const page = await browser.newPage();
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+await page.evaluate(() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'instant' }));
+await page.waitForTimeout(600);
+await page.screenshot({ path: './forge-updated.png' });
+console.log('done');
+await browser.close();

@@ -1,0 +1,10 @@
+import { chromium } from '@playwright/test';
+const browser = await chromium.launch();
+const page = await browser.newPage();
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+await page.evaluate(() => window.scrollBy(0, 1800));
+await page.waitForTimeout(600);
+await page.screenshot({ path: './card2.png' });
+console.log('done');
+await browser.close();

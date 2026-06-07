@@ -15,6 +15,7 @@ interface Metric {
 interface Project {
   title: string;
   description: string;
+  url?: string;
   tags: Tag[];
   metric: Metric;
 }
@@ -39,14 +40,15 @@ const PROJECTS: Project[] = [
     },
   },
   {
-    title: "AI-Powered Content Platform",
+    title: "PageScore — AI SEO & AEO Audit Engine",
     description:
-      "Next-generation CMS that automates content generation and semantic tagging, delivering hyper-personalized experiences for global audiences.",
+      "An AI-powered landing page evaluator that delivers precise technical SEO and AEO audit reports with actionable recommendations to improve search and AI engine visibility.",
+    url: "https://page-score.com",
     tags: [
-      { label: "LangChain", color: "bg-secondary/10 text-secondary border-secondary/20" },
-      { label: "TypeScript", color: "bg-primary/10 text-primary border-primary/20" },
+      { label: "Next.js", color: "bg-primary/10 text-primary border-primary/20" },
+      { label: "TypeScript", color: "bg-secondary/10 text-secondary border-secondary/20" },
       { label: "Anthropic", color: "bg-tertiary/10 text-tertiary border-tertiary/20" },
-      { label: "Next.js", color: "bg-white/5 text-on-surface-variant border-white/10" },
+      { label: "React", color: "bg-white/5 text-on-surface-variant border-white/10" },
     ],
     metric: {
       label: "Scale Reach",
@@ -121,9 +123,20 @@ export default function Projects() {
                     <h3 className="font-headline-md text-headline-md text-on-surface mb-3">
                       {project.title}
                     </h3>
-                    <p className="text-on-surface-variant font-body-md mb-6 leading-relaxed">
+                    <p className="text-on-surface-variant font-body-md mb-4 leading-relaxed">
                       {project.description}
                     </p>
+                    {project.url && (
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-secondary font-code-label text-code-label hover:text-primary transition-colors mb-6"
+                      >
+                        {project.url.replace("https://", "")}
+                        <span className="material-symbols-outlined text-base">arrow_outward</span>
+                      </a>
+                    )}
                     <div className="flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
                         <span

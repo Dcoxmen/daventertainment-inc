@@ -39,30 +39,30 @@ const FULLSTACK: ServiceCard[] = [
 
 const AI_SERVICES: ServiceCard[] = [
   {
+    icon: "travel_explore",
+    badge: "AEO",
+    title: "AEO Optimization",
+    description:
+      "Optimizing content and architecture for AI-driven search engines, ensuring platforms are indexed and surfaced accurately by LLM-powered answer engines.",
+    tags: ["Anthropic", "Structured Data", "Next.js"],
+    accentColor: "secondary",
+  },
+  {
+    icon: "analytics",
+    badge: "ANALYSIS",
+    title: "AI-Powered Web Analysis",
+    description:
+      "Building AI pipelines that audit and evaluate web properties, generating structured technical reports with actionable intelligence using large language models.",
+    tags: ["Anthropic", "TypeScript", "Next.js"],
+    accentColor: "secondary",
+  },
+  {
     icon: "smart_toy",
-    badge: "NLP",
-    title: "LLM Fine-tuning",
+    badge: "AGENTS",
+    title: "Autonomous AI Agents",
     description:
-      "Customizing Large Language Models for domain-specific tasks using PEFT/LoRA techniques and high-quality synthetic data.",
-    tags: ["PyTorch", "HuggingFace", "Python"],
-    accentColor: "secondary",
-  },
-  {
-    icon: "hub",
-    badge: "RAG",
-    title: "RAG Pipelines",
-    description:
-      "Developing Retrieval-Augmented Generation systems with vector databases for context-aware, hallucination-free AI responses.",
-    tags: ["Pinecone", "LangChain", "LlamaIndex"],
-    accentColor: "secondary",
-  },
-  {
-    icon: "visibility",
-    badge: "CV",
-    title: "Computer Vision",
-    description:
-      "Implementing object detection, image segmentation, and real-time visual analysis pipelines for automated inspection.",
-    tags: ["OpenCV", "YOLOv8", "TensorFlow"],
+      "Designing multi-step autonomous agent pipelines that reason, retrieve, and act across tools and APIs to complete complex technical tasks.",
+    tags: ["LangChain", "Anthropic", "Python"],
     accentColor: "secondary",
   },
 ];
