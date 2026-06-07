@@ -49,10 +49,15 @@ The portfolio must feel premium, creative, and professional — not a generic te
 ## Design System (implemented)
 
 ### Color palette
+> Colors derived from the Daventertainment Inc logo (blue/crimson/gold circle badge)
+
 - **Background:** `#0b1326` (near-black navy)
-- **Primary:** `#d0bcff` (lavender/violet)
-- **Secondary:** `#4cd7f6` (cyan)
-- **Tertiary:** `#ffb690` (orange)
+- **Primary:** `#d4b06a` (warm gold — logo cream/gold text)
+- **Secondary:** `#6d9cf0` (royal blue — logo upper half, brightened for dark mode)
+- **Tertiary:** `#e57888` (crimson — logo lower half, lightened for dark mode)
+- **on-primary:** `#1a0d00` (dark brown — text on gold-background buttons)
+- **on-secondary:** `#001233` (dark navy — text on blue-background buttons)
+- **on-tertiary:** `#330010` (dark crimson — text on crimson-background buttons)
 - Full Material Design 3 token set defined in `globals.css` via `@theme inline`
 
 ### Typography
@@ -63,18 +68,22 @@ The portfolio must feel premium, creative, and professional — not a generic te
 
 ### Custom CSS utilities (in `globals.css`)
 - `.glass-card` — frosted glass card effect
-- `.mesh-gradient` — purple/cyan radial gradient background
+- `.mesh-gradient` — gold/blue radial gradient background
 - `.glass-input` — dark frosted form input
-- `.glow-violet` — violet drop shadow
+- `.glow-violet` — gold drop shadow (class name kept, color updated to match primary gold)
 - `.shimmer-bg` — animated shimmer on hover
 
 ### Nav labels (section IDs)
 | Nav label | Section ID | Content |
 |-----------|-----------|---------|
-| Nexus | `#nexus` | Hero |
-| Forge | `#forge` | Projects |
-| Labs | `#labs` | Services |
-| Signal | `#signal` | Contact |
+| Nexus | `#home` | Hero |
+| Forge | `#projects` | Projects |
+| Labs | `#services` | Services |
+| Signal | `#contact` | Contact |
+
+### Nav logo
+- `public/Daventertainment-logo.png` — 40×40px, rendered via Next.js `<Image>` in `Nav.tsx`
+- Replaced the "D" letter circle placeholder as of 2026-06-07
 
 ---
 
@@ -123,11 +132,12 @@ public/             — static assets (project screenshots go here)
 
 | Project | Metric | Tags |
 |---------|--------|------|
-| Intelligent E-commerce Engine | 40% Efficiency Gain | Next.js, OpenAI API, Tailwind, React |
-| AI-Powered Content Platform | 10k+ Active Users | LangChain, TypeScript, Anthropic, Next.js |
-| Smart UX Frameworks | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
+| Intelligent E-commerce Engine ⚠️ placeholder | 40% Efficiency Gain | Next.js, OpenAI API, Tailwind, React |
+| PageScore — AI SEO & AEO Audit Engine ✅ real | 10k+ Active Users | Next.js, TypeScript, Anthropic, React |
+| Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
 
-> Image placeholders currently shown — user will provide real screenshots.
+> Cards 1 and 3 are still placeholder content — user to confirm what real projects to substitute.
+> All 3 project image areas still show placeholder divs — user will provide real screenshots.
 
 ---
 
@@ -139,9 +149,9 @@ public/             — static assets (project screenshots go here)
 - Cloud Architecture (Kubernetes, Docker, Terraform)
 
 **AI Integration:**
-- LLM Fine-tuning (PyTorch, HuggingFace, Python)
-- RAG Pipelines (Pinecone, LangChain, LlamaIndex)
-- Computer Vision (OpenCV, YOLOv8, TensorFlow)
+- AEO Optimization (Anthropic, Structured Data, Next.js)
+- AI-Powered Web Analysis (Anthropic, TypeScript, Next.js)
+- Autonomous AI Agents (LangChain, Anthropic, Python)
 
 ---
 
@@ -160,15 +170,18 @@ public/             — static assets (project screenshots go here)
 ## Session Log
 
 - **2026-06-06** — v1 built and deployed. Full site live on Netlify. All 4 sections complete. Copy approved. Anchor IDs updated to standard names for SEO.
-- **2026-06-07** — Content accuracy pass. Replaced fake placeholder content with real projects and skills:
-  - Project card 2: "AI-Powered Content Platform" → **PageScore — AI SEO & AEO Audit Engine** (page-score.com, live link added)
-  - Hero bento card: "GPT-Nexus Core" → **Gamified Sales Engine** (real logistics SaaS achievement)
-  - All 3 AI Integration service cards replaced: LLM Fine-tuning / RAG Pipelines / Computer Vision → **AEO Optimization / AI-Powered Web Analysis / Autonomous AI Agents**
+- **2026-06-07 (AM)** — Content accuracy pass:
+  - Project card 2 → **PageScore — AI SEO & AEO Audit Engine** (page-score.com, live link added)
+  - Hero bento card → **Gamified Sales Engine** (real logistics SaaS achievement)
+  - All 3 AI Integration service cards replaced → AEO Optimization / AI-Powered Web Analysis / Autonomous AI Agents
+- **2026-06-07 (PM)** — Brand color scheme + logo:
+  - Color palette updated from violet/cyan/orange → **gold/royal-blue/crimson** to match Daventertainment Inc logo
+  - Nav logo: replaced "D" letter circle with `public/Daventertainment-logo.png` via Next.js `<Image>`
 
 ## Next Session — Pick Up Here
 
-- [ ] **Project screenshots** — user will provide real images for the 3 project cards in the Forge section. Drop into `public/` and update `Projects.tsx` to use Next.js `<Image>` instead of placeholder divs. Images should be named clearly (e.g. `project-ecommerce.png`, `project-pagescore.png`, `project-ux-frameworks.png`) and placed in `public/`.
-- [ ] **Project cards 1 & 3** — "Intelligent E-commerce Engine" and "Smart UX Frameworks" are still placeholder content. User to confirm what real projects to replace them with.
+- [ ] **Project cards 1 & 3** — "Intelligent E-commerce Engine" and "Smart UX Frameworks" are still placeholder content. Ask user what real projects to replace them with.
+- [ ] **Project screenshots** — all 3 project image areas still show placeholder divs. User will provide real images → drop into `public/` → update `Projects.tsx` to use `<Image>`. Suggested names: `project-ecommerce.png`, `project-pagescore.png`, `project-ux-frameworks.png`.
 - [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
 
 ---

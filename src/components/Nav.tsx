@@ -73,7 +73,7 @@ export default function Nav() {
 
           {/* SSH button */}
           <a
-            href="#signal"
+            href="#contact"
             className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary font-code-label text-code-label hover:bg-primary/20 transition-colors"
           >
             <span className="material-symbols-outlined text-[20px]">terminal</span>

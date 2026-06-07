@@ -23,18 +23,34 @@ const CHANNELS = [
   },
 ];
 
-type FormStatus = "idle" | "sending" | "sent";
+type FormStatus = "idle" | "sending" | "sent" | "error";
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
 
-  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
-    setTimeout(() => {
-      setStatus("sent");
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -128,7 +144,15 @@ export default function Contact() {
             <div className="glass-card p-8 md:p-12 rounded-2xl relative overflow-hidden">
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[80px] rounded-full pointer-events-none" />
 
-              <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+              <form
+                name="contact"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                onSubmit={handleSubmit}
+                className="space-y-8 relative z-10"
+              >
+                <input type="hidden" name="form-name" value="contact" />
+                <input type="hidden" name="bot-field" />
                 <div className="space-y-6">
                   <div className="group">
                     <label
@@ -192,8 +216,8 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    disabled={status !== "idle"}
-                    className="w-full sm:w-auto px-10 py-4 bg-primary text-on-primary font-button text-button rounded-xl hover:bg-primary-container hover:scale-105 transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(208,188,255,0.4)] flex items-center justify-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    disabled={status === "sending" || status === "sent"}
+                    className="w-full sm:w-auto px-10 py-4 bg-primary text-on-primary font-button text-button rounded-xl hover:bg-primary-container hover:scale-105 transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(212,176,106,0.4)] flex items-center justify-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     {status === "sending" && (
                       <>
@@ -209,6 +233,14 @@ export default function Contact() {
                           check_circle
                         </span>
                         Sent Successfully
+                      </>
+                    )}
+                    {status === "error" && (
+                      <>
+                        <span className="material-symbols-outlined">
+                          error
+                        </span>
+                        Retry — Send Again
                       </>
                     )}
                     {status === "idle" && (
