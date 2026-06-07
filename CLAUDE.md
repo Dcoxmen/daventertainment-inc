@@ -132,11 +132,11 @@ public/             — static assets (project screenshots go here)
 
 | Project | Metric | Tags |
 |---------|--------|------|
-| Intelligent E-commerce Engine ⚠️ placeholder | 40% Efficiency Gain | Next.js, OpenAI API, Tailwind, React |
+| Conversational Analytics Engine ✅ real | 85% Report Automation | GCP, BigQuery, Looker Studio, GA4 |
 | PageScore — AI SEO & AEO Audit Engine ✅ real | 10k+ Active Users | Next.js, TypeScript, Anthropic, React |
 | Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
 
-> Cards 1 and 3 are still placeholder content — user to confirm what real projects to substitute.
+> Card 3 is still placeholder — user to confirm what real project to substitute.
 > All 3 project image areas still show placeholder divs — user will provide real screenshots.
 
 ---
@@ -152,6 +152,8 @@ public/             — static assets (project screenshots go here)
 - AEO Optimization (Anthropic, Structured Data, Next.js)
 - AI-Powered Web Analysis (Anthropic, TypeScript, Next.js)
 - Autonomous AI Agents (LangChain, Anthropic, Python)
+
+> Full Stack card 3 updated: "Cloud Architecture" → "Cloud & Analytics Infrastructure" (GCP, BigQuery, Looker Studio)
 
 ---
 
@@ -178,10 +180,17 @@ public/             — static assets (project screenshots go here)
   - Color palette updated from violet/cyan/orange → **gold/royal-blue/crimson** to match Daventertainment Inc logo
   - Nav logo: replaced "D" letter circle with `public/Daventertainment-logo.png` via Next.js `<Image>`
 
+## Contact Form — Implementation Notes
+
+- **Service:** formsubmit.co (free, no account needed)
+- **Why not Netlify Forms:** Netlify Forms AJAX submissions are intercepted before reaching Next.js, but `@netlify/plugin-nextjs` routes all paths through the SSR function first — the form handler never fires. Traditional HTML-only forms would work but require a page reload.
+- **How it works:** `Contact.tsx` POSTs JSON to `https://formsubmit.co/ajax/davedvst@gmail.com`. First submission requires a one-time email activation — already completed and live.
+- `public/netlify-form.html` can be left in place or removed — it's no longer used.
+
 ## Next Session — Pick Up Here
 
-- [ ] **Project cards 1 & 3** — "Intelligent E-commerce Engine" and "Smart UX Frameworks" are still placeholder content. Ask user what real projects to replace them with.
-- [ ] **Project screenshots** — all 3 project image areas still show placeholder divs. User will provide real images → drop into `public/` → update `Projects.tsx` to use `<Image>`. Suggested names: `project-ecommerce.png`, `project-pagescore.png`, `project-ux-frameworks.png`.
+- [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. Ask user what real project to replace it with.
+- [ ] **Project screenshots** — all 3 project image areas still show placeholder divs. User will provide real images → drop into `public/` → update `Projects.tsx` to use `<Image>`. Suggested names: `project-analytics.png`, `project-pagescore.png`, `project-ux-frameworks.png`.
 - [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
 
 ---

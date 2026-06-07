@@ -22,21 +22,21 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "Intelligent E-commerce Engine",
+    title: "Conversational Analytics Engine",
     description:
-      "A high-performance commerce platform leveraging predictive analytics to optimize conversion rates and personalize user journeys in real-time.",
+      "A GCP-powered analytics environment connecting BigQuery and Looker Studio to transform GA4 data into real-time conversational dashboards, eliminating manual reporting across the organization.",
     tags: [
-      { label: "Next.js", color: "bg-primary/10 text-primary border-primary/20" },
-      { label: "OpenAI API", color: "bg-secondary/10 text-secondary border-secondary/20" },
-      { label: "Tailwind", color: "bg-tertiary/10 text-tertiary border-tertiary/20" },
-      { label: "React", color: "bg-white/5 text-on-surface-variant border-white/10" },
+      { label: "GCP", color: "bg-primary/10 text-primary border-primary/20" },
+      { label: "BigQuery", color: "bg-secondary/10 text-secondary border-secondary/20" },
+      { label: "Looker Studio", color: "bg-tertiary/10 text-tertiary border-tertiary/20" },
+      { label: "GA4", color: "bg-white/5 text-on-surface-variant border-white/10" },
     ],
     metric: {
-      label: "Key Performance",
-      value: "40%",
-      unit: "Efficiency Gain",
+      label: "Pipeline Efficiency",
+      value: "85%",
+      unit: "Report Automation",
       valueColor: "text-primary",
-      bar: { color: "bg-primary", width: "40%" },
+      bar: { color: "bg-primary", width: "85%" },
     },
   },
   {

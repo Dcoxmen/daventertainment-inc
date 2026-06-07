@@ -28,11 +28,11 @@ const FULLSTACK: ServiceCard[] = [
   },
   {
     icon: "cloud",
-    badge: "DEVOPS",
-    title: "Cloud Architecture",
+    badge: "CLOUD",
+    title: "Cloud & Analytics Infrastructure",
     description:
-      "Architecting resilient infrastructure on AWS/GCP with Infrastructure as Code (Terraform) and CI/CD automation.",
-    tags: ["Kubernetes", "Docker", "Terraform"],
+      "Building GCP data environments that connect BigQuery and Looker Studio to surface GA4 analytics through conversational interfaces for real-time business intelligence.",
+    tags: ["GCP", "BigQuery", "Looker Studio"],
     accentColor: "primary",
   },
 ];
