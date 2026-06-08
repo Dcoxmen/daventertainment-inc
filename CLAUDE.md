@@ -137,7 +137,8 @@ public/             — static assets (project screenshots go here)
 | Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
 
 > Card 3 is still placeholder — user to confirm what real project to substitute.
-> Project images: card 2 (PageScore) has a real screenshot (`project-pagescore.png`). Cards 1 and 3 still show placeholder divs.
+> Card 3 is still placeholder — user to confirm what real project to substitute.
+> Project images: cards 1 (Conversational Analytics) and 2 (PageScore) have real screenshots. Card 3 still shows a placeholder div.
 > To add an image to a card: drop PNG into `public/`, add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`. The `<Image>` component and conditional render are already wired up.
 
 ---
@@ -180,6 +181,11 @@ public/             — static assets (project screenshots go here)
 - **2026-06-07 (PM)** — Brand color scheme + logo:
   - Color palette updated from violet/cyan/orange → **gold/royal-blue/crimson** to match Daventertainment Inc logo
   - Nav logo: replaced "D" letter circle with `public/Daventertainment-logo.png` via Next.js `<Image>`
+  - Nav "SSH_CONNECT" button: fixed broken `#signal` link → `#contact`
+  - Contact form: switched from fake setTimeout → formsubmit.co AJAX (live, activated, delivering to davedvst@gmail.com)
+  - Service card 3: "Cloud Architecture" → "Cloud & Analytics Infrastructure" (GCP, BigQuery, Looker Studio)
+  - Project card 1: "Intelligent E-commerce Engine" → "Conversational Analytics Engine" (real GCP/BigQuery/GA4 project)
+  - Project images: cards 1 and 2 now use real screenshots (`project-analytics.png`, `project-pagescore.png`)
 
 ## Contact Form — Implementation Notes
 
@@ -191,7 +197,7 @@ public/             — static assets (project screenshots go here)
 ## Next Session — Pick Up Here
 
 - [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. Ask user what real project to replace it with.
-- [ ] **Project screenshots** — cards 1 and 3 still need real images. Drop into `public/` as `project-analytics.png` and `project-ux-frameworks.png` (or whatever card 3 becomes), then add `image: "/filename.png"` to each project object in `Projects.tsx`.
+- [ ] **Project screenshots** — card 3 still needs a real image. Once card 3 content is decided, drop PNG into `public/` and add `image: "/filename.png"` to its object in `Projects.tsx`.
 - [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
 
 ---
