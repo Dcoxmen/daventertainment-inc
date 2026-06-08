@@ -28,6 +28,7 @@ const PROJECTS: Project[] = [
     title: "Conversational Analytics Engine",
     description:
       "A GCP-powered analytics environment connecting BigQuery and Looker Studio to transform GA4 data into real-time conversational dashboards, eliminating manual reporting across the organization.",
+    image: "/project-analytics.png",
     tags: [
       { label: "GCP", color: "bg-primary/10 text-primary border-primary/20" },
       { label: "BigQuery", color: "bg-secondary/10 text-secondary border-secondary/20" },
