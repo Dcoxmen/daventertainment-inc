@@ -12,10 +12,13 @@ interface Metric {
   dots?: boolean;
 }
 
+import Image from "next/image";
+
 interface Project {
   title: string;
   description: string;
   url?: string;
+  image?: string;
   tags: Tag[];
   metric: Metric;
 }
@@ -44,6 +47,7 @@ const PROJECTS: Project[] = [
     description:
       "An AI-powered landing page evaluator that delivers precise technical SEO and AEO audit reports with actionable recommendations to improve search and AI engine visibility.",
     url: "https://page-score.com",
+    image: "/project-pagescore.png",
     tags: [
       { label: "Next.js", color: "bg-primary/10 text-primary border-primary/20" },
       { label: "TypeScript", color: "bg-secondary/10 text-secondary border-secondary/20" },
@@ -106,14 +110,28 @@ export default function Projects() {
               key={project.title}
               className="glass-card rounded-xl overflow-hidden group transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-[0_0_40px_rgba(208,188,255,0.05)]"
             >
-              {/* Image placeholder — replace with real screenshots when ready */}
               <div className="relative h-48 md:h-64 w-full overflow-hidden bg-surface-container-low">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-6xl text-on-surface-variant/20">
-                    image
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+                {project.image ? (
+                  <>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 flex items-center justify-center">
+                      <span className="material-symbols-outlined text-6xl text-on-surface-variant/20">
+                        image
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+                  </>
+                )}
               </div>
 
               {/* Content */}

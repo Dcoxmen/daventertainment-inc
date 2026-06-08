@@ -137,7 +137,8 @@ public/             — static assets (project screenshots go here)
 | Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
 
 > Card 3 is still placeholder — user to confirm what real project to substitute.
-> All 3 project image areas still show placeholder divs — user will provide real screenshots.
+> Project images: card 2 (PageScore) has a real screenshot (`project-pagescore.png`). Cards 1 and 3 still show placeholder divs.
+> To add an image to a card: drop PNG into `public/`, add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`. The `<Image>` component and conditional render are already wired up.
 
 ---
 
@@ -190,7 +191,7 @@ public/             — static assets (project screenshots go here)
 ## Next Session — Pick Up Here
 
 - [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. Ask user what real project to replace it with.
-- [ ] **Project screenshots** — all 3 project image areas still show placeholder divs. User will provide real images → drop into `public/` → update `Projects.tsx` to use `<Image>`. Suggested names: `project-analytics.png`, `project-pagescore.png`, `project-ux-frameworks.png`.
+- [ ] **Project screenshots** — cards 1 and 3 still need real images. Drop into `public/` as `project-analytics.png` and `project-ux-frameworks.png` (or whatever card 3 becomes), then add `image: "/filename.png"` to each project object in `Projects.tsx`.
 - [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
 
 ---
