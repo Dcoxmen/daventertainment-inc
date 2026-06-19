@@ -180,3 +180,90 @@ body {
   background-color: rgba(212, 176, 106, 0.3);
   color: #d4b06a;
 }
+
+/* ── Light mode overrides ── */
+html.light {
+  --color-background: #f5f0e8;
+  --color-surface: #f5f0e8;
+  --color-surface-dim: #ede8dd;
+  --color-surface-bright: #faf7f2;
+  --color-surface-container-lowest: #f0ebe0;
+  --color-surface-container-low: #ede8dd;
+  --color-surface-container: #e8e3d8;
+  --color-surface-container-high: #e2ddd2;
+  --color-surface-container-highest: #dcd7cc;
+  --color-surface-variant: #dcd7cc;
+  --color-surface-tint: #8a6520;
+
+  --color-primary: #8a6520;
+  --color-primary-fixed: #a07830;
+  --color-primary-fixed-dim: #8a6520;
+  --color-primary-container: #c49040;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #ffffff;
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #d4b06a;
+
+  --color-secondary: #1a3d8a;
+  --color-secondary-fixed: #2855c8;
+  --color-secondary-fixed-dim: #1a3d8a;
+  --color-secondary-container: #4070d8;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #ffffff;
+
+  --color-tertiary: #7a1020;
+  --color-tertiary-container: #8c1a2e;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #ffffff;
+
+  --color-on-surface: #1a1530;
+  --color-on-surface-variant: #4a4560;
+  --color-on-background: #1a1530;
+  --color-inverse-surface: #1a1530;
+  --color-inverse-on-surface: #f5f0e8;
+
+  --color-outline: #8a8898;
+  --color-outline-variant: #c8c4d0;
+}
+
+html.light body {
+  background-color: #f5f0e8;
+  color: #1a1530;
+}
+
+html.light ::selection {
+  background-color: rgba(138, 101, 32, 0.2);
+  color: #8a6520;
+}
+
+html.light header {
+  border-color: rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+html.light .glass-input {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(26, 21, 48, 0.15);
+}
+
+html.light .glass-input:focus {
+  border-color: #8a6520;
+  box-shadow: 0 4px 20px -10px rgba(138, 101, 32, 0.3);
+}
+
+html.light .glow-violet {
+  box-shadow: 0 0 25px rgba(138, 101, 32, 0.12);
+}
+
+html.light .mesh-gradient {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(138, 101, 32, 0.06) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(26, 61, 138, 0.06) 0, transparent 50%);
+}
