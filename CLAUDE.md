@@ -58,7 +58,8 @@ The portfolio must feel premium, creative, and professional — not a generic te
 - **on-primary:** `#1a0d00` (dark brown — text on gold-background buttons)
 - **on-secondary:** `#001233` (dark navy — text on blue-background buttons)
 - **on-tertiary:** `#330010` (dark crimson — text on crimson-background buttons)
-- Full Material Design 3 token set defined in `globals.css` via `@theme inline`
+- Full Material Design 3 token set defined in `globals.css`
+- **IMPORTANT — Tailwind v4 theme split:** Colors use plain `@theme {}` (outputs CSS custom properties, allows runtime overrides). Fonts/sizes/spacing use `@theme inline {}` (baked at build time). This split is required for light/dark mode to work — do NOT move colors into `@theme inline`.
 
 ### Typography
 - **Sora** — display, all headlines, buttons (`--font-sora` via next/font)
@@ -76,10 +77,10 @@ The portfolio must feel premium, creative, and professional — not a generic te
 ### Nav labels (section IDs)
 | Nav label | Section ID | Content |
 |-----------|-----------|---------|
-| Nexus | `#home` | Hero |
-| Forge | `#projects` | Projects |
-| Labs | `#services` | Services |
-| Signal | `#contact` | Contact |
+| About | `#home` | Hero |
+| Projects | `#projects` | Projects |
+| Services | `#services` | Services |
+| Contact | `#contact` | Contact |
 
 ### Nav logo
 - `public/Daventertainment-logo.png` — 40×40px, rendered via Next.js `<Image>` in `Nav.tsx`
@@ -96,11 +97,11 @@ src/
     page.tsx        — single-page scroll, assembles all components
     globals.css     — full Tailwind v4 @theme + custom utilities
   components/
-    Nav.tsx         — sticky top nav (desktop) + fixed bottom nav (mobile), client component
-    Hero.tsx        — Nexus section: headline, bio card, CTAs, bento grid
-    Projects.tsx    — Forge section: 3 project cards with metric callouts
-    Services.tsx    — Labs section: 6 service cards in 2 columns + CTA strip
-    Contact.tsx     — Signal section: channel links + contact form, client component
+    Nav.tsx         — sticky top nav (desktop) + fixed bottom nav (mobile) + light/dark toggle, client component
+    Hero.tsx        — About/home section: headline, bio card, CTAs, bento grid
+    Projects.tsx    — Projects section: 3 project cards with metric callouts
+    Services.tsx    — Services section: 6 service cards in 2 columns + CTA strip
+    Contact.tsx     — Contact section: channel links + contact form, client component
 public/             — static assets (project screenshots go here)
 ```
 
@@ -137,7 +138,6 @@ public/             — static assets (project screenshots go here)
 | Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
 
 > Card 3 is still placeholder — user to confirm what real project to substitute.
-> Card 3 is still placeholder — user to confirm what real project to substitute.
 > Project images: cards 1 (Conversational Analytics) and 2 (PageScore) have real screenshots. Card 3 still shows a placeholder div.
 > To add an image to a card: drop PNG into `public/`, add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`. The `<Image>` component and conditional render are already wired up.
 
@@ -164,7 +164,7 @@ public/             — static assets (project screenshots go here)
 - Use **App Router** (`src/app/`) — no Pages Router
 - Keep components in `src/components/`
 - Images go in `public/` and are served via Next.js `<Image>` component
-- Tailwind v4 — utility-first, `@theme inline` in `globals.css` (no `tailwind.config.js`)
+- Tailwind v4 — utility-first, split `@theme` in `globals.css` (no `tailwind.config.js`): fonts/sizes use `@theme inline`, colors use plain `@theme`
 - `'use client'` only where needed: Nav (IntersectionObserver), Contact (form state)
 - TypeScript strict mode is on — zero errors as of current build
 - Single-page scroll layout with anchor-based nav
@@ -186,6 +186,14 @@ public/             — static assets (project screenshots go here)
   - Service card 3: "Cloud Architecture" → "Cloud & Analytics Infrastructure" (GCP, BigQuery, Looker Studio)
   - Project card 1: "Intelligent E-commerce Engine" → "Conversational Analytics Engine" (real GCP/BigQuery/GA4 project)
   - Project images: cards 1 and 2 now use real screenshots (`project-analytics.png`, `project-pagescore.png`)
+- **2026-06-19** — Frontend improvements:
+  - Nav labels renamed: Nexus/Forge/Labs/Signal → **About/Projects/Services/Contact** (SEO/AEO friendly)
+  - AEO upgrades: full JSON-LD schemas (Person, Organization, ProfessionalService) added to `layout.tsx`; expanded metadata with OpenGraph, Twitter card, keywords
+  - **Light/dark mode** added with toggle button (desktop nav + mobile bottom nav):
+    - Anti-flash inline script in `<head>` applies saved theme before first paint
+    - `localStorage` persists preference across sessions
+    - Root cause fix: Tailwind v4 `@theme inline` bakes values at build time — runtime overrides don't work. Solution: split into `@theme inline` (fonts/sizes only) + `@theme` (colors), so `html.light { --color-* }` overrides take effect at runtime
+    - Light mode uses warm parchment background (`#f5f0e8`) with darkened gold/blue/crimson accents
 
 ## Contact Form — Implementation Notes
 
@@ -196,9 +204,11 @@ public/             — static assets (project screenshots go here)
 
 ## Next Session — Pick Up Here
 
-- [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. Ask user what real project to replace it with.
-- [ ] **Project screenshots** — card 3 still needs a real image. Once card 3 content is decided, drop PNG into `public/` and add `image: "/filename.png"` to its object in `Projects.tsx`.
-- [ ] **Any additional polish** — animations, further copy tweaks, new sections if needed
+- [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. User is considering app ideas but hasn't decided. Ask what real project to substitute.
+- [ ] **Project card 3 screenshot** — Once card 3 content is decided, drop PNG into `public/` and add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`.
+- [ ] **Verify light/dark mode** — Fix was applied (globals.css `@theme` split) but user has not confirmed it's working in the browser. Test the toggle on live or dev before assuming it's good.
+- [ ] **Push pending changes** — Nav rename, AEO schema, light/dark mode are local and uncommitted. Push to GitHub when user is ready.
+- [ ] **Optional extras (deferred)** — Scroll reveal animations, resume download button, copy email to clipboard, scroll progress bar, typed/rotating headline — user chose A/B/C only; these are available if wanted later.
 
 ---
 
@@ -229,3 +239,67 @@ public/             — static assets (project screenshots go here)
 - [x] `www.daventertainment.com` redirecting to primary domain
 - [x] Force HTTPS enabled
 - [x] **LIVE AND WORKING** — deployed to Netlify as of 2026-06-06
+
+
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+
+
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
