@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Sora, Inter, JetBrains_Mono } from "next/font/google";
+import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
 const sora = Sora({
@@ -21,6 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://daventertainment.com"),
   title: "David Cox | Full Stack Engineer & AI Integration Specialist | Daventertainment Inc",
   description:
     "David Cox is a Full Stack Engineer and AI Integration Specialist with 20 years of experience building scalable SaaS platforms, Next.js applications, and AI-powered systems. Available for contract and full-time roles.",
@@ -123,7 +125,7 @@ const jsonLd = [
     areaServed: "Worldwide",
     availableChannel: {
       "@type": "ServiceChannel",
-      serviceUrl: "https://daventertainment.com/#contact",
+      serviceUrl: "https://daventertainment.com/contact",
     },
   },
 ];
@@ -139,22 +141,15 @@ export default function RootLayout({
       className={`${sora.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        {/* Anti-flash: apply saved theme before first paint */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light')}catch(e){}`,
-          }}
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }

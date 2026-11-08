@@ -59,13 +59,12 @@ The portfolio must feel premium, creative, and professional — not a generic te
 - **on-secondary:** `#001233` (dark navy — text on blue-background buttons)
 - **on-tertiary:** `#330010` (dark crimson — text on crimson-background buttons)
 - Full Material Design 3 token set defined in `globals.css`
-- **IMPORTANT — Tailwind v4 theme split:** Colors use plain `@theme {}` (outputs CSS custom properties, allows runtime overrides). Fonts/sizes/spacing use `@theme inline {}` (baked at build time). This split is required for light/dark mode to work — do NOT move colors into `@theme inline`.
+- **IMPORTANT — Tailwind v4 theme split:** Colors use plain `@theme {}` (outputs CSS custom properties, allows runtime overrides). Fonts/sizes/spacing use `@theme inline {}` (baked at build time). Keep this split. The light/dark toggle was removed in the redesign, so the site is dark only.
 
 ### Typography
 - **Sora** — display, all headlines, buttons (`--font-sora` via next/font)
 - **Inter** — body text (`--font-inter` via next/font)
 - **JetBrains Mono** — code labels, nav items, badges (`--font-jetbrains-mono` via next/font)
-- **Material Symbols Outlined** — icons (loaded via Google Fonts `<link>` in layout.tsx)
 
 ### Custom CSS utilities (in `globals.css`)
 - `.glass-card` — frosted glass card effect
@@ -74,35 +73,41 @@ The portfolio must feel premium, creative, and professional — not a generic te
 - `.glow-violet` — gold drop shadow (class name kept, color updated to match primary gold)
 - `.shimmer-bg` — animated shimmer on hover
 
-### Nav labels (section IDs)
-| Nav label | Section ID | Content |
-|-----------|-----------|---------|
-| About | `#home` | Hero |
-| Projects | `#projects` | Projects |
-| Services | `#services` | Services |
-| Contact | `#contact` | Contact |
+### Navigation (redesign branch)
+Multi-page site: Work, About, Music, Art, Videos, Studio, plus a Hire Me button to `/contact`. See `src/components/SiteHeader.tsx`.
 
-### Nav logo
-- `public/Daventertainment-logo.png` — 40×40px, rendered via Next.js `<Image>` in `Nav.tsx`
-- Replaced the "D" letter circle placeholder as of 2026-06-07
+### Logos
+- `public/Daventertainment-logo.png` — small header logo (326×328, too small for large use)
+- `public/badge-face.webp` — 2048px redraw used as the 3D badge face. Replace this one file when the new logo is ready.
 
 ---
 
-## Current File Structure
+## Current File Structure (redesign branch)
 
 ```
 src/
   app/
-    layout.tsx      — Sora/Inter/JetBrains Mono fonts, metadata, Material Symbols link
-    page.tsx        — single-page scroll, assembles all components
-    globals.css     — full Tailwind v4 @theme + custom utilities
+    layout.tsx        — fonts, metadata, JSON-LD, SiteHeader
+    page.tsx          — home: renders the 3D Experience
+    sitemap.ts, robots.ts
+    globals.css       — Tailwind v4 @theme + custom utilities
+    (site)/           — plain fast pages with shared footer
+      work/, work/[slug]/, about/, music/, art/, videos/, studio/, contact/
   components/
-    Nav.tsx         — sticky top nav (desktop) + fixed bottom nav (mobile) + light/dark toggle, client component
-    Hero.tsx        — About/home section: headline, bio card, CTAs, bento grid
-    Projects.tsx    — Projects section: 3 project cards with metric callouts
-    Services.tsx    — Services section: 6 service cards in 2 columns + CTA strip
-    Contact.tsx     — Contact section: channel links + contact form, client component
-public/             — static assets (project screenshots go here)
+    SiteHeader.tsx, PageIntro.tsx, PlaceholderTile.tsx, Contact.tsx
+    experience/
+      Experience.tsx  — scroll story sections, Lenis + GSAP ScrollTrigger timeline, timeline rail, sound button
+      BadgeScene.tsx  — React Three Fiber scene: badge, backdrop, screenshots
+      StoryObjects.tsx — 2005 windows, 2018 network, 2021 particle lens, Now trio badges
+      keyframes.ts    — badge state for each chapter (desktop and phone layouts)
+      shaders.ts      — badge face, harbor backdrop, windows and particle shaders
+      useStorySound.ts — Listen/Silent audio; a low-pass filter opens as you scroll
+  content/
+    apps.ts           — the 4 featured apps (apps with screenshots first; the NDA app last)
+    story.ts          — home chapter copy and skills, plus THEME_TRACK (the music file path)
+    catalog.ts        — tracks, art, videos (12 placeholders each)
+    profile.ts        — headshot path, resume filename, stats, experience, services
+public/               — static assets; audio/theme-placeholder.mp3 is a generated placeholder loop
 ```
 
 ---
@@ -129,33 +134,9 @@ public/             — static assets (project screenshots go here)
 
 ---
 
-## Projects (currently in Forge section)
+## Featured Apps
 
-| Project | Metric | Tags |
-|---------|--------|------|
-| Conversational Analytics Engine ✅ real | 85% Report Automation | GCP, BigQuery, Looker Studio, GA4 |
-| PageScore — AI SEO & AEO Audit Engine ✅ real | 10k+ Active Users | Next.js, TypeScript, Anthropic, React |
-| Smart UX Frameworks ⚠️ placeholder | 12ms Inference Latency | React, Tailwind, TensorFlow.js, Vite |
-
-> Card 3 is still placeholder — user to confirm what real project to substitute.
-> Project images: cards 1 (Conversational Analytics) and 2 (PageScore) have real screenshots. Card 3 still shows a placeholder div.
-> To add an image to a card: drop PNG into `public/`, add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`. The `<Image>` component and conditional render are already wired up.
-
----
-
-## Services (currently in Labs section)
-
-**Full Stack Engineering:**
-- Advanced React Systems (TypeScript, TailwindCSS, Redux Toolkit)
-- Scalable Node.js APIs (NestJS, PostgreSQL, Redis)
-- Cloud Architecture (Kubernetes, Docker, Terraform)
-
-**AI Integration:**
-- AEO Optimization (Anthropic, Structured Data, Next.js)
-- AI-Powered Web Analysis (Anthropic, TypeScript, Next.js)
-- Autonomous AI Agents (LangChain, Anthropic, Python)
-
-> Full Stack card 3 updated: "Cloud Architecture" → "Cloud & Analytics Infrastructure" (GCP, BigQuery, Looker Studio)
+Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name approved for public use), PageScore (10k+ active users), Conversational Analytics Engine (85% report automation), Gamified Sales Engine (NDA: no client name or visuals). Services copy lives in `src/content/profile.ts`.
 
 ---
 
@@ -165,9 +146,10 @@ public/             — static assets (project screenshots go here)
 - Keep components in `src/components/`
 - Images go in `public/` and are served via Next.js `<Image>` component
 - Tailwind v4 — utility-first, split `@theme` in `globals.css` (no `tailwind.config.js`): fonts/sizes use `@theme inline`, colors use plain `@theme`
-- `'use client'` only where needed: Nav (IntersectionObserver), Contact (form state)
+- `'use client'` only where needed: SiteHeader, Contact, experience components
 - TypeScript strict mode is on — zero errors as of current build
-- Single-page scroll layout with anchor-based nav
+- Multi-page App Router site; the home page is the 3D scroll story, all other pages stay fast and plain
+- 3D loads client-side only; reduced-motion and no-WebGL visitors get plain text
 
 ---
 
@@ -195,6 +177,20 @@ public/             — static assets (project screenshots go here)
     - Root cause fix: Tailwind v4 `@theme inline` bakes values at build time — runtime overrides don't work. Solution: split into `@theme inline` (fonts/sizes only) + `@theme` (colors), so `html.light { --color-* }` overrides take effect at runtime
     - Light mode uses warm parchment background (`#f5f0e8`) with darkened gold/blue/crimson accents
 
+- **2026-11-07** — Redesign planning, Phase 1 and Phase 2, on branch `redesign/phase-1-prototype` (uncommitted at pause):
+  - Evaluated lorenzolottici.it, premotio.com and puture.co.kr; plan agreed (see Redesign Plan below)
+  - Phase 1: 3D badge with Intro, 1997 and 2000 chapters. David tested it: "exactly the direction I wanted"; headlines fine for now
+  - Phase 2: multi-page site, content files, placeholders, sitemap and robots; removed light/dark toggle, Material Symbols font and smooth-scroll rule
+  - Added three, @react-three/fiber, gsap, @gsap/react, lenis, @types/three
+  - David changed UC Irvine to 2019–2024 and Hornblower to 1997–2020 in `profile.ts`; the resume PDF still says Present for both
+
+- **2026-11-08** — Story timeline from David; chapter outline approved; **Phase 3 built** (uncommitted):
+  - 14 home sections: Intro, 8 eras (1997–Now), 4 app chapters (The Work), Contact; about 19 screens
+  - New badge looks: app windows (2005), gold coin flip (2010), stamped company seal with shockwave (2016), node network (2018), particle lens (2021), app/music/art badges (Now), app screenshots in the frame (The Work)
+  - Clickable timeline rail (desktop), Listen/Silent sound with a generated 21-second placeholder loop, reduced-motion version shows the story as a plain timeline
+  - Fixed a Phase 1 bug: the WebGL check opened a new graphics context on every re-render
+  - Logistics client stays anonymous in the story (Worldwide Express named only on `/about`)
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -202,13 +198,65 @@ public/             — static assets (project screenshots go here)
 - **How it works:** `Contact.tsx` POSTs JSON to `https://formsubmit.co/ajax/davedvst@gmail.com`. First submission requires a one-time email activation — already completed and live.
 - `public/netlify-form.html` can be left in place or removed — it's no longer used.
 
+## Redesign Plan
+
+**Goal:** an award-level 3D scrolling site that serves recruiters and clients first, and also shows apps, music, art and video and tells the Daventertainment story.
+
+**Agreed direction**
+- Two speeds: cinematic home, fast plain pages, always a way to skip to work
+- One concept per page: Badge = home, Dial = `/music`, Backlot = `/studio` (coming soon for now)
+- Story focus (David, 2026-11-08): a well-rounded modern creator with a strong technical foundation. Music and DJ work open the story, but full stack code and content creation lead
+- Home chapters (approved 2026-11-08, built in Phase 3): Intro → 1997 The Code → 2000 The Harbor → 2005 The Contracts → 2010 The Label → 2016 The Seal → 2018 The Scale → 2021 The Intelligence → Now: The Creator → The Work → Contact
+
+### Story timeline (David's own words, summarized, 2026-11-08)
+- **1997:** started coding and digital video while promoting his bands and gigs; programming synthesizers and DAW recording systems led him to programming and internet design
+- **2000:** learning HTML, JavaScript and database development; regular weekend gigs for large party yacht companies in LA and Orange County; managed entertainment for one yacht company; temporary web development gigs
+- **2005:** regular temp agency work in web and SaaS development, for companies from large marketing firms to small nimble ones, while managing music on weekends
+- **2010:** music publishing venture with a friend and former bandmate (creating, producing, registering, distributing music); e-commerce and payment gateways; added PHP and Node.js; began developing a sales app that started his full stack career
+- **2016:** Daventertainment Inc established as an entertainment and web development company; regular contract development for a large logistics company, which liked system connector apps built for its clients; began testing a sales app for its sales department
+- **2018:** the national sales team adopted the sales app, and the company offered compensation and positions; enterprise work with large teams (SCRUM, Jira, GitHub, Node.js, Python, APIs); joined the UC Irvine coding bootcamp, later taught there; began learning AI development
+- **2021:** current job at a specialized product company (The Joy Factory): web development, customer and B2B apps, AI integration, marketing workflows; AI agents, ChatGPT, Claude, Gemini, LLMs, RAG, HubSpot, BigCommerce, Shopify, NetSuite, Vercel, Next.js, Google Cloud
+- **Now:** building his own apps, art and music to stay sharp and current; coding with AI agents and optimizing agent knowledge
+- Experience wording is "over 20 years". Keep existing metrics (99.8%, 1.2M, 85%, 10k+)
+- Art stays professional: no cannabis or POD designs here
+- No database or payments yet. Later: art and music with personal and commercial licenses through hosted checkout, plus app templates in a separate area
+- No news or blog for now. Art, music and video will update regularly
+- The new logo is coming, with the same colors and round shape
+
+| Phase | Status |
+|-------|--------|
+| 1. Prototype | ✅ Done, approved by David |
+| 2. Foundation | ✅ Built, awaiting David's review |
+| 3. Home experience: remaining chapters, sound, phone and reduced-motion polish | ✅ Built 2026-11-08, awaiting David's review |
+| 4. Dial on `/music`, Backlot on `/studio` | ⏭️ Next |
+| 5. Launch: real-device testing, speed tuning, real contact form test, swap live site | Not started |
+| 6. Later: real content, shop, licenses, templates, award submission | Not started |
+
 ## Next Session — Pick Up Here
 
-- [ ] **Project card 3** — "Smart UX Frameworks" is still placeholder content. User is considering app ideas but hasn't decided. Ask what real project to substitute.
-- [ ] **Project card 3 screenshot** — Once card 3 content is decided, drop PNG into `public/` and add `image: "/filename.png"` to its object in `PROJECTS[]` in `Projects.tsx`.
-- [ ] **Verify light/dark mode** — Fix was applied (globals.css `@theme` split) but user has not confirmed it's working in the browser. Test the toggle on live or dev before assuming it's good.
-- [ ] **Push pending changes** — Nav rename, AEO schema, light/dark mode are local and uncommitted. Push to GitHub when user is ready.
-- [ ] **Optional extras (deferred)** — Scroll reveal animations, resume download button, copy email to clipboard, scroll progress bar, typed/rotating headline — user chose A/B/C only; these are available if wanted later.
+**State (2026-11-08):** Phases 1–3 are built and uncommitted on `redesign/phase-1-prototype`. `main` and the live site are still the old version. To view: `npm run build`, `npx next start`, open `http://localhost:3000`.
+
+**Needs David's decision or input**
+- [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
+- [x] **Chapter outline** approved 2026-11-08 and built
+- [ ] **Review Phase 3** on a real computer and phone: smoothness, pacing, chapter copy, the placeholder music
+- [ ] **Music:** replace `public/audio/theme-placeholder.mp3` with David's own seamless loop (60–90 sec) and update `THEME_TRACK` in `src/content/story.ts`
+- [x] **Story questions answered 2026-11-08:**
+  - David will update the resume to "20+ years" and to show yacht gigs starting in 2000; `/about` now shows Hornblower 2000–2020
+  - Worldwide Express stays at 2018–2020 (when he was officially hired; contract work began in 2016)
+  - The 2010 sales app is the Gamified Sales Engine (begun 2010, tested 2016, national in 2018)
+  - Name Worldwide Express **only** on `/about`. The story chapters, app pages and anywhere else must keep the logistics client anonymous
+- [ ] **Resume PDF:** fix the `DJ&#x2019;d` typo, remove the phone number for the public copy, update the Present dates and the outdated Gatsby/Contentful line, then save as `public/David_Cox_Resume_2026.pdf`. The download button then appears on `/about`
+- [x] **Employers:** Worldwide Express and Hornblower are named on `/about` only; the logistics client stays anonymous everywhere else
+- [ ] **Commit and push:** decide when, and whether a Netlify preview is wanted
+
+**Assets still to come:** real headshot (set `HEADSHOT` in `profile.ts`), new logo, real tracks, art and videos.
+
+**To check or do later**
+- [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked
+- [ ] Add the full-screen art view and video player when real media exists
+- [ ] Reconcile the Netlify status below: `netlify.toml` and `@netlify/plugin-nextjs` are not in the repo, though the site deploys fine
+- [ ] Old links to `/#projects` and `/#contact` no longer lead to those sections after launch
 
 ---
 
@@ -243,6 +291,7 @@ public/             — static assets (project screenshots go here)
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
 ## 1. Think Before Coding
 
