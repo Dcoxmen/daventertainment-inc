@@ -77,8 +77,10 @@ The portfolio must feel premium, creative, and professional — not a generic te
 Multi-page site: Work, About, Music, Art, Videos, Studio, plus a Hire Me button to `/contact`. See `src/components/SiteHeader.tsx`.
 
 ### Logos
-- `public/Daventertainment-logo.png` — small header logo (326×328, too small for large use)
-- `public/badge-face.webp` — 2048px redraw used as the 3D badge face. Replace this one file when the new logo is ready.
+- **New logo installed 2026-11-08** (same colors and round shape, mono lettering, gold outer ring)
+- `public/Daventertainment-logo.png` — header logo and JSON-LD logo (1024×1024, includes the gold ring)
+- `public/badge-face.webp` — 3D badge face: the 2048px logo cropped to its inner blue/red circle (the 3D badge supplies its own gold rim)
+- `src/app/icon.png` — 32×32 favicon (the gold "D"); replaced `favicon.ico`
 
 ---
 
@@ -107,7 +109,7 @@ src/
     story.ts          — home chapter copy and skills, plus THEME_TRACK (the music file path)
     catalog.ts        — tracks, art, videos (12 placeholders each)
     profile.ts        — headshot path, resume filename, stats, experience, services
-public/               — static assets; audio/theme-placeholder.mp3 is a generated placeholder loop
+public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is David's music loop
 ```
 
 ---
@@ -191,6 +193,8 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
   - Fixed a Phase 1 bug: the WebGL check opened a new graphics context on every re-render
   - Logistics client stays anonymous in the story (Worldwide Express named only on `/about`)
 
+- **2026-11-08 (later)** — **Redesign deployed to production.** At David's request, committed Phases 1–3 as `4018a56`, pushed `redesign/phase-1-prototype`, fast-forwarded `main` and pushed. Netlify deployed in about a minute. Live checks passed: all 12 pages at desktop and phone sizes, sitemap (12 URLs), robots, audio file, timeline rail, sound, phone menu, reduced-motion version, no console errors
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -234,13 +238,13 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 are built and uncommitted on `redesign/phase-1-prototype`. `main` and the live site are still the old version. To view: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 are **live on daventertainment.com** (commit `4018a56` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
 - [x] **Chapter outline** approved 2026-11-08 and built
 - [ ] **Review Phase 3** on a real computer and phone: smoothness, pacing, chapter copy, the placeholder music
-- [ ] **Music:** replace `public/audio/theme-placeholder.mp3` with David's own seamless loop (60–90 sec) and update `THEME_TRACK` in `src/content/story.ts`
+- [x] **Music:** David's `soul-swellin-loop-30sec.mp3` (31.7 sec, seamless) replaced the placeholder on 2026-11-08
 - [x] **Story questions answered 2026-11-08:**
   - David will update the resume to "20+ years" and to show yacht gigs starting in 2000; `/about` now shows Hornblower 2000–2020
   - Worldwide Express stays at 2018–2020 (when he was officially hired; contract work began in 2016)
@@ -248,9 +252,10 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
   - Name Worldwide Express **only** on `/about`. The story chapters, app pages and anywhere else must keep the logistics client anonymous
 - [ ] **Resume PDF:** fix the `DJ&#x2019;d` typo, remove the phone number for the public copy, update the Present dates and the outdated Gatsby/Contentful line, then save as `public/David_Cox_Resume_2026.pdf`. The download button then appears on `/about`
 - [x] **Employers:** Worldwide Express and Hornblower are named on `/about` only; the logistics client stays anonymous everywhere else
-- [ ] **Commit and push:** decide when, and whether a Netlify preview is wanted
+- [x] **Commit and push:** done 2026-11-08; the redesign is live
+- [ ] **Send one real test message** through the live contact form (only mocked submissions were tested)
 
-**Assets still to come:** real headshot (set `HEADSHOT` in `profile.ts`), new logo, real tracks, art and videos.
+**Assets still to come:** real headshot (set `HEADSHOT` in `profile.ts`), real tracks, art and videos. New logo, favicon and music loop are in (2026-11-08, not yet deployed).
 
 **To check or do later**
 - [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked

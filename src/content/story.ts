@@ -2,7 +2,7 @@
 // each id lives in src/components/experience/keyframes.ts.
 
 // Replace with your own loop (WAV or MP3, 60–90 seconds, seamless).
-export const THEME_TRACK = "/audio/theme-placeholder.mp3";
+export const THEME_TRACK = "/audio/soul-swellin-loop-30sec.mp3";
 
 export type Era = {
   id: string;
