@@ -10,6 +10,8 @@ const LAYOUTS: Record<string, { desktop: Layout; mobile: Layout }> = {
   big: { desktop: { x: 0.24, y: 0, size: 0.8 }, mobile: { x: 0, y: -0.2, size: 0.9 } },
   harbor: { desktop: { x: 0.2, y: -0.16, size: 0.74 }, mobile: { x: 0, y: -0.24, size: 0.92 } },
   side: { desktop: { x: 0.24, y: 0, size: 0.7 }, mobile: { x: 0, y: -0.27, size: 0.62 } },
+  // The logo slot at the top of the 2018 sales app page (see SalesApp in StoryObjects.tsx).
+  salesLogo: { desktop: { x: 0.09, y: 0.18, size: 0.17 }, mobile: { x: -0.2, y: -0.2, size: 0.17 } },
   hub: { desktop: { x: 0.24, y: 0, size: 0.16 }, mobile: { x: 0, y: -0.27, size: 0.2 } },
   frame: { desktop: { x: 0.24, y: 0, size: 0.78 }, mobile: { x: 0, y: -0.27, size: 0.66 } },
 };
@@ -24,7 +26,7 @@ const BASE: Omit<BadgeState, keyof Layout> = {
   label: 1,
   harbor: 0,
   windows: 0,
-  network: 0,
+  sales: 0,
   lens: 0,
   trio: 0,
   tiltX: 0,
@@ -39,7 +41,7 @@ const STATES: Record<string, [string, Partial<BadgeState>]> = {
   contracts: ["side", { code: 1, vinyl: 1, label: 0.345, windows: 1, size: 0 }],
   label: ["side", { coin: 1, label: 0.5, tiltY: TAU }],
   seal: ["side", { coin: 1, seal: 1, label: 0.62, tiltY: TAU }],
-  scale: ["hub", { coin: 1, seal: 1, label: 0.62, network: 1, tiltY: TAU }],
+  scale: ["salesLogo", { coin: 1, seal: 1, label: 0.62, sales: 1, tiltY: TAU }],
   intelligence: ["hub", { coin: 1, seal: 1, label: 0.62, lens: 1, tiltY: TAU, size: 0.13 }],
   creator: ["side", { coin: 1, seal: 1, label: 0.62, trio: 1, tiltY: TAU, size: 0 }],
   work: ["frame", { coin: 1, seal: 1, work: 1, label: 0, tiltY: TAU }],

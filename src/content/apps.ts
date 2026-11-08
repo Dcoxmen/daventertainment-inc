@@ -21,6 +21,7 @@ export const APPS: App[] = [
     description:
       "A customer assistant that helps shoppers narrow down what they need. Focused questions in an easy-to-understand interface identify the features and solutions they are looking for, then it recommends a bundled solution of device case and best-matched mounts and accessories.",
     stack: ["Next.js", "E-commerce API", "Claude AI"],
+    url: "https://thejoyfactory.com",
     image: "/project-bundle-builder.webp",
     portrait: true,
   },

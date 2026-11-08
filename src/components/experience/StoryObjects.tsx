@@ -3,11 +3,13 @@
 import { useEffect, useMemo, useRef, type RefObject } from "react";
 import { useFrame, useThree, type RootState } from "@react-three/fiber";
 import * as THREE from "three";
-import type { BadgeState } from "./BadgeScene";
+import { cssFont, type BadgeState } from "./BadgeScene";
+import { stateFor } from "./keyframes";
 import {
   DOT_FRAGMENT,
   LENS_VERTEX,
-  NETWORK_VERTEX,
+  PANEL_FRAGMENT,
+  UV_VERTEX,
   WINDOW_FRAGMENT,
   WINDOW_VERTEX,
 } from "./shaders";
@@ -120,79 +122,287 @@ function Windows({ state, small }: ObjectProps) {
   return <instancedMesh ref={mesh} args={[geometry, material, count]} frustumCulled={false} />;
 }
 
-// 2018: the seal spreads into a national network of nodes.
-function Network({ state, small }: ObjectProps) {
-  const group = useRef<THREE.Group>(null);
-  const dots = useRef<THREE.Points>(null);
-  const links = useRef<THREE.LineSegments>(null);
-  const pixelRatio = useThree((three) => three.viewport.dpr);
+// 2018: the seal lands as the logo of the sales app, beside a head-to-head card.
+// Drawn in the same wireframe style as the 2005 windows. Labels stay generic (NDA).
+const INK = "#f3e6c8";
+const LINE = "rgba(140, 158, 204, 0.85)";
+const HEX = { gold: "#d4b06a", blue: "#6d9cf0", crimson: "#e57888" };
 
-  const { points, lines, pointMaterial, lineMaterial } = useMemo(() => {
-    const random = seededRandom(7);
-    const count = small ? 40 : 70;
-    const nodes = Array.from({ length: count }, () => {
-      const angle = random() * TAU;
-      const radius = Math.sqrt(random());
-      return [Math.cos(angle) * radius, Math.sin(angle) * radius, (random() - 0.5) * 0.3];
+// Panel sizes in units of the viewport's short side. The page's logo slot sits
+// LOGO_SLOT of the way down the page, which is where the badge parks.
+const PAGE = { width: 0.5, height: 0.62 };
+const CARD = { width: 0.36, height: 0.44 };
+const LOGO_SLOT = 0.242;
+const LOGO_RADIUS = 0.17; // of the page width, matches the badge size in keyframes.ts
+
+function bar(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string) {
+  c.fillStyle = color;
+  c.beginPath();
+  c.roundRect(x, y, w, h, h / 2);
+  c.fill();
+}
+
+function panelFrame(c: CanvasRenderingContext2D, tint: string, title: string) {
+  const { width: w, height: h } = c.canvas;
+  const mono = cssFont("--font-jetbrains-mono");
+  c.clearRect(0, 0, w, h);
+  c.fillStyle = "rgba(10, 18, 38, 0.94)";
+  c.beginPath();
+  c.roundRect(4, 4, w - 8, h - 8, w * 0.04);
+  c.fill();
+  c.save();
+  c.clip();
+  c.globalAlpha = 0.55;
+  c.fillStyle = tint;
+  c.fillRect(0, 0, w, h * 0.07);
+  c.restore();
+  for (let i = 0; i < 3; i++) {
+    c.fillStyle = "#e6e6e6";
+    c.beginPath();
+    c.arc(w * 0.05 + i * w * 0.035, h * 0.035, w * 0.011, 0, TAU);
+    c.fill();
+  }
+  c.fillStyle = INK;
+  c.font = `500 ${Math.round(h * 0.028)}px ${mono}, monospace`;
+  c.textBaseline = "middle";
+  c.fillText(title, w * 0.18, h * 0.036);
+  c.strokeStyle = tint;
+  c.lineWidth = 3;
+  c.shadowColor = tint;
+  c.shadowBlur = 14;
+  c.beginPath();
+  c.roundRect(4, 4, w - 8, h - 8, w * 0.04);
+  c.stroke();
+  c.shadowBlur = 0;
+  return mono;
+}
+
+// An infographic page with a slot at the top for the logo.
+function drawPage(c: CanvasRenderingContext2D) {
+  const { width: w, height: h } = c.canvas;
+  const mono = panelFrame(c, HEX.gold, "sales-app / leaderboard");
+
+  c.setLineDash([10, 10]);
+  c.strokeStyle = "rgba(212, 176, 106, 0.6)";
+  c.lineWidth = 3;
+  c.beginPath();
+  c.arc(w / 2, h * LOGO_SLOT, w * LOGO_RADIUS + 16, 0, TAU);
+  c.stroke();
+  c.setLineDash([]);
+
+  bar(c, w * 0.28, h * 0.415, w * 0.44, h * 0.022, INK);
+  bar(c, w * 0.34, h * 0.448, w * 0.32, h * 0.013, LINE);
+
+  // KPI tiles
+  [HEX.gold, HEX.blue, HEX.crimson].forEach((tint, i) => {
+    const x = w * (0.06 + i * 0.305);
+    const tileW = w * 0.27;
+    c.strokeStyle = tint;
+    c.lineWidth = 2;
+    c.beginPath();
+    c.roundRect(x, h * 0.49, tileW, h * 0.1, 10);
+    c.stroke();
+    bar(c, x + tileW * 0.12, h * 0.513, tileW * (0.45 + i * 0.1), h * 0.03, tint);
+    c.fillStyle = LINE;
+    c.font = `500 ${Math.round(h * 0.018)}px ${mono}, monospace`;
+    c.fillText(["CALLS", "DEALS", "REVENUE"][i], x + tileW * 0.12, h * 0.574);
+  });
+
+  // Bar chart
+  const left = w * 0.06;
+  const bottom = h * 0.86;
+  const chartH = h * 0.2;
+  c.strokeStyle = "rgba(140, 158, 204, 0.4)";
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(left, bottom);
+  c.lineTo(w * 0.62, bottom);
+  c.stroke();
+  [0.35, 0.55, 0.45, 0.7, 0.6, 0.85, 0.75].forEach((value, i) => {
+    c.fillStyle = i === 5 ? HEX.gold : HEX.blue;
+    c.globalAlpha = i === 5 ? 1 : 0.75;
+    c.beginPath();
+    c.roundRect(left + w * 0.015 + i * w * 0.077, bottom - chartH * value, w * 0.05, chartH * value, 6);
+    c.fill();
+  });
+  c.globalAlpha = 1;
+
+  // Donut chart
+  c.lineWidth = w * 0.045;
+  let start = -Math.PI / 2;
+  ([[HEX.gold, 0.45], [HEX.blue, 0.3], [HEX.crimson, 0.25]] as const).forEach(([tint, share]) => {
+    c.strokeStyle = tint;
+    c.beginPath();
+    c.arc(w * 0.81, h * 0.755, w * 0.1, start + 0.06, start + share * TAU - 0.06);
+    c.stroke();
+    start += share * TAU;
+  });
+
+  // Leaderboard rows
+  [0.9, 0.94].forEach((y, i) => {
+    c.fillStyle = i ? HEX.blue : HEX.gold;
+    c.beginPath();
+    c.arc(w * 0.08, h * y, h * 0.011, 0, TAU);
+    c.fill();
+    bar(c, w * 0.12, h * y - h * 0.007, w * (0.5 - i * 0.12), h * 0.014, LINE);
+  });
+}
+
+// Two rep profiles compared stat by stat.
+function drawCard(c: CanvasRenderingContext2D) {
+  const { width: w, height: h } = c.canvas;
+  const mono = panelFrame(c, HEX.blue, "HEAD TO HEAD");
+
+  [[0.25, HEX.blue, "REP A"], [0.75, HEX.crimson, "REP B"]].forEach(([fx, ring, name]) => {
+    const cx = w * (fx as number);
+    const cy = h * 0.24;
+    const r = w * 0.12;
+    c.save();
+    c.beginPath();
+    c.arc(cx, cy, r, 0, TAU);
+    c.clip();
+    c.fillStyle = "rgba(140, 158, 204, 0.6)";
+    c.beginPath();
+    c.arc(cx, cy - r * 0.18, r * 0.36, 0, TAU);
+    c.fill();
+    c.beginPath();
+    c.ellipse(cx, cy + r * 0.85, r * 0.7, r * 0.55, 0, 0, TAU);
+    c.fill();
+    c.restore();
+    c.strokeStyle = ring as string;
+    c.lineWidth = 6;
+    c.beginPath();
+    c.arc(cx, cy, r, 0, TAU);
+    c.stroke();
+    c.fillStyle = INK;
+    c.font = `600 ${Math.round(h * 0.03)}px ${mono}, monospace`;
+    c.textAlign = "center";
+    c.fillText(name as string, cx, h * 0.37);
+    bar(c, cx - w * 0.09, h * 0.395, w * 0.18, h * 0.012, LINE);
+  });
+
+  c.fillStyle = HEX.gold;
+  c.font = `800 ${Math.round(h * 0.075)}px ${cssFont("--font-sora")}, sans-serif`;
+  c.fillText("VS", w / 2, h * 0.245);
+
+  const stats: [string, number, number][] = [
+    ["CALLS", 0.8, 0.65],
+    ["DEALS", 0.6, 0.75],
+    ["REVENUE", 0.9, 0.7],
+    ["STREAK", 0.55, 0.85],
+  ];
+  stats.forEach(([label, a, b], i) => {
+    const y = h * (0.49 + i * 0.105);
+    c.fillStyle = LINE;
+    c.font = `500 ${Math.round(h * 0.024)}px ${mono}, monospace`;
+    c.fillText(label, w / 2, y);
+    const span = w * 0.38;
+    bar(c, w / 2 - w * 0.02 - span * a, y + h * 0.025, span * a, h * 0.02, HEX.blue);
+    bar(c, w / 2 + w * 0.02, y + h * 0.025, span * b, h * 0.02, HEX.crimson);
+  });
+  c.textAlign = "left";
+}
+
+function panelTexture(width: number, height: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.anisotropy = 8;
+  return texture;
+}
+
+function panelMaterial(texture: THREE.Texture, tint: [number, number, number]) {
+  return new THREE.ShaderMaterial({
+    vertexShader: UV_VERTEX,
+    fragmentShader: PANEL_FRAGMENT,
+    uniforms: {
+      uMap: { value: texture },
+      uMix: { value: 0 },
+      uReveal: { value: 0 },
+      uTime: { value: 0 },
+      uTint: { value: new THREE.Vector3(...tint) },
+    },
+    transparent: true,
+    depthWrite: false,
+  });
+}
+
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
+function SalesApp({ state, small }: ObjectProps) {
+  const page = useRef<THREE.Mesh>(null);
+  const card = useRef<THREE.Mesh>(null);
+
+  const { pageTexture, cardTexture, pageGeometry, cardGeometry, pageMaterial, cardMaterial } = useMemo(() => {
+    const pageTexture = panelTexture(768, 952);
+    const cardTexture = panelTexture(576, 704);
+    return {
+      pageTexture,
+      cardTexture,
+      pageGeometry: new THREE.PlaneGeometry(PAGE.width, PAGE.height),
+      cardGeometry: new THREE.PlaneGeometry(CARD.width, CARD.height),
+      pageMaterial: panelMaterial(pageTexture, [0.831, 0.69, 0.416]),
+      cardMaterial: panelMaterial(cardTexture, [0.427, 0.612, 0.941]),
+    };
+  }, []);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      const pageContext = (pageTexture.image as HTMLCanvasElement).getContext("2d");
+      const cardContext = (cardTexture.image as HTMLCanvasElement).getContext("2d");
+      if (pageContext) drawPage(pageContext);
+      if (cardContext) drawCard(cardContext);
+      pageTexture.needsUpdate = true;
+      cardTexture.needsUpdate = true;
     });
-
-    const points = new THREE.BufferGeometry();
-    points.setAttribute("position", new THREE.Float32BufferAttribute(nodes.flat(), 3));
-    points.setAttribute("aSeed", new THREE.Float32BufferAttribute(nodes.map(() => random()), 1));
-
-    // Connect each node to its two nearest neighbors.
-    const segments: number[] = [];
-    nodes.forEach((node, i) => {
-      nodes
-        .map((other, j) => ({ j, d: Math.hypot(other[0] - node[0], other[1] - node[1]) }))
-        .filter(({ j }) => j !== i)
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 2)
-        .forEach(({ j }) => segments.push(...node, ...nodes[j]));
-    });
-    const lines = new THREE.BufferGeometry();
-    lines.setAttribute("position", new THREE.Float32BufferAttribute(segments, 3));
-
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: "#6d9cf0",
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    return { points, lines, pointMaterial: dotMaterial(NETWORK_VERTEX, 7), lineMaterial };
-  }, [small]);
-
-  useEffect(() => () => {
-    points.dispose();
-    lines.dispose();
-    pointMaterial.dispose();
-    lineMaterial.dispose();
-  }, [points, lines, pointMaterial, lineMaterial]);
+    return () => {
+      [pageTexture, cardTexture, pageGeometry, cardGeometry, pageMaterial, cardMaterial].forEach((item) => item.dispose());
+    };
+  }, [pageTexture, cardTexture, pageGeometry, cardGeometry, pageMaterial, cardMaterial]);
 
   useFrame((root) => {
-    const node = group.current;
-    if (!node || !dots.current || !links.current) return;
+    if (!page.current || !card.current) return;
     const s = state.current;
-    node.visible = s.network > 0.001;
-    if (!node.visible) return;
+    const visible = s.sales > 0.001;
+    page.current.visible = card.current.visible = visible;
+    if (!visible) return;
 
-    const { x, y } = anchor(root, s);
+    // Panels stay put around the logo slot while the seal flies in to fill it.
+    const slot = stateFor("scale", !small);
     const { width, height } = root.viewport;
-    node.position.set(x, y, 0);
-    node.scale.set(width * (small ? 0.46 : 0.34) * s.network, height * (small ? 0.3 : 0.38) * s.network, 1);
-    const { uniforms } = dots.current.material as THREE.ShaderMaterial;
-    uniforms.uMix.value = s.network;
-    uniforms.uTime.value = root.clock.elapsedTime;
-    uniforms.uPixelRatio.value = pixelRatio;
-    (links.current.material as THREE.LineBasicMaterial).opacity = 0.28 * s.network;
+    const x = slot.x * width;
+    const y = slot.y * height;
+    const unit = Math.min(width, height);
+    const time = root.clock.elapsedTime;
+    // The page draws in once the seal is on its way and the card follows;
+    // scrolling back erases the card first, then the page.
+    const panels: [THREE.Mesh, number, number, number, number, number][] = [
+      [page.current, clamp01((s.sales - 0.3) / 0.55), 0, (0.5 - LOGO_SLOT) * PAGE.height, -0.12, -0.1],
+      [card.current, clamp01((s.sales - 0.55) / 0.45), 0.43, (0.5 - LOGO_SLOT) * PAGE.height + 0.1, -0.04, 0.12],
+    ];
+    panels.forEach(([mesh, reveal, offsetX, offsetY, depth, turn], i) => {
+      const settle = 1 - Math.pow(1 - reveal, 3);
+      mesh.position.set(
+        x + offsetX * unit,
+        y - offsetY * unit + Math.sin(time * 0.6 + i * 2) * unit * 0.006 * settle,
+        depth
+      );
+      mesh.scale.setScalar(unit * (0.88 + 0.12 * settle));
+      mesh.rotation.set(0, turn * settle, 0);
+      const { uniforms } = mesh.material as THREE.ShaderMaterial;
+      uniforms.uReveal.value = reveal;
+      uniforms.uMix.value = Math.min(1, reveal * 4);
+      uniforms.uTime.value = time;
+    });
   });
 
   return (
-    <group ref={group}>
-      <lineSegments ref={links} geometry={lines} material={lineMaterial} />
-      <points ref={dots} geometry={points} material={pointMaterial} />
-    </group>
+    <>
+      <mesh ref={page} geometry={pageGeometry} material={pageMaterial} />
+      <mesh ref={card} geometry={cardGeometry} material={cardMaterial} />
+    </>
   );
 }
 
@@ -387,7 +597,7 @@ export default function StoryObjects({ state }: { state: RefObject<BadgeState> }
   return (
     <>
       <Windows state={state} small={small} />
-      <Network state={state} small={small} />
+      <SalesApp state={state} small={small} />
       <Lens state={state} small={small} />
       <Trio state={state} small={small} />
     </>

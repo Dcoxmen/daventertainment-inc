@@ -330,7 +330,7 @@ export const WINDOW_FRAGMENT = /* glsl */ `
   }
 `;
 
-// Glowing dots for the 2018 network and the 2021 particle lens.
+// Glowing dots for the 2021 particle lens.
 export const DOT_FRAGMENT = /* glsl */ `
   varying float vSeed;
   varying float vRadius;
@@ -346,20 +346,6 @@ export const DOT_FRAGMENT = /* glsl */ `
     color += vec3(0.6) * step(0.97, vSeed);
     float twinkle = 0.45 + 0.55 * (0.5 + 0.5 * sin(uTime * (1.0 + vSeed * 2.0) + vSeed * 40.0));
     gl_FragColor = vec4(color, alpha * uMix * twinkle);
-  }
-`;
-
-export const NETWORK_VERTEX = /* glsl */ `
-  attribute float aSeed;
-  uniform float uSize;
-  uniform float uPixelRatio;
-  varying float vSeed;
-  varying float vRadius;
-  void main() {
-    vSeed = aSeed;
-    vRadius = aSeed < 0.7 ? 1.0 : 0.0; // most nodes blue, some gold
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = uSize * uPixelRatio * (0.6 + aSeed * 0.9);
   }
 `;
 
@@ -382,5 +368,25 @@ export const LENS_VERTEX = /* glsl */ `
     vRadius = aRadius;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
     gl_PointSize = uSize * uPixelRatio * (0.6 + aSeed * 0.8);
+  }
+`;
+
+// 2018 wireframe panels: they draw in from the top behind a glowing scan line.
+export const PANEL_FRAGMENT = /* glsl */ `
+  varying vec2 vUv;
+  uniform sampler2D uMap;
+  uniform float uMix;
+  uniform float uReveal;
+  uniform float uTime;
+  uniform vec3 uTint;
+
+  void main() {
+    vec4 panel = texture2D(uMap, vUv);
+    float front = 1.0 - uReveal * 1.12;
+    float shown = smoothstep(front - 0.012, front + 0.012, vUv.y);
+    float edge = exp(-abs(vUv.y - front) * 90.0) * panel.a;
+    float sweep = exp(-pow((vUv.y - fract(uTime * 0.12)) * 40.0, 2.0)) * 0.06 * panel.a;
+    vec3 color = panel.rgb + uTint * edge * 0.9 + vec3(sweep);
+    gl_FragColor = vec4(color, (panel.a * shown + edge * 0.6) * uMix);
   }
 `;

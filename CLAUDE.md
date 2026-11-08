@@ -100,7 +100,7 @@ src/
     experience/
       Experience.tsx  — scroll story sections, Lenis + GSAP ScrollTrigger timeline, timeline rail, sound button
       BadgeScene.tsx  — React Three Fiber scene: badge, backdrop, screenshots
-      StoryObjects.tsx — 2005 windows, 2018 network, 2021 particle lens, Now trio badges
+      StoryObjects.tsx — 2005 windows, 2018 sales app page + head-to-head card, 2021 particle lens, Now trio badges
       keyframes.ts    — badge state for each chapter (desktop and phone layouts)
       shaders.ts      — badge face, harbor backdrop, windows and particle shaders
       useStorySound.ts — Listen/Silent audio; a low-pass filter opens as you scroll
@@ -195,6 +195,10 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 - **2026-11-08 (later)** — **Redesign deployed to production.** At David's request, committed Phases 1–3 as `4018a56`, pushed `redesign/phase-1-prototype`, fast-forwarded `main` and pushed. Netlify deployed in about a minute. Live checks passed: all 12 pages at desktop and phone sizes, sitemap (12 URLs), robots, audio file, timeline rail, sound, phone menu, reduced-motion version, no console errors
 
+- **2026-11-08 (evening)** — Not yet deployed:
+  - Bundle Builder app page links to https://thejoyfactory.com (`url` in `apps.ts`), like PageScore
+  - Chapter 6 (2018 The Scale) redesigned at David's request: the seal flies into the logo slot of a wireframe sales app page (KPI tiles, bar chart, donut, leaderboard) beside a head-to-head card comparing Rep A and Rep B. Same wireframe style as 2005. Panels draw in from the top behind a scan line and erase in reverse. Replaced the 2018 node network. Labels stay generic for the NDA
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -238,7 +242,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 are **live on daventertainment.com** (commit `4018a56` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 plus the new logo, favicon and music are **live on daventertainment.com** (commit `27e81a9` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
@@ -255,7 +259,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 - [x] **Commit and push:** done 2026-11-08; the redesign is live
 - [ ] **Send one real test message** through the live contact form (only mocked submissions were tested)
 
-**Assets still to come:** real headshot (set `HEADSHOT` in `profile.ts`), real tracks, art and videos. New logo, favicon and music loop are in (2026-11-08, not yet deployed).
+**Assets still to come:** real headshot (set `HEADSHOT` in `profile.ts`), real tracks, art and videos. New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
 
 **To check or do later**
 - [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked

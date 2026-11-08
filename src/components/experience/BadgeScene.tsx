@@ -19,7 +19,7 @@ export type BadgeState = {
   label: number; // logo radius on the face; 0 hides it
   harbor: number; // night harbor backdrop
   windows: number; // 2005 app windows
-  network: number; // 2018 network
+  sales: number; // 2018 sales app page and head-to-head card
   lens: number; // 2021 particle lens
   trio: number; // app, music and art badges
   x: number; // fraction of viewport width from center
@@ -58,7 +58,7 @@ const CODE_LINES = [
 
 const SEAL_TEXT = "DAVENTERTAINMENT INC  ·  ESTABLISHED 2016  ·  ENTERTAINMENT & WEB DEVELOPMENT  ·  ";
 
-function cssFont(variable: string) {
+export function cssFont(variable: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(variable);
 }
 
@@ -272,7 +272,8 @@ function Badge({ state, onReady }: SceneProps) {
     // The seal "stamps": a quick dip in size while it arrives.
     const stamp = 1 - 0.16 * Math.sin(Math.PI * s.seal);
     const radius = (s.size * Math.min(viewport.width, viewport.height)) / 2;
-    const idle = 1 - record;
+    // Hold still while parked as the sales app's logo, so it sits square in the page.
+    const idle = (1 - record) * (1 - 0.85 * s.sales);
     group.position.set(s.x * viewport.width, s.y * viewport.height, 0);
     group.scale.setScalar(radius * stamp * (0.72 + 0.28 * m.enter));
     group.rotation.set(
