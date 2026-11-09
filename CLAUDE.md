@@ -109,7 +109,7 @@ src/
   content/
     apps.ts           — the 4 featured apps (apps with screenshots first; the NDA app last)
     story.ts          — home chapter copy and skills, plus THEME_TRACK (the music file path)
-    catalog.ts        — tracks, art, videos (12 placeholders each)
+    catalog.ts        — tracks and videos (12 placeholders each); ART lists David's 12 artworks (files in public/art/)
     profile.ts        — headshot path, resume filename, stats, experience, services
 public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is David's music loop
 ```
@@ -203,7 +203,9 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 - **2026-11-08 (night)** — Chapter copy rewrite in `src/content/story.ts` (deployed as `d433906`): stronger verbs and turning points, varied openings, and a through-line. The motif "read the room" is planted in 2000 and paid off in Now, echoing the headline "Code that plays to the room." Facts unchanged; logistics client still anonymous. David approved all chapters; at his request the 2021 chapter no longer names The Joy Factory ("At my current job position")
 
-- **2026-11-08 (late night)** — Now chapter (not yet deployed): added a fourth floating icon for Videos (screen with gold play button); desktop shows the four 3D badges in a staggered 2 × 2 cluster; on phones the 3D badges hide and the chapter shows the same four icons as tappable buttons linking to /work, /music, /art and /videos (replacing the text links there). Added "Video" to the chapter's skills
+- **2026-11-08 (late night)** — Now chapter (deployed as `b197bab`): added a fourth floating icon for Videos (screen with gold play button); desktop shows the four 3D badges in a staggered 2 × 2 cluster; on phones the 3D badges hide and the chapter shows the same four icons as tappable buttons linking to /work, /music, /art and /videos (replacing the text links there). Added "Video" to the chapter's skills
+
+- **2026-11-08 (late night, 2)** — `/art` (not yet deployed): 12 artworks replace the placeholders, with titles from the filenames; headline "Original art and illustration."; images hover-zoom; no full-screen viewer or buy buttons yet
 
 ## Contact Form — Implementation Notes
 
@@ -248,7 +250,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF and rewritten chapter copy are **live on daventertainment.com** (commit `d433906` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF, rewritten chapter copy and Now chapter Videos badge/phone buttons are **live on daventertainment.com** (commit `b197bab` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
@@ -265,7 +267,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 - [x] **Commit and push:** done 2026-11-08; the redesign is live
 - [ ] **Send one real test message** through the live contact form (only mocked submissions were tested)
 
-**Assets still to come:** real tracks, art and videos. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
+**Assets still to come:** real tracks and videos. Art: 12 pieces added 2026-11-08 from Downloads/portfolio-images (raccoon-samurai-warrior left out at David's request), converted to WebP up to 1024px in `public/art/`. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
 
 **To check or do later**
 - [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked
