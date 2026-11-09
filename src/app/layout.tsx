@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
-import { Sora, Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
-const sora = Sora({
+// Fonts are stored in the repo (latin variable files from Google Fonts) so
+// builds never depend on downloading them from Google.
+const sora = localFont({
+  src: "./fonts/sora-latin.woff2",
   variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: "400 800",
+  display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: "./fonts/inter-latin.woff2",
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400 600",
+  display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const jetbrainsMono = localFont({
+  src: "./fonts/jetbrains-mono-latin.woff2",
   variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400 500",
+  display: "swap",
 });
 
 export const metadata: Metadata = {

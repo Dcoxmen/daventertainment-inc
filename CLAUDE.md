@@ -62,9 +62,10 @@ The portfolio must feel premium, creative, and professional — not a generic te
 - **IMPORTANT — Tailwind v4 theme split:** Colors use plain `@theme {}` (outputs CSS custom properties, allows runtime overrides). Fonts/sizes/spacing use `@theme inline {}` (baked at build time). Keep this split. The light/dark toggle was removed in the redesign, so the site is dark only.
 
 ### Typography
-- **Sora** — display, all headlines, buttons (`--font-sora` via next/font)
-- **Inter** — body text (`--font-inter` via next/font)
-- **JetBrains Mono** — code labels, nav items, badges (`--font-jetbrains-mono` via next/font)
+- **Sora** — display, all headlines, buttons (`--font-sora`)
+- **Inter** — body text (`--font-inter`)
+- **JetBrains Mono** — code labels, nav items, badges (`--font-jetbrains-mono`)
+- **Self-hosted** via `next/font/local` from `src/app/fonts/*.woff2` (latin variable files). Do NOT switch back to `next/font/google`: it downloads fonts at build time, and a failed download on Netlify broke the 2026-11-08 deploy
 
 ### Custom CSS utilities (in `globals.css`)
 - `.glass-card` — frosted glass card effect
@@ -206,6 +207,8 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 - **2026-11-08 (late night)** — Now chapter (deployed as `b197bab`): added a fourth floating icon for Videos (screen with gold play button); desktop shows the four 3D badges in a staggered 2 × 2 cluster; on phones the 3D badges hide and the chapter shows the same four icons as tappable buttons linking to /work, /music, /art and /videos (replacing the text links there). Added "Video" to the chapter's skills
 
 - **2026-11-08 (late night, 2)** — `/art` (not yet deployed): 12 artworks replace the placeholders, with titles from the filenames; headline "Original art and illustration."; images hover-zoom; no full-screen viewer or buy buttons yet
+
+- **2026-11-08 (late night, 3)** — Netlify build of `92fdaba` (art page) failed: `next/font/google` could not download the font files during the build (error: "Can't resolve '@vercel/turbopack-next/internal/font/google/font'"). Netlify's AI suggested removing `--turbo`, but the script never had it; Turbopack is the Next 16 default and had built fine before. Fix: fonts self-hosted with `next/font/local`; verified the build succeeds with Google Fonts blocked
 
 ## Contact Form — Implementation Notes
 
