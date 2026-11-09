@@ -242,7 +242,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link and 2018 sales app scene are **live on daventertainment.com** (commit `f227cca` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene and headshot are **live on daventertainment.com** (commit `23368cd` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
@@ -254,12 +254,12 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
   - Worldwide Express stays at 2018–2020 (when he was officially hired; contract work began in 2016)
   - The 2010 sales app is the Gamified Sales Engine (begun 2010, tested 2016, national in 2018)
   - Name Worldwide Express **only** on `/about`. The story chapters, app pages and anywhere else must keep the logistics client anonymous
-- [ ] **Resume PDF:** fix the `DJ&#x2019;d` typo, remove the phone number for the public copy, update the Present dates and the outdated Gatsby/Contentful line, then save as `public/David_Cox_Resume_2026.pdf`. The download button then appears on `/about`
+- [x] **Resume PDF:** corrected version added 2026-11-08 as `public/David_Cox_Resume_2026.pdf` (no phone number; source in David's OneDrive/Documents). The Download Resume button on `/about` appears automatically
 - [x] **Employers:** Worldwide Express and Hornblower are named on `/about` only; the logistics client stays anonymous everywhere else
 - [x] **Commit and push:** done 2026-11-08; the redesign is live
 - [ ] **Send one real test message** through the live contact form (only mocked submissions were tested)
 
-**Assets still to come:** real tracks, art and videos. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; not yet deployed). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
+**Assets still to come:** real tracks, art and videos. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
 
 **To check or do later**
 - [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked
