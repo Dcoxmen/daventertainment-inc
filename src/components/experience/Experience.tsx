@@ -13,6 +13,7 @@ import { ERAS, THEME_TRACK, type Era } from "@/content/story";
 import type { BadgeState } from "./BadgeScene";
 import { stateFor } from "./keyframes";
 import { useStorySound } from "./useStorySound";
+import CreatorButtons from "./CreatorButtons";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -100,8 +101,9 @@ function EraCopy({ era, number }: { era: Era; number: number }) {
           </li>
         ))}
       </ul>
+      {era.links && <CreatorButtons />}
       {era.links && (
-        <nav aria-label="Creative work" className="mt-5 flex flex-wrap gap-3">
+        <nav aria-label="Creative work" className="mt-5 hidden flex-wrap gap-3 md:flex">
           {era.links.map(({ label, href }) => (
             <Link
               key={href}

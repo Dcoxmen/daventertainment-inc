@@ -76,7 +76,7 @@ export const ERAS: Era[] = [
     year: "Now",
     title: "The Creator",
     body: "Today the two threads run together. I build my own apps, make art, and produce music, coding alongside AI agents and curating the knowledge they work from. It's the same instinct I learned on those yacht decks: read the room, then play to it.",
-    skills: ["AI agents", "Agent knowledge", "Apps", "Art", "Music"],
+    skills: ["AI agents", "Agent knowledge", "Apps", "Art", "Music", "Video"],
     accent: "primary",
     links: [
       { label: "Apps", href: "/work" },

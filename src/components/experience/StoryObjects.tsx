@@ -5,6 +5,7 @@ import { useFrame, useThree, type RootState } from "@react-three/fiber";
 import * as THREE from "three";
 import { cssFont, type BadgeState } from "./BadgeScene";
 import { stateFor } from "./keyframes";
+import { CREATOR_ICONS, drawCreatorIcon, type CreatorIcon } from "./creatorIcons";
 import {
   DOT_FRAGMENT,
   LENS_VERTEX,
@@ -460,80 +461,26 @@ function Lens({ state, small }: ObjectProps) {
   );
 }
 
-type IconDrawer = (context: CanvasRenderingContext2D) => void;
-
-const ICONS: { background: string; draw: IconDrawer }[] = [
-  {
-    // Apps: </>
-    background: "#1d3f8f",
-    draw: (c) => {
-      c.lineWidth = 30;
-      c.beginPath();
-      c.moveTo(190, 180); c.lineTo(120, 256); c.lineTo(190, 332);
-      c.moveTo(290, 168); c.lineTo(222, 344);
-      c.moveTo(322, 180); c.lineTo(392, 256); c.lineTo(322, 332);
-      c.stroke();
-    },
-  },
-  {
-    // Music: two beamed notes
-    background: "#8c1a2e",
-    draw: (c) => {
-      c.beginPath();
-      c.ellipse(196, 340, 46, 34, -0.4, 0, TAU);
-      c.ellipse(336, 310, 46, 34, -0.4, 0, TAU);
-      c.fill();
-      c.lineWidth = 22;
-      c.beginPath();
-      c.moveTo(236, 330); c.lineTo(236, 170);
-      c.moveTo(376, 300); c.lineTo(376, 140);
-      c.stroke();
-      c.beginPath();
-      c.moveTo(225, 160); c.lineTo(387, 130); c.lineTo(387, 176); c.lineTo(225, 206);
-      c.fill();
-    },
-  },
-  {
-    // Art: a palette
-    background: "#9a7840",
-    draw: (c) => {
-      c.beginPath();
-      c.ellipse(256, 256, 170, 136, -0.2, 0, TAU);
-      c.fill();
-      c.fillStyle = "#9a7840";
-      c.beginPath();
-      c.arc(320, 320, 30, 0, TAU);
-      c.fill();
-      [["#2855c8", 190, 200], ["#a11f36", 270, 170], ["#0b1326", 190, 290], ["#d4b06a", 345, 220]].forEach(
-        ([color, cx, cy]) => {
-          c.fillStyle = color as string;
-          c.beginPath();
-          c.arc(cx as number, cy as number, 30, 0, TAU);
-          c.fill();
-        }
-      );
-    },
-  },
-];
-
-function iconTexture({ background, draw }: (typeof ICONS)[number]) {
+function iconTexture(icon: CreatorIcon) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = 512;
-  const c = canvas.getContext("2d");
-  if (c) {
-    c.fillStyle = background;
-    c.fillRect(0, 0, 512, 512);
-    c.strokeStyle = c.fillStyle = "#f3e6c8";
-    c.lineCap = c.lineJoin = "round";
-    draw(c);
-  }
+  drawCreatorIcon(canvas, icon);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   return texture;
 }
 
-// Now: the badge splits into app, music and art badges.
-function Trio({ state }: ObjectProps) {
+// Staggered 2 × 2 cluster around the anchor, in units of the viewport's short side.
+const CLUSTER = [
+  [-0.15, 0.13],
+  [0.13, 0.17],
+  [-0.13, -0.13],
+  [0.15, -0.09],
+];
+
+// Now: the badge splits into app, music, art and video badges. On phones the
+// chapter shows tappable buttons instead (CreatorButtons.tsx), so these hide.
+function Trio({ state, small }: ObjectProps) {
   const discs = useRef<(THREE.Mesh | null)[]>([]);
 
   const { geometry, materials } = useMemo(() => {
@@ -541,7 +488,7 @@ function Trio({ state }: ObjectProps) {
     const geometry = new THREE.CylinderGeometry(1, 1, 0.12, 64).rotateX(Math.PI / 2).rotateZ(Math.PI / 2);
     const edge = new THREE.MeshBasicMaterial({ color: "#d4b06a" });
     const back = new THREE.MeshBasicMaterial({ color: "#0b1326" });
-    const materials = ICONS.map((icon) => [
+    const materials = CREATOR_ICONS.map((icon) => [
       edge,
       new THREE.MeshBasicMaterial({ map: iconTexture(icon) }),
       back,
@@ -563,15 +510,15 @@ function Trio({ state }: ObjectProps) {
     const time = root.clock.elapsedTime;
     discs.current.forEach((disc, i) => {
       if (!disc) return;
-      disc.visible = s.trio > 0.001;
+      disc.visible = !small && s.trio > 0.001;
       if (!disc.visible) return;
-      const offset = i - 1;
+      const [dx, dy] = CLUSTER[i];
       disc.position.set(
-        x + offset * unit * 0.26 * s.trio,
-        y + Math.sin(time * 0.9 + i * 2) * unit * 0.02 + (offset === 0 ? unit * 0.06 : -unit * 0.03) * s.trio,
+        x + dx * unit * s.trio,
+        y + dy * unit * s.trio + Math.sin(time * 0.9 + i * 2) * unit * 0.015,
         0
       );
-      disc.scale.setScalar(unit * 0.11 * s.trio);
+      disc.scale.setScalar(unit * 0.095 * s.trio);
       disc.rotation.set(Math.sin(time * 0.6 + i) * 0.15, (1 - s.trio) * Math.PI + Math.sin(time * 0.5 + i) * 0.25, 0);
     });
   });
