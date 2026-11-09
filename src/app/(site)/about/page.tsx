@@ -49,10 +49,8 @@ export default function AboutPage() {
             alt="David Cox"
             fill
             sizes="320px"
-            unoptimized={HEADSHOT.endsWith(".svg")}
-            className="object-cover grayscale"
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-secondary to-primary mix-blend-color" />
         </div>
       </div>
 

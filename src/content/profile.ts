@@ -1,5 +1,4 @@
-// Replace with your photo's path; the About page applies the brand color treatment.
-export const HEADSHOT = "/headshot-placeholder.svg";
+export const HEADSHOT = "/headshot.webp";
 
 // Add this file to public/ and the download link appears on the About page.
 export const RESUME_FILE = "David_Cox_Resume_2026.pdf";
