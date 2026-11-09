@@ -19,7 +19,7 @@ export const ART: CatalogItem[] = [
   { title: "Cityside Underglow Pink", src: "/art/cityside-underglow-pink.webp" },
   { title: "Day of the Dead Guitarist", src: "/art/day-of-dead-guitarist.webp" },
   { title: "Días de los Muertos Band", src: "/art/dias-de-los-muertos-band.webp" },
-  { title: "PCH Coastal Drive", src: "/art/pch-coastal-drive-illustration.webp" },
+  { title: "Red Lips, Vintage Mic", src: "/art/red-lips-vintage-mic.webp" },
   { title: "Psychedelic City", src: "/art/psychedelic-city-painting.webp" },
   { title: "Rainbow Volcano Eruption", src: "/art/rainbow-volcano-eruption.webp" },
   { title: "Soul Singer Abstract", src: "/art/soul-singer-abstract.webp" },
