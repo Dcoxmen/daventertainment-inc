@@ -199,6 +199,8 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
   - Bundle Builder app page links to https://thejoyfactory.com (`url` in `apps.ts`), like PageScore
   - Chapter 6 (2018 The Scale) redesigned at David's request: the seal flies into the logo slot of a wireframe sales app page (KPI tiles, bar chart, donut, leaderboard) beside a head-to-head card comparing Rep A and Rep B. Same wireframe style as 2005. Panels draw in from the top behind a scan line and erase in reverse. Replaced the 2018 node network. Labels stay generic for the NDA
 
+- **2026-11-08 (night)** — Chapter copy rewrite in `src/content/story.ts` (not yet deployed, awaiting David's review): stronger verbs and turning points, varied openings, and a through-line. The motif "read the room" is planted in 2000 and paid off in Now, echoing the headline "Code that plays to the room." Facts unchanged; logistics client still anonymous. David approved all chapters; at his request the 2021 chapter no longer names The Joy Factory ("At my current job position")
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -242,7 +244,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene and headshot are **live on daventertainment.com** (commit `23368cd` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot and resume PDF are **live on daventertainment.com** (commit `3f83d53` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
