@@ -1,30 +1,21 @@
 import type { Metadata } from "next";
 import PageIntro from "@/components/PageIntro";
-import { TRACKS } from "@/content/catalog";
+import RadioDial from "@/components/music/RadioDial";
 
 export const metadata: Metadata = {
   title: "Music | Daventertainment Inc",
-  description: "Original music from Daventertainment Inc.",
+  description:
+    "Daventertainment Radio: twelve original lo-fi, chillhop and funk stations by David Cox. Turn the dial to listen.",
   alternates: { canonical: "/music" },
 };
 
 export default function MusicPage() {
   return (
     <>
-      <PageIntro label="Music" title="New tracks are on the way.">
-        Original music from Daventertainment Inc.
+      <PageIntro label="Music" title="Tune in.">
+        Twelve original lo-fi stations from Daventertainment Inc. Turn the dial to listen.
       </PageIntro>
-      <ol className="max-w-3xl divide-y divide-white/10 border-y border-white/10">
-        {TRACKS.map(({ title }, index) => (
-          <li key={title} className="flex items-center gap-5 py-4">
-            <span className="w-7 font-code-label text-[13px] text-primary">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span className="flex-1 font-headline-md font-semibold">{title}</span>
-            <span className="font-code-label text-[13px] text-on-surface-variant">Coming soon</span>
-          </li>
-        ))}
-      </ol>
+      <RadioDial />
     </>
   );
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import SiteHeader from "@/components/SiteHeader";
+import PlayerProvider from "@/components/player/PlayerProvider";
+import MiniPlayer from "@/components/player/MiniPlayer";
 import "./globals.css";
 
 // Fonts are stored in the repo (latin variable files from Google Fonts) so
@@ -152,8 +154,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen antialiased">
-        <SiteHeader />
-        {children}
+        <PlayerProvider>
+          <SiteHeader />
+          {children}
+          <MiniPlayer />
+        </PlayerProvider>
       </body>
     </html>
   );

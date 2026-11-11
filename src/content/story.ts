@@ -1,9 +1,6 @@
 // The home page story. Each era is one scroll chapter; the badge state for
 // each id lives in src/components/experience/keyframes.ts.
 
-// Replace with your own loop (WAV or MP3, 60–90 seconds, seamless).
-export const THEME_TRACK = "/audio/soul-swellin-loop-30sec.mp3";
-
 export type Era = {
   id: string;
   year: string;

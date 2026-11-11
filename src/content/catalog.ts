@@ -12,7 +12,6 @@ const placeholders = (name: string): CatalogItem[] =>
     title: `${name} ${String(i + 1).padStart(2, "0")}`,
   }));
 
-export const TRACKS = placeholders("Track");
 // Files live in public/art/ (WebP, up to 1024px square).
 export const ART: CatalogItem[] = [
   { title: "Chilled Rainbow Martini", src: "/art/chilled-rainbow-martini.webp" },

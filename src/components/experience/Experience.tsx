@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,10 +9,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 import { APPS, type App } from "@/content/apps";
-import { ERAS, THEME_TRACK, type Era } from "@/content/story";
+import { ERAS, type Era } from "@/content/story";
+import { usePlayer } from "@/components/player/PlayerProvider";
 import type { BadgeState } from "./BadgeScene";
 import { stateFor } from "./keyframes";
-import { useStorySound } from "./useStorySound";
 import CreatorButtons from "./CreatorButtons";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -157,8 +157,10 @@ export default function Experience() {
   const [sceneReady, setSceneReady] = useState(false);
   const [chapter, setChapter] = useState(0);
   const animated = useSyncExternalStore(subscribeToMotion, canRunExperience, () => false);
-  const sound = useStorySound(THEME_TRACK);
-  const setSoundProgress = sound.setProgress;
+  // The site-wide radio: muffled at the top of the story, opening up as you scroll.
+  const sound = usePlayer();
+  const setSoundProgress = sound.setFilter;
+  useEffect(() => () => setSoundProgress(null), [setSoundProgress]);
 
   useGSAP(
     () => {
@@ -247,7 +249,7 @@ export default function Experience() {
   }
 
   const railActive = RAIL.findLastIndex(({ section }) => section <= chapter && chapter > 0);
-  const soundLabel = { off: "Listen", loading: "Loading…", on: "Sound on" }[sound.status];
+  const soundLabel = { off: "Listen", loading: "Tuning…", on: "Sound on" }[sound.status];
 
   return (
     <div ref={root} className="relative text-on-surface">
@@ -394,7 +396,7 @@ export default function Experience() {
             <button
               type="button"
               onClick={sound.toggle}
-              aria-pressed={sound.status === "on"}
+              aria-pressed={sound.status !== "off"}
               className="text-on-surface transition-colors hover:text-primary aria-pressed:text-primary"
             >
               ♪ {soundLabel}

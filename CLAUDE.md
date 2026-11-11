@@ -106,11 +106,16 @@ src/
       CreatorButtons.tsx — phone view of the Now chapter: the four icons as tappable, gently floating buttons
       keyframes.ts    — badge state for each chapter (desktop and phone layouts)
       shaders.ts      — badge face, harbor backdrop, windows and particle shaders
-      useStorySound.ts — Listen/Silent audio; a low-pass filter opens as you scroll
+    player/
+      PlayerProvider.tsx — site-wide radio in the root layout (Web Audio): stations, tuning static, home scroll filter, analyser, Media Session
+      MiniPlayer.tsx — floating controls on plain pages once the radio is started (hidden on / and /music)
+      icons.tsx — drawn play/pause/next/prev icons (text symbols render as emoji on Windows)
+    music/RadioDial.tsx — the Dial on /music: 12 stations like a clock, drag/tap/arrow keys, visualizer ring
   content/
     apps.ts           — the 4 featured apps (apps with screenshots first; the NDA app last)
-    story.ts          — home chapter copy and skills, plus THEME_TRACK (the music file path)
-    catalog.ts        — tracks and videos (12 placeholders each); ART lists David's 12 artworks (files in public/art/)
+    story.ts          — home chapter copy and skills
+    stations.ts       — the 12 radio stations (loop file, exact length, YouTube link)
+    catalog.ts        — videos (12 placeholders); ART lists David's 12 artworks (files in public/art/)
     profile.ts        — headshot path, resume filename, stats, experience, services
 public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is David's music loop
 ```
@@ -247,7 +252,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 | 1. Prototype | ✅ Done, approved by David |
 | 2. Foundation | ✅ Built, awaiting David's review |
 | 3. Home experience: remaining chapters, sound, phone and reduced-motion polish | ✅ Built 2026-11-08, awaiting David's review |
-| 4. Dial on `/music`, Backlot on `/studio` | ⏭️ Next |
+| 4. Dial on `/music`, Backlot on `/studio` | Dial built 2026-11-10; Backlot next |
 | 5. Launch: real-device testing, speed tuning, real contact form test, swap live site | Not started |
 | 6. Later: real content, shop, licenses, templates, award submission | Not started |
 
@@ -255,7 +260,18 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 **State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF, rewritten chapter copy, Now chapter Videos badge/phone buttons, art gallery (with Red Lips, Vintage Mic) and self-hosted fonts are **live on daventertainment.com** (commit `1917525` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
-**Phase 4 music: paused for David's answers (2026-11-09). Discussion only, no code changed yet**
+**Phase 4 music: decisions from David (2026-11-10)**
+- No licensing or sales: the dial just plays the music. Approach A confirmed
+- 12 stations, each a seamless loop of **at most 1:30**, cut with ffmpeg (installed via WinGet) into `public/audio/stations/`. Full mix MP3s stay OUT of the repo
+- The home Listen button uses the same site-wide player
+- Each station links to its full mix on YouTube. Stations: Cup of Joe (v8q06zzUpo8), Night Out (-5DmnuNbhgE), Hypnotically Cool x Funk Feelin (54B_cwJ5oPQ), Up & Running (Gi1Enlr7J-g), Evening Dine (I9xbNDHCvjc), Aghaz-e Rooz (Begin the Day) (ZCbAeAyIuMg), The Row (xB6esrN9sNI), Spanish Coffee (CjRLfdPre4k), Matiz Tropical (oX00L3VZDhE), Rizz Risen, Landing in Funkify, Mi Special Butterfly (last three: video links still needed)
+- The "mixes" are songs of 2:41–4:15, in `claude-projects/audio-files/` (outside the repo). "Tropical Nuance (Remix).mp3" = Matiz Tropical. The last three stations link to the channel videos page on purpose
+- **Loops made 2026-11-10** (uncommitted): 12 MP3s in `public/audio/stations/` (72–90 s, 160 kbps, ~1.6 MB each, 19 MB total), station list in `src/content/stations.ts`. Each seam is a 2 s crossfade at a beat-matched point; levels evened to about -16 LUFS. Script and seam previews (loop played twice) are in `audio-files/loop-previews/`; rerun with `node make-loops.mjs <srcDir> <outDir> <previewDir>`
+- Loops must play through Web Audio (`AudioBufferSourceNode.loop`); `<audio loop>` leaves a small gap in MP3s
+- David approved all 12 loops (2026-11-10)
+- **Dial and site-wide player built 2026-11-10** (uncommitted, not deployed). Home Listen now plays the current station (starts at Cup of Joe) with the scroll filter; the old Soul Swellin loop and `useStorySound.ts` were retired (the MP3 is still in `public/audio/`). Tested in headless Chromium: seams loop sample-exact, drag/tap/keys tune, music continues across pages, mini player works, no console errors, no phone overflow. Not yet tested on Safari/iPhone or real devices; lock-screen controls may need an `<audio>` element on some phones
+
+**Phase 4 music: earlier discussion (2026-11-09)**
 - YouTube channel: "Daventertainment Inc", https://www.youtube.com/channel/UCDCuScou1VMIOx7DCasa76g. Public feed (no API key): https://www.youtube.com/feeds/videos.xml?channel_id=UCDCuScou1VMIOx7DCasa76g (latest 15 uploads). Mostly weekly 1-hour lo-fi mixes since Nov 2025 (Latin lo-fi, acid jazz, Afro-beat/reggae, indie/math rock, retro lounge, neo soul, Japanese instrumentation), plus 3 singles from Aug–Sep 2025. Recent mixes have ~1,000–1,250 views
 - Proposed: the Dial on `/music` with each mix as a "station"
 - Recommended approach A: self-hosted 30–60 sec preview loops (~1 MB each, cut from David's mix files) drive the dial and a visualizer; a "Watch the full mix" button opens the YouTube player (loaded only on click). Alternatives: B = YouTube embeds only (dial can't react to the audio; the player must stay visible per YouTube terms); C = full mixes on external storage such as Cloudflare R2. Full mixes (~60–90 MB each) must NOT go in the repo
