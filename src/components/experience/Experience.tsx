@@ -195,31 +195,41 @@ export default function Experience() {
           top += HEIGHT_VH[section.kind];
         });
 
+        gsap.utils.toArray<HTMLElement>("[data-copy]").forEach((copy) => {
+          const section = copy.closest("[data-chapter]");
+          if (desktop) {
+            gsap.fromTo(
+              copy,
+              { autoAlpha: 0, y: 60 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                ease: "none",
+                scrollTrigger: { trigger: section, start: "top 70%", end: "top 20%", scrub: true },
+              }
+            );
+          } else {
+            // Phones: the 3D objects fill the lower half, so the text must not slide up
+            // through them. The y offset cancels the scroll, so the text fades in already
+            // in its final place at the top, after the previous chapter's text has left.
+            gsap.fromTo(
+              copy,
+              { autoAlpha: 0, y: () => -0.4 * window.innerHeight },
+              {
+                autoAlpha: 1,
+                y: 0,
+                ease: "none",
+                scrollTrigger: { trigger: section, start: "top 40%", end: "top top", scrub: true, invalidateOnRefresh: true },
+              }
+            );
+          }
+          fadeOut(copy, section);
+        });
+
         return () => story.scrollTrigger?.kill();
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-chapter]").forEach((section) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onToggle: ({ isActive }) => {
-            if (isActive) setChapter(Number(section.dataset.chapter));
-          },
-        });
-
-        const copy = section.querySelector("[data-copy]");
-        if (!copy) return;
-        gsap.fromTo(
-          copy,
-          { autoAlpha: 0, y: 60 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            ease: "none",
-            scrollTrigger: { trigger: section, start: "top 70%", end: "top 20%", scrub: true },
-          }
-        );
+      function fadeOut(copy: HTMLElement, section: Element | null) {
         gsap.fromTo(
           copy,
           { autoAlpha: 1, y: 0 },
@@ -231,6 +241,17 @@ export default function Experience() {
             scrollTrigger: { trigger: section, start: "bottom 75%", end: "bottom 40%", scrub: true },
           }
         );
+      }
+
+      gsap.utils.toArray<HTMLElement>("[data-chapter]").forEach((section) => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          onToggle: ({ isActive }) => {
+            if (isActive) setChapter(Number(section.dataset.chapter));
+          },
+        });
       });
 
       return () => {
