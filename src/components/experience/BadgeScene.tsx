@@ -37,9 +37,8 @@ type SceneProps = {
 // Replace this one file to change the badge face.
 const FACE_IMAGE = "/badge-face.webp";
 
-// The face shader has three screenshot slots, then an NDA treatment for the
-// fourth app. Keep apps with screenshots first in src/content/apps.ts.
-const SCREENSHOTS = APPS.slice(0, 3).map((app) => (app.nda ? undefined : app.image));
+// The face shader has four image slots, one per app, using each app's square badge image.
+const SCREENSHOTS = APPS.slice(0, 4).map((app) => app.badge);
 
 const TAU = Math.PI * 2;
 const RING_ROWS = 12;
@@ -165,7 +164,7 @@ function Badge({ state, onReady }: SceneProps) {
   const spinner = useRef<THREE.Group>(null);
   const face = useRef<THREE.ShaderMaterial>(null);
   const rim = useRef<THREE.MeshStandardMaterial>(null);
-  const shots = useRef<(THREE.Texture | null)[]>([null, null, null]);
+  const shots = useRef<(THREE.Texture | null)[]>([null, null, null, null]);
   const motion = useRef({ enter: 0, spin: 0, pointerX: 0, pointerY: 0, targetX: 0, targetY: 0 });
 
   const edge = useMemo(() => {
@@ -189,7 +188,8 @@ function Badge({ state, onReady }: SceneProps) {
       uShot0: { value: null },
       uShot1: { value: null },
       uShot2: { value: null },
-      uShotAspect: { value: new THREE.Vector3(1, 1, 1) },
+      uShot3: { value: null },
+      uShotAspect: { value: new THREE.Vector4(1, 1, 1, 1) },
       uShot: { value: 0 },
       uTime: { value: 0 },
       uCodeMix: { value: 0 },

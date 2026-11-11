@@ -146,7 +146,7 @@ public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is Da
 
 ## Featured Apps
 
-Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name approved for public use), PageScore (10k+ active users), Conversational Analytics Engine (85% report automation), Gamified Sales Engine (NDA: no client name or visuals). Services copy lives in `src/content/profile.ts`.
+Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/`: `<slug>-cover.webp` (16:9, /work cards and app pages) and `<slug>-badge.webp` (square, content kept inside the circle, for the home 3D frame). Made by `node scripts/work-images/make.mjs` from originals in `scripts/work-images/source/`; the Gamified Sales Engine images are a drawn wireframe illustration (generic labels, NDA-safe). Bundle Builder (The Joy Factory, name approved for public use), PageScore (10k+ active users), Conversational Analytics Engine (85% report automation), Gamified Sales Engine (NDA: no client name or visuals). Services copy lives in `src/content/profile.ts`.
 
 ---
 
@@ -297,7 +297,7 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 **Assets still to come:** real tracks and videos. Art: 12 pieces added 2026-11-08 from Downloads/portfolio-images (raccoon-samurai-warrior left out at David's request); on 2026-11-09 PCH Coastal Drive was replaced with "Red Lips, Vintage Mic" (Downloads/dcoxmen-media/Poster-lips-mic-red-vintage-1024.png), converted to WebP up to 1024px in `public/art/`. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
 
 **To check or do later**
-- [ ] Look at the Bundle Builder card on `/work`: the full-image change was built but not visually checked
+- [x] Bundle Builder card on `/work`: replaced 2026-11-11 by the new 16:9 cover
 - [ ] Add the full-screen art view and video player when real media exists
 - [ ] Reconcile the Netlify status below: `netlify.toml` and `@netlify/plugin-nextjs` are not in the repo, though the site deploys fine
 - [ ] Old links to `/#projects` and `/#contact` no longer lead to those sections after launch

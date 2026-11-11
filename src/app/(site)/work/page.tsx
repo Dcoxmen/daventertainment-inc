@@ -24,20 +24,14 @@ export default function WorkPage() {
             href={`/work/${app.slug}`}
             className="glass-card group overflow-hidden rounded-xl transition-colors hover:border-primary/50"
           >
-            <div className="relative h-56 bg-surface-container-low">
-              {app.image && !app.nda ? (
-                <Image
-                  src={app.image}
-                  alt={`${app.title} screenshot`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className={app.portrait ? "object-contain" : "object-cover object-top"}
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center bg-gradient-to-br from-secondary-container/40 to-tertiary-container/40 font-code-label text-code-label">
-                  Details on request
-                </div>
-              )}
+            <div className="relative aspect-video bg-surface-container-low">
+              <Image
+                src={app.image}
+                alt={app.nda ? `${app.title} illustration` : `${app.title} screenshot`}
+                fill
+                sizes="(max-width: 768px) 100vw, 600px"
+                className="object-cover"
+              />
             </div>
             <div className="p-6">
               {app.client && (

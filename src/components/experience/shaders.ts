@@ -47,7 +47,8 @@ export const FACE_FRAGMENT = /* glsl */ `
   uniform sampler2D uShot0;
   uniform sampler2D uShot1;
   uniform sampler2D uShot2;
-  uniform vec3 uShotAspect;
+  uniform sampler2D uShot3;
+  uniform vec4 uShotAspect;
   uniform float uShot;
   uniform float uTime;
   uniform float uCodeMix;
@@ -80,19 +81,11 @@ export const FACE_FRAGMENT = /* glsl */ `
     return texture2D(image, uv + 0.5).rgb;
   }
 
-  // The NDA app has no screenshot: show blurred code behind frosted stripes.
-  vec3 ndaColor(vec2 p, float r, float ring, float angle) {
-    float blurred = texture2D(uCode, vec2(seamless(-angle / TAU + uTime * 0.01), ring), 5.0).r;
-    blurred *= smoothstep(INNER, INNER + 0.08, r);
-    float stripes = step(0.5, fract((p.x + p.y) * 7.0 + uTime * 0.15));
-    return vec3(0.02, 0.04, 0.09) + BLUE * blurred * 0.4 + vec3(0.025) * stripes;
-  }
-
-  vec3 shotColor(float index, vec2 p, float r, float ring, float angle) {
+  vec3 shotColor(float index, vec2 p) {
     if (index < 0.5) return cover(uShot0, uShotAspect.x, p);
     if (index < 1.5) return cover(uShot1, uShotAspect.y, p);
     if (index < 2.5) return cover(uShot2, uShotAspect.z, p);
-    return ndaColor(p, r, ring, angle);
+    return cover(uShot3, uShotAspect.w, p);
   }
 
   void main() {
@@ -156,8 +149,8 @@ export const FACE_FRAGMENT = /* glsl */ `
     // App screenshots, crossfading as uShot moves between apps
     float first = floor(uShot);
     vec3 shot = mix(
-      shotColor(first, p, r, ring, angle),
-      shotColor(first + 1.0, p, r, ring, angle),
+      shotColor(first, p),
+      shotColor(first + 1.0, p),
       smoothstep(0.0, 1.0, fract(uShot))
     );
     shot *= 1.0 - 0.35 * smoothstep(0.7, 1.0, r);

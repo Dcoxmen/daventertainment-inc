@@ -58,20 +58,19 @@ export default async function AppPage(props: PageProps<"/work/[slug]">) {
 
       {app.nda && (
         <p className="glass-card mt-8 rounded-xl p-5 text-body-md text-on-surface-variant">
-          This project is under NDA, so visuals are not shown here. Details are available on request.
+          This project is under NDA. The image is an illustration, not the real app. Details are available on request.
         </p>
       )}
 
-      {app.image && !app.nda && (
-        <Image
-          src={app.image}
-          alt={`${app.title} screenshot`}
-          width={1200}
-          height={800}
-          sizes="(max-width: 768px) 100vw, 768px"
-          className="mt-10 h-auto w-full rounded-xl border border-white/10"
-        />
-      )}
+      <Image
+        src={app.image}
+        alt={app.nda ? `${app.title} illustration` : `${app.title} screenshot`}
+        width={1600}
+        height={900}
+        sizes="(max-width: 768px) 100vw, 768px"
+        className="mt-10 aspect-video h-auto w-full rounded-xl border border-white/10 object-cover"
+      />
+
 
       <div className="mt-10 flex flex-wrap gap-3">
         {app.url && (

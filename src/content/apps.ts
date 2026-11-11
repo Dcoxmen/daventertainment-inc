@@ -5,11 +5,12 @@ export type App = {
   stack: string[];
   client?: string;
   url?: string;
-  image?: string;
-  /** Shows the whole image on cards instead of cropping it. */
-  portrait?: boolean;
+  /** 16:9 image for the /work cards and the app page. Made by scripts/work-images/make.mjs. */
+  image: string;
+  /** Square image for the round frame in the home story; keep its content inside the circle. */
+  badge: string;
   metric?: { value: string; label: string };
-  /** Hides visuals and shows "details on request". */
+  /** Under NDA: the images are an illustration, and the app page offers details on request. */
   nda?: boolean;
 };
 
@@ -22,8 +23,8 @@ export const APPS: App[] = [
       "A customer assistant that helps shoppers narrow down what they need. Focused questions in an easy-to-understand interface identify the features and solutions they are looking for, then it recommends a bundled solution of device case and best-matched mounts and accessories.",
     stack: ["Next.js", "E-commerce API", "Claude AI"],
     url: "https://thejoyfactory.com",
-    image: "/project-bundle-builder.webp",
-    portrait: true,
+    image: "/work/bundle-builder-cover.webp",
+    badge: "/work/bundle-builder-badge.webp",
   },
   {
     slug: "pagescore",
@@ -32,7 +33,8 @@ export const APPS: App[] = [
       "An AI-powered landing page evaluator that delivers precise technical SEO and AEO audit reports with actionable recommendations to improve search and AI engine visibility.",
     stack: ["Next.js", "TypeScript", "Anthropic", "React"],
     url: "https://page-score.com",
-    image: "/project-pagescore.png",
+    image: "/work/pagescore-cover.webp",
+    badge: "/work/pagescore-badge.webp",
     metric: { value: "10k+", label: "Active users" },
   },
   {
@@ -41,7 +43,8 @@ export const APPS: App[] = [
     description:
       "A GCP-powered analytics environment connecting BigQuery and Looker Studio to transform GA4 data into real-time conversational dashboards, eliminating manual reporting across the organization.",
     stack: ["GCP", "BigQuery", "Looker Studio", "GA4"],
-    image: "/project-analytics.png",
+    image: "/work/conversational-analytics-cover.webp",
+    badge: "/work/conversational-analytics-badge.webp",
     metric: { value: "85%", label: "Report automation" },
   },
   {
@@ -51,6 +54,8 @@ export const APPS: App[] = [
     description:
       "A gamified SaaS platform built for a national logistics company. It scaled to nationwide use and drove corporate revenue.",
     stack: ["SaaS", "Full Stack"],
+    image: "/work/gamified-sales-engine-cover.webp",
+    badge: "/work/gamified-sales-engine-badge.webp",
     nda: true,
   },
 ];
