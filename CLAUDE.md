@@ -253,7 +253,15 @@ Source of truth: `src/content/apps.ts`. Bundle Builder (The Joy Factory, name ap
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF, rewritten chapter copy, Now chapter Videos badge/phone buttons, art gallery and self-hosted fonts are **live on daventertainment.com** (commit `349e6a3` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF, rewritten chapter copy, Now chapter Videos badge/phone buttons, art gallery (with Red Lips, Vintage Mic) and self-hosted fonts are **live on daventertainment.com** (commit `1917525` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+
+**Phase 4 music: paused for David's answers (2026-11-09). Discussion only, no code changed yet**
+- YouTube channel: "Daventertainment Inc", https://www.youtube.com/channel/UCDCuScou1VMIOx7DCasa76g. Public feed (no API key): https://www.youtube.com/feeds/videos.xml?channel_id=UCDCuScou1VMIOx7DCasa76g (latest 15 uploads). Mostly weekly 1-hour lo-fi mixes since Nov 2025 (Latin lo-fi, acid jazz, Afro-beat/reggae, indie/math rock, retro lounge, neo soul, Japanese instrumentation), plus 3 singles from Aug–Sep 2025. Recent mixes have ~1,000–1,250 views
+- Proposed: the Dial on `/music` with each mix as a "station"
+- Recommended approach A: self-hosted 30–60 sec preview loops (~1 MB each, cut from David's mix files) drive the dial and a visualizer; a "Watch the full mix" button opens the YouTube player (loaded only on click). Alternatives: B = YouTube embeds only (dial can't react to the audio; the player must stay visible per YouTube terms); C = full mixes on external storage such as Cloudflare R2. Full mixes (~60–90 MB each) must NOT go in the repo
+- Player: no framework. Native audio plus Web Audio API: one site-wide player that keeps playing across pages, a visualizer, Media Session lock-screen controls. Howler.js not needed
+- Option: list the newest mixes automatically from the public feed
+- Questions waiting on David: (1) approach A? (2) which 12 mixes: most recent, or hand-picked? auto-update from the feed? (3) can he supply mix files to cut previews? (4) should other creators be able to use the music in their videos, and free with credit or paid? (5) Content ID registration, and are all samples cleared? One mix mentions "plunderphonic elements" (6) should the home Listen button use the same site-wide player?
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
