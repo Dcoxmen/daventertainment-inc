@@ -78,7 +78,7 @@ const ACCENTS: Record<Era["accent"], string> = {
   tertiary: "text-tertiary",
 };
 
-const BODY = "mt-4 text-body-md text-on-surface md:mt-5 md:text-body-lg";
+const BODY = "mt-4 text-body-md text-on-surface md:mt-5 md:text-body-lg short:mt-2 short:text-[14px] short:leading-normal";
 const LABEL = "font-code-label text-code-label uppercase";
 
 function EraCopy({ era, number }: { era: Era; number: number }) {
@@ -87,11 +87,11 @@ function EraCopy({ era, number }: { era: Era; number: number }) {
       <p className={`${LABEL} ${ACCENTS[era.accent]}`}>
         Chapter {String(number).padStart(2, "0")} · {era.title}
       </p>
-      <h2 className="mt-2 font-display text-[72px] leading-none font-extrabold tracking-tight md:text-[140px]">
+      <h2 className="mt-2 font-display text-[72px] leading-none font-extrabold tracking-tight md:text-[140px] short:mt-1 short:text-[52px]">
         {era.year}
       </h2>
       <p className={BODY}>{era.body}</p>
-      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Skills">
+      <ul className="mt-4 flex flex-wrap gap-2 short:hidden" aria-label="Skills">
         {era.skills.map((skill) => (
           <li
             key={skill}
@@ -103,12 +103,12 @@ function EraCopy({ era, number }: { era: Era; number: number }) {
       </ul>
       {era.links && <CreatorButtons />}
       {era.links && (
-        <nav aria-label="Creative work" className="mt-5 hidden flex-wrap gap-3 md:flex">
+        <nav aria-label="Creative work" className="mt-5 hidden flex-wrap gap-3 md:flex short:mt-3 short:gap-2">
           {era.links.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              className="rounded-lg border border-outline px-4 py-2.5 font-button text-sm font-semibold hover:border-primary hover:text-primary"
+              className="rounded-lg border border-outline px-4 py-2.5 font-button text-sm font-semibold hover:border-primary hover:text-primary short:px-3 short:py-1.5"
             >
               {label} →
             </Link>
@@ -125,13 +125,13 @@ function AppCopy({ app, index }: { app: App; index: number }) {
       <p className={`${LABEL} text-primary`}>
         The Work · {index + 1}/{APPS.length}
       </p>
-      {app.client && <p className="mt-3 font-code-label text-[13px] text-secondary">{app.client}</p>}
-      <h2 className="mt-1 font-display text-[34px] leading-[1.08] font-extrabold tracking-tight md:text-[52px]">
+      {app.client && <p className="mt-3 font-code-label text-[13px] text-secondary short:mt-1">{app.client}</p>}
+      <h2 className="mt-1 font-display text-[34px] leading-[1.08] font-extrabold tracking-tight md:text-[52px] short:text-[26px]">
         {app.title}
       </h2>
       <p className={BODY}>{app.description}</p>
       {app.metric && (
-        <p className="mt-4 font-headline-md text-headline-md">
+        <p className="mt-4 font-headline-md text-headline-md short:mt-2 short:text-[18px]">
           <span className="text-primary">{app.metric.value}</span> {app.metric.label}
         </p>
       )}
@@ -142,7 +142,7 @@ function AppCopy({ app, index }: { app: App; index: number }) {
       )}
       <Link
         href={`/work/${app.slug}`}
-        className="mt-5 inline-block font-button text-button text-primary hover:underline"
+        className="mt-5 inline-block font-button text-button text-primary hover:underline short:mt-2"
       >
         View project →
       </Link>
@@ -291,21 +291,21 @@ export default function Experience() {
                 key="intro"
                 data-chapter={index}
                 style={animated ? { height: `${HEIGHT_VH.intro}vh` } : undefined}
-                className="flex min-h-svh items-start px-4 pt-28 md:items-center md:px-12 md:pt-0"
+                className="flex min-h-svh items-start px-4 pt-28 md:items-center md:px-12 md:pt-0 short:pt-16 short:pb-12"
               >
                 <div className="grid w-full grid-cols-1 items-center gap-10 md:grid-cols-2">
                   <div className="max-w-xl">
-                    <p className="mb-5 font-code-label text-[13px] uppercase text-primary md:text-code-label">
+                    <p className="mb-5 font-code-label text-[13px] uppercase text-primary md:text-code-label short:mb-2">
                       David Cox · Daventertainment Inc
                     </p>
-                    <h1 className="font-display text-[44px] leading-[1.05] font-extrabold tracking-tight md:text-[76px]">
+                    <h1 className="font-display text-[44px] leading-[1.05] font-extrabold tracking-tight md:text-[76px] short:text-[34px]">
                       Code that plays to the room.
                     </h1>
-                    <p className="mt-5 text-body-md text-on-surface-variant md:mt-6 md:text-body-lg">
+                    <p className="mt-5 text-body-md text-on-surface-variant md:mt-6 md:text-body-lg short:mt-3 short:text-[14px] short:leading-normal">
                       Full stack engineer and AI integration specialist with over 20 years of experience
                       building SaaS platforms, Next.js applications, and AI-powered systems.
                     </p>
-                    <div className="mt-6 flex flex-wrap gap-3 md:mt-8">
+                    <div className="mt-6 flex flex-wrap gap-3 md:mt-8 short:mt-4">
                       <Link
                         href="/work"
                         className="rounded-lg bg-primary px-6 py-3.5 font-button text-button text-on-primary transition-opacity hover:opacity-85"
@@ -343,7 +343,7 @@ export default function Experience() {
             ) : (
               <>
                 <p className={`${LABEL} text-primary`}>Contact</p>
-                <h2 className="mt-2 font-display text-[44px] leading-[1.05] font-extrabold tracking-tight md:text-[76px]">
+                <h2 className="mt-2 font-display text-[44px] leading-[1.05] font-extrabold tracking-tight md:text-[76px] short:text-[40px]">
                   Let&apos;s build something.
                 </h2>
                 <p className={BODY}>
@@ -377,15 +377,17 @@ export default function Experience() {
               <div
                 className={
                   animated
-                    ? `sticky top-0 flex h-svh items-start px-4 pt-24 md:items-center md:px-12 md:pt-0 ${
-                        section.kind === "era" && section.era.id === "harbor" ? "md:pb-56" : ""
+                    ? `sticky top-0 flex h-svh items-start px-4 pt-24 md:items-center md:px-12 md:pt-0 short:pt-14 short:pb-10 ${
+                        section.kind === "era" && section.era.id === "harbor" ? "md:pb-56 short:pb-10" : ""
                       }`
                     : ""
                 }
               >
                 <div
                   data-copy={animated ? "" : undefined}
-                  className="max-w-md [text-shadow:0_2px_16px_rgba(3,7,18,0.95)] lg:max-w-lg"
+                  className={`max-w-md [text-shadow:0_2px_16px_rgba(3,7,18,0.95)] lg:max-w-lg ${
+                    section.kind !== "era" ? "short:max-w-[52vw]" : section.era.id === "scale" ? "short:max-w-[40vw]" : "short:max-w-[44vw]"
+                  }`}
                 >
                   {copy}
                 </div>

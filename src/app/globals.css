@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Short screens, mainly phones held sideways: the home story uses a compact text size */
+@custom-variant short (@media (max-height: 500px));
+
 /* Fonts, sizes, spacing — inline so next/font CSS vars resolve correctly */
 @theme inline {
   --font-display: var(--font-sora), 'Sora', sans-serif;
