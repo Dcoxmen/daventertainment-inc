@@ -105,6 +105,7 @@ src/
       creatorIcons.ts — Apps / Music / Art / Videos icon art and links, shared by the 3D badges and the phone buttons
       CreatorButtons.tsx — phone view of the Now chapter: the four icons as tappable, gently floating buttons
       keyframes.ts    — badge state for each chapter (desktop and phone layouts)
+      interaction.ts  — shared live input (pointer, tap pulse, scroll speed, cursor) and the layout media queries
       shaders.ts      — badge face, harbor backdrop, windows and particle shaders
     player/
       PlayerProvider.tsx — site-wide radio in the root layout (Web Audio): stations, tuning static, home scroll filter, analyser, Media Session
@@ -112,12 +113,17 @@ src/
       icons.tsx — drawn play/pause/next/prev icons (text symbols render as emoji on Windows)
     music/RadioDial.tsx — the Dial on /music: 12 stations like a clock, drag/tap/arrow keys, visualizer ring
   content/
-    apps.ts           — the 4 featured apps (apps with screenshots first; the NDA app last)
+    apps.ts           — the 4 featured apps, each with a 16:9 `image` and a square `badge` (the 3D frame shows the first four, in order)
     story.ts          — home chapter copy and skills
     stations.ts       — the 12 radio stations (loop file, exact length, YouTube link)
     catalog.ts        — videos (12 placeholders); ART lists David's 12 artworks (files in public/art/)
-    profile.ts        — headshot path, resume filename, stats, experience, services
+    profile.ts        — headshot path, resume filename, stats, experience, services, FAQ (shown on /about)
+    schema.ts         — JSON-LD: site graph (Person, Organization, ProfessionalService, WebSite linked by @id)
 public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is David's music loop
+  work/               — app images: <slug>-cover.webp (16:9) and <slug>-badge.webp (square)
+scripts/
+  work-images/make.mjs — builds public/work/ from source/ (HTML layouts screenshotted by Playwright, saved with sharp)
+  og-image/make.mjs — builds src/app/opengraph-image.png, the 1200×630 link preview
 ```
 
 ---
@@ -160,6 +166,13 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - TypeScript strict mode is on — zero errors as of current build
 - Multi-page App Router site; the home page is the 3D scroll story, all other pages stay fast and plain
 - 3D loads client-side only; reduced-motion and no-WebGL visitors get plain text
+- Home story has three layouts, and every change must be checked in all three:
+  - **Phone** (under 768px wide): text at the top, 3D objects in the lower half. Text fades in already in place at the top (its y offset cancels the scroll), so it never passes through the 3D objects
+  - **Desktop** (768px wide and up): text on the left, 3D on the right
+  - **Short screens** (`short:` variant in `globals.css`, max-height 500px, i.e. phones held sideways): desktop layout with compact text and no skill tags. The 2018 column is narrower (40vw) to clear the sales app panels
+  - The home story switches layout with the `wide:` variant, not `md:`: 768px and up OR any phone held sideways, so an iPhone SE sideways (667×375) also gets the side-by-side layout. `WIDE_QUERY`/`NARROW_QUERY` in `interaction.ts` must match it (used by gsap.matchMedia and StoryObjects)
+  - `compact:` (portrait phones under 760px tall) shrinks the type and hides skill tags; `tiny:` (narrow phones held sideways) shrinks it further. Variant order in `globals.css` matters: wide, short, tiny, compact
+- Test sizes used: 390×844, 375×667, 430×932 (portrait); 844×340, 844×390, 932×430 (landscape); 1440×900 (desktop)
 
 ---
 
@@ -215,6 +228,20 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 - **2026-11-08 (late night, 3)** — Netlify build of `92fdaba` (art page) failed: `next/font/google` could not download the font files during the build (error: "Can't resolve '@vercel/turbopack-next/internal/font/google/font'"). Netlify's AI suggested removing `--turbo`, but the script never had it; Turbopack is the Next 16 default and had built fine before. Fix: fonts self-hosted with `next/font/local`; verified the build succeeds with Google Fonts blocked
 
+- **2026-11-11** — Three deploys, each verified live:
+  - Explained the music player to David (how the loops were cut and how the Web Audio player works) so he can describe it to recruiters and clients
+  - **Work images** (`c3d8669`): every app has a 16:9 cover and a square badge image (see Featured Apps). The /work cards use a fixed 16:9 shape on every screen size, so nothing is cropped on phones. The 3D frame shader now has four image slots; the NDA stripes treatment was removed. Gamified Sales Engine got a drawn wireframe illustration (leaderboard + head to head; trophy instead of the DAV logo so it doesn't suggest David owns the client's app); its app page says the image is an illustration, not the real app. Original screenshots moved to `scripts/work-images/source/`
+  - **Phone portrait scroll** (`ed69545`): chapter text used to slide up through the 3D objects while half faded, which made 2016+ unreadable mid-screen. Text now fades in already in place at the top
+  - **Phone landscape** (`046778d`): David's real problem was an iPhone held sideways in Chrome, which gets the desktop layout (wider than 768px) in a screen only ~340px tall. Text was taller than the screen and never fully visible. Added the `short:` compact layout (see Key Conventions)
+
+- **2026-11-15** — Story, micro-animations, phone and AEO upgrade (uncommitted, not deployed):
+  - Each chapter got a one-line `hook` in `story.ts` (read in order they tell the arc); bodies tightened; the 2010 sales app is now the thread that pays off in 2016 and 2018. Facts unchanged
+  - Text entrances (scrubbed): the year rolls over from the previous chapter's year like an odometer (previous digits drawn by CSS so they stay out of the page text), an accent rule draws in, skill tags pop in one by one, app metrics count up
+  - 3D: badge leans with scroll speed; mouse users can drag or click to spin it (tap on phones); 2005 windows move out of the cursor's way and trail the scroll; 2018 panels turn toward the cursor; 2021 particles part around the cursor (or a tap) and wind up with scrolling; Now badges grow on hover and navigate on click (client-side, radio keeps playing)
+  - Story progress bar with chapter ticks (all sizes); bottom bar shows the year on phones; chapter label rises in on change
+  - Phones: fixed skill tags over the 3D on 375×667 and the cramped iPhone SE landscape layout (see Key Conventions). Checked all 7 test sizes: no console errors, no sideways scroll
+  - AEO: linked JSON-LD graph, ProfilePage + FAQPage and a visible FAQ on /about, SoftwareApplication on each app page, `public/llms.txt`, link preview image, home canonical, "over 20 years" wording everywhere
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -258,7 +285,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-08):** Phases 1–3 plus the new logo, favicon, music, Joy Factory link, 2018 sales app scene, headshot, resume PDF, rewritten chapter copy, Now chapter Videos badge/phone buttons, art gallery (with Red Lips, Vintage Mic) and self-hosted fonts are **live on daventertainment.com** (commit `1917525` on `main`). Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (paused 2026-11-11):** Phases 1–3, the Dial on `/music`, the new work images, and the phone portrait and landscape scroll fixes are **live on daventertainment.com** (commit `046778d` on `main`, same as the branch). Only this CLAUDE.md notes update was left uncommitted at the pause. Next planned task: the Backlot on `/studio` (Phase 4), unless David picks something from the lists below. Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Phase 4 music: decisions from David (2026-11-10)**
 - No licensing or sales: the dial just plays the music. Approach A confirmed
@@ -278,6 +305,23 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - Player: no framework. Native audio plus Web Audio API: one site-wide player that keeps playing across pages, a visualizer, Media Session lock-screen controls. Howler.js not needed
 - Option: list the newest mixes automatically from the public feed
 - Questions waiting on David: (1) approach A? (2) which 12 mixes: most recent, or hand-picked? auto-update from the feed? (3) can he supply mix files to cut previews? (4) should other creators be able to use the music in their videos, and free with credit or paid? (5) Content ID registration, and are all samples cleared? One mix mentions "plunderphonic elements" (6) should the home Listen button use the same site-wide player?
+
+**Videos page plan (agreed with David 2026-11-11, discussion only, nothing built yet)**
+- Focus: jobs and contracts first, creative second. David is comfortable on camera; little existing footage, so most videos will be new
+- Launch set of 5:
+  1. "Hi, I'm David" (45 s, to camera); also use on `/about` or `/contact`
+  2. PageScore walkthrough (90 s, screen + voiceover, face in a corner)
+  3. Bundle Builder walkthrough (90 s)
+  4. "How I built this portfolio with AI agents" (3–4 min: 3D story, radio dial loops, work images)
+  5. Gamified Sales Engine story (60–90 s, to camera only; NDA: no client name or product screens; may cut in the wireframe illustration). Arc: begun 2010, tested 2016, national 2018
+- Next: Conversational Analytics walkthrough, then 2–3 min explainers (AEO, RAG in plain English, AI agents connected to store data)
+- Later, creative row: music visualizer cuts linking to full YouTube mixes, art time-lapses, yacht/DJ archive clips if any
+- Leave out: full-length mixes as main content, anything employers haven't cleared, a grid of 12 placeholders
+- Walkthrough formula: hook with the result (5 s) → problem (15 s) → one real task demoed (40 s) → one technical decision (20 s) → "let's talk" close (10 s)
+- Production: phone/webcam at eye level by a window, $30–60 lav or USB mic, OBS at 1920×1080 with browser at 125% zoom, CapCut or DaVinci Resolve, always captions, three bullet points per video instead of a script
+- Schedule: week 1 videos 1–2, week 2 videos 3 and 5, weeks 3–4 video 4, then one every 1–2 weeks
+- Page build (when the first videos exist): rows Work → Process → Creative; YouTube with click-to-load facade; the 16:9 work covers as thumbnails; VideoObject JSON-LD; show only finished videos. Until then, replace the 12 placeholders in `catalog.ts` with a "First videos coming soon" note and a link to the YouTube channel
+- Offered next: bullet-point outlines for the five launch videos
 
 **Needs David's decision or input**
 - [x] **1997 story:** resolved 2026-11-08 by David's story timeline above. Professional web work since 2005 supports "over 20 years"; suggest updating the resume from "15+ years" to match
@@ -301,6 +345,13 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - [ ] Add the full-screen art view and video player when real media exists
 - [ ] Reconcile the Netlify status below: `netlify.toml` and `@netlify/plugin-nextjs` are not in the repo, though the site deploys fine
 - [ ] Old links to `/#projects` and `/#contact` no longer lead to those sections after launch
+- [ ] David to confirm on his iPhone (landscape, Chrome) that the 2016+ chapters now read well
+- [x] Small phones in portrait (375×667): fixed 2026-11-15 (`compact:` variant)
+- [x] iPhone SE in landscape (667×375): fixed 2026-11-15 (`wide:` and `tiny:` variants)
+- [x] 2010 chapter: TypeScript changed back to PHP (TypeScript was first released in October 2012); David agreed 2026-11-15
+- [x] Location: David is based in Tustin, California (Person schema homeLocation, FAQ, llms.txt)
+- [x] Chapter hooks and /about FAQ copy approved by David 2026-11-15
+- [ ] David to review the Sales Engine illustration choices: the trophy (vs the DAV logo) and the NDA note wording
 
 ---
 

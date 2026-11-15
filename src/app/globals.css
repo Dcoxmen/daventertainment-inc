@@ -1,7 +1,22 @@
 @import "tailwindcss";
 
+/* Home story side-by-side layout: 768px and wider, or any phone held sideways.
+   Must match WIDE_QUERY in src/components/experience/interaction.ts.
+   Declared before `short` so the compact short-screen sizes win. */
+@custom-variant wide {
+  @media (min-width: 768px), (orientation: landscape) and (max-height: 500px) {
+    @slot;
+  }
+}
+
 /* Short screens, mainly phones held sideways: the home story uses a compact text size */
 @custom-variant short (@media (max-height: 500px));
+
+/* Narrow phones held sideways (iPhone SE size): even more compact. Declared after `short` so it wins */
+@custom-variant tiny (@media (max-width: 767px) and (orientation: landscape) and (max-height: 500px));
+
+/* Small portrait phones (iPhone SE size): the home story drops its skill tags */
+@custom-variant compact (@media (max-width: 767px) and (max-height: 760px));
 
 /* Fonts, sizes, spacing — inline so next/font CSS vars resolve correctly */
 @theme inline {
@@ -160,6 +175,11 @@
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
+}
+
+@keyframes rise {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes shimmer {

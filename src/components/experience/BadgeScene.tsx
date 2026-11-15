@@ -7,6 +7,7 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { APPS } from "@/content/apps";
 import StoryObjects from "./StoryObjects";
 import { BACKDROP_FRAGMENT, FACE_FRAGMENT, FULLSCREEN_VERTEX, UV_VERTEX } from "./shaders";
+import { HOVER_QUERY, input, isControl, toScreen } from "./interaction";
 
 // Every value is tweened by scroll; see keyframes.ts for each chapter's state.
 export type BadgeState = {
@@ -116,6 +117,68 @@ function useStripTexture(width: number, height: number, draw: (c: CanvasRenderin
   return texture;
 }
 
+// Feeds the shared input object: pointer (mouse hover, or a fading pulse after a tap),
+// scroll speed, and the cursor the objects ask for. Mounted first so it runs first each frame.
+function InputTracker() {
+  const pointer = useRef({ ndcX: 0, ndcY: 0, target: 0, lastScroll: 0 });
+
+  useEffect(() => {
+    const p = pointer.current;
+    p.lastScroll = window.scrollY;
+    const hover = window.matchMedia(HOVER_QUERY);
+    const place = (event: PointerEvent) => {
+      p.ndcX = (event.clientX / window.innerWidth) * 2 - 1;
+      p.ndcY = (event.clientY / window.innerHeight) * 2 - 1;
+    };
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || !hover.matches) return;
+      place(event);
+      p.target = 1;
+    };
+    const onDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse") return;
+      place(event);
+      input.strength = 1;
+      p.target = 0;
+    };
+    const onLeave = () => {
+      p.target = 0;
+    };
+    const root = document.documentElement;
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerdown", onDown);
+    root.addEventListener("pointerleave", onLeave);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
+      root.removeEventListener("pointerleave", onLeave);
+      root.style.cursor = "";
+      input.strength = 0;
+      input.velocity = 0;
+      input.cursor = {};
+    };
+  }, []);
+
+  useFrame(({ viewport }, delta) => {
+    const p = pointer.current;
+    input.x = (p.ndcX * viewport.width) / 2;
+    input.y = (-p.ndcY * viewport.height) / 2;
+    // Hover eases in; a tap pulse fades over about a second.
+    input.strength += (p.target - input.strength) * (1 - Math.exp(-delta * (p.target ? 6 : 2.5)));
+
+    const scroll = window.scrollY;
+    const speed = (scroll - p.lastScroll) / window.innerHeight / Math.max(delta, 1 / 240);
+    p.lastScroll = scroll;
+    input.velocity += (Math.max(-4, Math.min(4, speed)) - input.velocity) * (1 - Math.exp(-delta * 5));
+
+    const cursor = Object.values(input.cursor).find(Boolean) ?? "";
+    const root = document.documentElement;
+    if (root.style.cursor !== cursor) root.style.cursor = cursor;
+  });
+
+  return null;
+}
+
 function Backdrop({ state }: Pick<SceneProps, "state">) {
   const material = useRef<THREE.ShaderMaterial>(null);
   const uniforms = useMemo(
@@ -165,7 +228,22 @@ function Badge({ state, onReady }: SceneProps) {
   const face = useRef<THREE.ShaderMaterial>(null);
   const rim = useRef<THREE.MeshStandardMaterial>(null);
   const shots = useRef<(THREE.Texture | null)[]>([null, null, null, null]);
-  const motion = useRef({ enter: 0, spin: 0, pointerX: 0, pointerY: 0, targetX: 0, targetY: 0 });
+  const motion = useRef({
+    enter: 0,
+    spin: 0,
+    pointerX: 0,
+    pointerY: 0,
+    targetX: 0,
+    targetY: 0,
+    // The visitor's own spin around the vertical axis: drag, click, or tap on phones.
+    flip: 0,
+    flipSpeed: 0,
+    hover: 0,
+    lean: 0,
+  });
+  // Where the badge is on screen (for hit tests), and the drag in progress.
+  const hit = useRef({ x: 0, y: 0, r: 0, active: false });
+  const drag = useRef({ on: false, lastX: 0, moved: 0, speed: 0, time: 0 });
 
   const edge = useMemo(() => {
     const t = THICKNESS;
@@ -234,12 +312,55 @@ function Badge({ state, onReady }: SceneProps) {
 
   useEffect(() => {
     onReady();
+    const m = motion.current;
+    const d = drag.current;
+    const onBadge = (event: MouseEvent) => {
+      const h = hit.current;
+      return h.active && !isControl(event.target) && Math.hypot(event.clientX - h.x, event.clientY - h.y) < h.r;
+    };
     const onPointerMove = (event: PointerEvent) => {
-      motion.current.targetX = (event.clientX / window.innerWidth) * 2 - 1;
-      motion.current.targetY = (event.clientY / window.innerHeight) * 2 - 1;
+      m.targetX = (event.clientX / window.innerWidth) * 2 - 1;
+      m.targetY = (event.clientY / window.innerHeight) * 2 - 1;
+      if (event.pointerType === "mouse") input.cursor.badge = d.on ? "grabbing" : onBadge(event) ? "grab" : "";
+      if (!d.on) return;
+      const now = performance.now();
+      const turn = (event.clientX - d.lastX) * 0.012;
+      m.flip += turn;
+      d.speed = turn / Math.max((now - d.time) / 1000, 1 / 120);
+      d.moved += Math.abs(event.clientX - d.lastX);
+      d.lastX = event.clientX;
+      d.time = now;
+    };
+    // Mouse: drag to spin. On phones a swipe scrolls the page, so a tap flips the badge instead.
+    const onPointerDown = (event: PointerEvent) => {
+      d.moved = 0;
+      if (event.pointerType !== "mouse" || event.button !== 0 || !onBadge(event)) return;
+      event.preventDefault(); // no text selection while dragging
+      Object.assign(d, { on: true, lastX: event.clientX, speed: 0, time: performance.now() });
+      input.cursor.badge = "grabbing";
+    };
+    const onPointerUp = () => {
+      if (!d.on) return;
+      d.on = false;
+      // Keep the flick's speed only if the pointer was still moving when released.
+      m.flipSpeed = performance.now() - d.time < 80 ? d.speed : 0;
+      input.cursor.badge = "grab";
+    };
+    const onClick = (event: MouseEvent) => {
+      if (d.moved > 4 || !onBadge(event)) return;
+      m.flipSpeed += TAU * 2.4; // about one full flip
     };
     window.addEventListener("pointermove", onPointerMove);
-    return () => window.removeEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("click", onClick);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("click", onClick);
+      delete input.cursor.badge;
+    };
   }, [onReady]);
 
   useFrame(({ clock, viewport }, delta) => {
@@ -255,11 +376,27 @@ function Badge({ state, onReady }: SceneProps) {
     const ease = 1 - Math.exp(-delta * 4);
 
     group.visible = s.size > 0.003;
+    // Too small to grab while it's the sales app logo or the 2021 lens hub.
+    hit.current.active = group.visible && s.size > 0.25;
+    if (!hit.current.active && input.cursor.badge) input.cursor.badge = "";
     if (!group.visible) return;
 
     m.enter += (1 - m.enter) * (1 - Math.exp(-delta * 2.2));
     m.pointerX += (m.targetX - m.pointerX) * ease;
     m.pointerY += (m.targetY - m.pointerY) * ease;
+
+    // The visitor's spin coasts after a flick, then springs back to the nearest full turn.
+    if (!drag.current.on) {
+      if (Math.abs(m.flipSpeed) > 2.5) {
+        m.flipSpeed *= Math.exp(-delta * 1.4);
+      } else {
+        const rest = Math.round(m.flip / TAU) * TAU;
+        m.flipSpeed += ((rest - m.flip) * 40 - m.flipSpeed * 9) * delta;
+      }
+      m.flip += m.flipSpeed * delta;
+    }
+    // Lean back with the scroll, like a sign catching the wind.
+    m.lean += (Math.max(-1, Math.min(1, input.velocity * 0.35)) - m.lean) * (1 - Math.exp(-delta * 3));
 
     // The record spins up with the vinyl state and settles upright when it reverses.
     const record = s.vinyl * (1 - s.coin);
@@ -274,13 +411,17 @@ function Badge({ state, onReady }: SceneProps) {
     const radius = (s.size * Math.min(viewport.width, viewport.height)) / 2;
     // Hold still while parked as the sales app's logo, so it sits square in the page.
     const idle = (1 - record) * (1 - 0.85 * s.sales);
+    m.hover += ((input.cursor.badge ? 1 : 0) - m.hover) * ease;
+    const scale = radius * stamp * (0.72 + 0.28 * m.enter) * (1 + 0.045 * m.hover);
     group.position.set(s.x * viewport.width, s.y * viewport.height, 0);
-    group.scale.setScalar(radius * stamp * (0.72 + 0.28 * m.enter));
+    group.scale.setScalar(scale);
     group.rotation.set(
-      s.tiltX + m.pointerY * 0.1 + Math.sin(time * 0.5) * 0.05 * idle,
-      s.tiltY + m.pointerX * 0.16 + Math.sin(time * 0.35) * 0.16 * idle - (1 - m.enter) * 2.2,
-      0
+      s.tiltX + m.pointerY * 0.1 + Math.sin(time * 0.5) * 0.05 * idle - m.lean * 0.32 * idle,
+      s.tiltY + m.pointerX * 0.16 + Math.sin(time * 0.35) * 0.16 * idle - (1 - m.enter) * 2.2 + m.flip,
+      m.lean * 0.05 * idle
     );
+    const screen = toScreen(group.position.x, group.position.y, viewport);
+    Object.assign(hit.current, { x: screen.x, y: screen.y, r: scale * screen.scale });
     spinGroup.rotation.z = -m.spin;
     spinGroup.scale.z = 1 - 0.7 * record; // a coin is thick, a record is not
 
@@ -333,6 +474,7 @@ export default function BadgeScene({ state, onReady }: SceneProps) {
       camera={{ position: [0, 0, 6], fov: 35 }}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
+      <InputTracker />
       <Backdrop state={state} />
       <StoryObjects state={state} />
       <Suspense fallback={null}>

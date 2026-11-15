@@ -2,7 +2,26 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { APPS } from "@/content/apps";
+import { APPS, type App } from "@/content/apps";
+import { PERSON_ID, SITE, jsonLd } from "@/content/schema";
+
+// Describes the app for search and AI answer engines, credited to David.
+function appSchema(app: App) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${SITE}/work/${app.slug}`,
+    name: app.title,
+    description: app.description,
+    applicationCategory: "WebApplication",
+    operatingSystem: "Web",
+    image: `${SITE}${app.image}`,
+    ...(app.url && { url: app.url }),
+    author: { "@id": PERSON_ID },
+    creator: { "@id": PERSON_ID },
+    keywords: app.stack.join(", "),
+  };
+}
 
 export const dynamicParams = false;
 
@@ -28,6 +47,7 @@ export default async function AppPage(props: PageProps<"/work/[slug]">) {
 
   return (
     <article className="max-w-3xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(appSchema(app))} />
       <Link href="/work" className="font-code-label text-code-label text-secondary hover:text-primary">
         ← All work
       </Link>

@@ -93,3 +93,33 @@ export const SERVICES = [
     ],
   },
 ];
+
+// Shown on /about and published as FAQPage structured data. Direct answers that AI
+// answer engines can quote. Keep every answer factual; the logistics client stays unnamed.
+export const FAQ = [
+  {
+    question: "Who is David Cox?",
+    answer:
+      "David Cox is a full stack engineer and AI integration specialist based in Tustin, California, and the founder of Daventertainment Inc (incorporated in 2016). He has over 20 years of experience building web platforms, SaaS products, e-commerce systems and AI-powered tools, and a parallel career in music production and live entertainment.",
+  },
+  {
+    question: "What does David Cox build?",
+    answer:
+      "Next.js and React applications, Node.js APIs, e-commerce integrations and AI systems. Recent work includes PageScore, an AI SEO and AEO audit engine with over 10,000 active users; a conversational analytics engine on Google Cloud that automated 85% of reporting; Bundle Builder, an AI-assisted shopping assistant for The Joy Factory; and a gamified sales platform adopted nationwide by a logistics company's sales team.",
+  },
+  {
+    question: "What AI technologies does David Cox work with?",
+    answer:
+      "AI agents, large language models including Anthropic Claude, ChatGPT and Gemini, retrieval-augmented generation (RAG), and LangChain, connected to real business systems such as Shopify, BigCommerce, HubSpot, NetSuite and Google Cloud (BigQuery, Looker Studio, GA4).",
+  },
+  {
+    question: "What is AEO, and how does David Cox approach it?",
+    answer:
+      "AEO (answer engine optimization) means structuring a site so AI answer engines such as ChatGPT, Claude, Perplexity and Google AI Overviews can find, understand and cite it accurately. David's approach combines clear question-and-answer content, linked schema.org structured data, fast server-rendered pages and crawlable summaries, and he built PageScore to audit it automatically.",
+  },
+  {
+    question: "Is David Cox available for hire?",
+    answer:
+      "Yes. David is available for contract projects through Daventertainment Inc and for full-time roles. The fastest way to reach him is the contact form at daventertainment.com/contact.",
+  },
+];

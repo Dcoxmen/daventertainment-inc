@@ -1,10 +1,15 @@
 // The home page story. Each era is one scroll chapter; the badge state for
 // each id lives in src/components/experience/keyframes.ts.
 
+// Replace with your own loop (WAV or MP3, 60–90 seconds, seamless).
+export const THEME_TRACK = "/audio/soul-swellin-loop-30sec.mp3";
+
 export type Era = {
   id: string;
   year: string;
   title: string;
+  /** One line that carries the story; read in order, the hooks tell the whole arc. */
+  hook: string;
   body: string;
   skills: string[];
   accent: "primary" | "secondary" | "tertiary";
@@ -16,7 +21,8 @@ export const ERAS: Era[] = [
     id: "code",
     year: "1997",
     title: "The Code",
-    body: "It started in the studio. Programming synthesizers and DAW recording rigs taught me to think in sequences and signal flow. Promoting my bands' gigs carried that curiosity online, into code, digital video, and the early web.",
+    hook: "Before I wrote code, I programmed sound.",
+    body: "It started in the studio. Programming synthesizers and DAW recording rigs taught me to think in sequences, signals, and systems. Promoting my bands' gigs pulled that curiosity online, into digital video, web design, and my first lines of code.",
     skills: ["Synth programming", "DAW recording", "Digital video", "Web design"],
     accent: "secondary",
   },
@@ -24,7 +30,8 @@ export const ERAS: Era[] = [
     id: "harbor",
     year: "2000",
     title: "The Harbor",
-    body: "Weekends, I was on the water, DJing and playing harbor cruise parties across Los Angeles and Orange County, and eventually running entertainment for one of the yacht companies. Weekdays, I was learning HTML, JavaScript, PHP, and databases and taking my first web jobs. Both crafts demanded one instinct: read the room.",
+    hook: "Two stages: the deck on weekends, the browser on weekdays.",
+    body: "Weekends, I was on the water, DJing and playing harbor cruise parties across Los Angeles and Orange County, and eventually running entertainment for one of the yacht companies. Weekdays, I learned HTML, JavaScript, PHP, and databases and took my first web jobs. Both crafts ran on one instinct: read the room.",
     skills: ["HTML", "JavaScript", "Databases", "Live production"],
     accent: "tertiary",
   },
@@ -32,7 +39,8 @@ export const ERAS: Era[] = [
     id: "contracts",
     year: "2005",
     title: "The Contracts",
-    body: "Temp contracts turned into a steady run of web and SaaS projects, from large marketing firms to small, fast-moving teams. Every client meant a new codebase, a new deadline, and a new way of working, and the weekends still belonged to music.",
+    hook: "Every contract was a new room to read.",
+    body: "Temp contracts became a steady run of web and SaaS projects, for clients from large marketing firms to small, fast-moving teams. Each one meant a new codebase, a new deadline, and a new way of working, so I learned to ramp up fast and deliver. The weekends still belonged to music.",
     skills: ["Web development", "SaaS", "Client delivery"],
     accent: "secondary",
   },
@@ -40,7 +48,8 @@ export const ERAS: Era[] = [
     id: "label",
     year: "2010",
     title: "The Label",
-    body: "A former bandmate and I started a music publishing venture, writing, producing, registering, and distributing our own catalog. Selling it online meant learning e-commerce, payment gateways, PHP, and Node.js. It's also where we started building the new apps that would launch my full stack career.",
+    hook: "The music business taught me the business of software.",
+    body: "A former bandmate and I started a music publishing venture, writing, producing, registering, and distributing our own catalog. Selling it online meant learning e-commerce, payment gateways, PHP, and Node.js. It's also where I started building a sales app, the project that would launch my full stack career.",
     skills: ["PHP", "Node.js", "E-commerce", "Payment gateways", "Music production"],
     accent: "primary",
   },
@@ -48,7 +57,8 @@ export const ERAS: Era[] = [
     id: "seal",
     year: "2016",
     title: "The Seal",
-    body: "I incorporated Daventertainment Inc as an entertainment and web development company. That's when a large logistics company contracted us for ongoing development, liked the system connectors we built for their clients, and they put our sales app in front of their sales team for testing.",
+    hook: "I made it official, and a national client took notice.",
+    body: "I incorporated Daventertainment Inc as an entertainment and web development company. A large logistics company brought us on for ongoing development, liked the system connectors we built for its clients, and put our sales app in front of its sales team for testing.",
     skills: ["System integrations", "APIs", "Sales apps"],
     accent: "primary",
   },
@@ -56,7 +66,8 @@ export const ERAS: Era[] = [
     id: "scale",
     year: "2018",
     title: "The Scale",
-    body: "The sales app went national, adopted by the company's sales force, and I earned a position inside the enterprise. There I learned to ship with large teams and real process. I also joined the UC Irvine coding bootcamp program, where I'd later help teach. Began studying AI.",
+    hook: "One test team became a national sales force.",
+    body: "The sales app went national, adopted by the company's sales force, and I earned a position inside the enterprise. There I learned to ship with large teams and real process. I also joined the UC Irvine coding bootcamp program, where I'd later help teach, and began studying AI.",
     skills: ["SCRUM", "Jira", "GitHub", "Node.js", "Python", "APIs"],
     accent: "secondary",
   },
@@ -64,7 +75,8 @@ export const ERAS: Era[] = [
     id: "intelligence",
     year: "2021",
     title: "The Intelligence",
-    body: "Started my current job position, and have implemented AI from experiment to everyday tool. I build customer facing and B2B applications, wire AI agents, LLMs, and RAG, automate database operations and integrate them into real commerce workflows, and connect platforms like Shopify, BigCommerce, HubSpot, and Google Cloud.",
+    hook: "The tools started thinking. I put them to work.",
+    body: "In my current role, I've taken AI from experiment to everyday tool. I build customer facing and B2B applications, wire up AI agents, LLMs, and RAG, automate database operations, and connect it all to real commerce through Shopify, BigCommerce, HubSpot, NetSuite, and Google Cloud.",
     skills: ["AI agents", "Claude", "LLMs", "RAG", "Next.js", "Google Cloud", "Shopify", "NetSuite"],
     accent: "secondary",
   },
@@ -72,7 +84,8 @@ export const ERAS: Era[] = [
     id: "creator",
     year: "Now",
     title: "The Creator",
-    body: "Today driven by curiosity and creativity. I build my own apps, make daily art, and produce music, coding alongside AI agents and curating the knowledge they work from. It's the same instinct I learned developing software and performing music: read the room, then deliver.",
+    hook: "Same instinct, new instruments.",
+    body: "Today I build for curiosity as much as for clients: my own apps, daily art, and music, coding alongside AI agents and curating the knowledge they work from. It's what the studio and the stage taught me, now on every screen: read the room, then deliver.",
     skills: ["AI agents", "Agent knowledge", "Apps", "Art", "Music", "Video"],
     accent: "primary",
     links: [

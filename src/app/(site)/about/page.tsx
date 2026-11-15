@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
-import { EDUCATION, EXPERIENCE, HEADSHOT, RESUME_FILE, SERVICES, STATS } from "@/content/profile";
+import { EDUCATION, EXPERIENCE, FAQ, HEADSHOT, RESUME_FILE, SERVICES, STATS } from "@/content/profile";
+import { PERSON_ID, SITE, jsonLd } from "@/content/schema";
 
 export const metadata: Metadata = {
   title: "About | David Cox",
@@ -15,9 +16,32 @@ export const metadata: Metadata = {
 
 const hasResume = existsSync(path.join(process.cwd(), "public", RESUME_FILE));
 
+const PAGE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE}/about`,
+      url: `${SITE}/about`,
+      name: "About David Cox",
+      mainEntity: { "@id": PERSON_ID },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE}/about#faq`,
+      mainEntity: FAQ.map(({ question, answer }) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      })),
+    },
+  ],
+};
+
 export default function AboutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(PAGE_SCHEMA)} />
       <div className="grid items-center gap-10 md:grid-cols-[1fr_320px]">
         <div>
           <PageIntro label="About" title="David Cox">
@@ -96,13 +120,25 @@ export default function AboutPage() {
         </ol>
       </section>
 
-      <section className="max-w-3xl">
+      <section className="mb-16 max-w-3xl">
         <h2 className="mb-4 font-headline-lg text-headline-lg-mobile md:text-headline-lg">Education</h2>
         <ul className="space-y-2 text-body-md text-on-surface-variant">
           {EDUCATION.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
+      </section>
+
+      <section id="faq" className="max-w-3xl">
+        <h2 className="mb-6 font-headline-lg text-headline-lg-mobile md:text-headline-lg">Questions, answered</h2>
+        <div className="space-y-3">
+          {FAQ.map(({ question, answer }) => (
+            <div key={question} className="glass-card rounded-xl p-5">
+              <h3 className="font-headline-md font-semibold">{question}</h3>
+              <p className="mt-2 text-body-md text-on-surface-variant">{answer}</p>
+            </div>
+          ))}
+        </div>
       </section>
     </>
   );

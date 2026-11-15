@@ -1,0 +1,32 @@
+# Daventertainment Inc — David Cox
+
+> Portfolio of David Cox, a full stack engineer and AI integration specialist based in Tustin, California, with over 20 years of experience, and founder of Daventertainment Inc (incorporated 2016), an entertainment and web development company. He builds Next.js applications, SaaS platforms, e-commerce integrations and AI systems (agents, LLMs, RAG), and also produces music, art and video. Available for contract projects and full-time roles.
+
+## Key facts
+
+- Specialties: Next.js, React, TypeScript, Node.js, AI integration (Anthropic Claude, LLMs, AI agents, RAG, LangChain), SEO and AEO (answer engine optimization), Google Cloud analytics (BigQuery, Looker Studio, GA4), e-commerce (Shopify, BigCommerce, HubSpot, NetSuite)
+- Career: started coding and digital video in 1997 through music; web development from 2000; contract web and SaaS development from 2005; founded Daventertainment Inc in 2016; a sales app he built was adopted nationwide by a logistics company's sales team in 2018; AI integration and commerce engineering since 2021
+- Teaching: Teaching Director Assistant, UC Irvine Continuing Education full-stack MERN coding bootcamp (2019–2024)
+- Education: Full-Stack MERN Developer Certification, University of California, Irvine (2019)
+
+## Featured work
+
+- [PageScore: AI SEO & AEO Audit Engine](https://daventertainment.com/work/pagescore): AI-powered landing page audits for search and AI engine visibility; over 10,000 active users. Live at https://page-score.com
+- [Conversational Analytics Engine](https://daventertainment.com/work/conversational-analytics): GCP environment connecting BigQuery and Looker Studio to GA4 data; automated 85% of reporting
+- [Bundle Builder](https://daventertainment.com/work/bundle-builder): AI-assisted shopping assistant for The Joy Factory that recommends a bundled case, mounts and accessories
+- [Gamified Sales Engine](https://daventertainment.com/work/gamified-sales-engine): gamified SaaS sales platform that scaled to nationwide use at a national logistics company (under NDA)
+
+## Pages
+
+- [Home](https://daventertainment.com/): the career story, 1997 to now
+- [Work](https://daventertainment.com/work): featured apps
+- [About](https://daventertainment.com/about): experience, services, education and frequently asked questions
+- [Music](https://daventertainment.com/music): Daventertainment Radio, twelve original lo-fi, chillhop and funk stations
+- [Art](https://daventertainment.com/art): original art and illustration
+- [Contact](https://daventertainment.com/contact): hire David for contract or full-time work
+
+## Profiles
+
+- GitHub: https://github.com/Dcoxmen
+- LinkedIn: https://www.linkedin.com/in/david-cox-78b88b44/
+- YouTube: https://www.youtube.com/channel/UCDCuScou1VMIOx7DCasa76g

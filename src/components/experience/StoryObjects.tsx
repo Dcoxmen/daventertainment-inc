@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore, type RefObject } from "react";
 import { useFrame, useThree, type RootState } from "@react-three/fiber";
 import * as THREE from "three";
 import { cssFont, type BadgeState } from "./BadgeScene";
 import { stateFor } from "./keyframes";
+import { WIDE_QUERY, input, isControl, toScreen } from "./interaction";
 import { CREATOR_ICONS, drawCreatorIcon, type CreatorIcon } from "./creatorIcons";
 import {
   DOT_FRAGMENT,
@@ -48,6 +49,9 @@ function dotMaterial(vertexShader: string, size: number) {
       uTime: { value: 0 },
       uSize: { value: size },
       uPixelRatio: { value: 1 },
+      uSpin: { value: 0 },
+      uPointer: { value: new THREE.Vector2(9, 9) },
+      uPush: { value: 0 },
     },
     transparent: true,
     depthWrite: false,
@@ -60,7 +64,7 @@ function Windows({ state, small }: ObjectProps) {
   const mesh = useRef<THREE.InstancedMesh>(null);
   const count = small ? 14 : 24;
 
-  const { geometry, material, layout } = useMemo(() => {
+  const { geometry, material, layout, pushed } = useMemo(() => {
     const random = seededRandom(5);
     const layout = Array.from({ length: count }, (_, i) => ({
       angle: (i / count) * TAU + random() * 0.4,
@@ -86,7 +90,9 @@ function Windows({ state, small }: ObjectProps) {
       transparent: true,
       depthWrite: false,
     });
-    return { geometry, material, layout };
+    // Each window's current push away from the pointer, eased so it glides.
+    const pushed = layout.map(() => ({ x: 0, y: 0 }));
+    return { geometry, material, layout, pushed };
   }, [count]);
 
   useEffect(() => () => {
@@ -94,7 +100,7 @@ function Windows({ state, small }: ObjectProps) {
     material.dispose();
   }, [geometry, material]);
 
-  useFrame((root) => {
+  useFrame((root, delta) => {
     const instances = mesh.current;
     if (!instances) return;
     const s = state.current;
@@ -104,15 +110,25 @@ function Windows({ state, small }: ObjectProps) {
     const { x, y, unit } = anchor(root, s);
     const time = root.clock.elapsedTime;
     const spread = unit * 0.44 * s.windows;
+    const glide = 1 - Math.exp(-delta * 5);
     (instances.material as THREE.ShaderMaterial).uniforms.uMix.value = s.windows;
 
     layout.forEach((item, i) => {
-      placement.position.set(
-        x + Math.cos(item.angle) * item.radius * spread * 1.15 + Math.sin(time * 0.6 + item.seed * 9) * unit * 0.02,
-        y + Math.sin(item.angle) * item.radius * spread * 0.75 + Math.cos(time * 0.5 + item.seed * 7) * unit * 0.02,
-        item.depth * s.windows
-      );
-      placement.rotation.set(0, item.turn * 0.6, item.turn * 0.3);
+      // Nearer windows trail the scroll a little more: depth you can feel.
+      const drift = input.velocity * unit * 0.025 * (item.depth + 0.6);
+      const baseX = x + Math.cos(item.angle) * item.radius * spread * 1.15 + Math.sin(time * 0.6 + item.seed * 9) * unit * 0.02;
+      const baseY = y + Math.sin(item.angle) * item.radius * spread * 0.75 + Math.cos(time * 0.5 + item.seed * 7) * unit * 0.02 + drift;
+      // Windows slide out of the pointer's way.
+      const dx = baseX - input.x;
+      const dy = baseY - input.y;
+      const reach = unit * 0.2;
+      const push = (input.strength * unit * 0.09 * Math.exp(-(dx * dx + dy * dy) / (reach * reach))) / (Math.hypot(dx, dy) + 1e-4);
+      const offset = pushed[i];
+      offset.x += (dx * push - offset.x) * glide;
+      offset.y += (dy * push - offset.y) * glide;
+      const lift = Math.hypot(offset.x, offset.y) / unit;
+      placement.position.set(baseX + offset.x, baseY + offset.y, item.depth * s.windows + lift * 2);
+      placement.rotation.set(-offset.y / unit, item.turn * 0.6 + offset.x / unit, item.turn * 0.3);
       placement.scale.setScalar(unit * 0.15 * item.scale * (0.3 + 0.7 * s.windows));
       placement.updateMatrix();
       instances.setMatrixAt(i, placement.matrix);
@@ -385,13 +401,14 @@ function SalesApp({ state, small }: ObjectProps) {
     ];
     panels.forEach(([mesh, reveal, offsetX, offsetY, depth, turn], i) => {
       const settle = 1 - Math.pow(1 - reveal, 3);
-      mesh.position.set(
-        x + offsetX * unit,
-        y - offsetY * unit + Math.sin(time * 0.6 + i * 2) * unit * 0.006 * settle,
-        depth
-      );
+      const px = x + offsetX * unit;
+      const py = y - offsetY * unit + Math.sin(time * 0.6 + i * 2) * unit * 0.006 * settle;
+      mesh.position.set(px, py, depth);
       mesh.scale.setScalar(unit * (0.88 + 0.12 * settle));
-      mesh.rotation.set(0, turn * settle, 0);
+      // Panels turn gently toward the pointer.
+      const lookX = Math.max(-1, Math.min(1, (input.x - px) / unit)) * input.strength;
+      const lookY = Math.max(-1, Math.min(1, (input.y - py) / unit)) * input.strength;
+      mesh.rotation.set(-lookY * 0.18 * settle, (turn + lookX * 0.22) * settle, 0);
       const { uniforms } = mesh.material as THREE.ShaderMaterial;
       uniforms.uReveal.value = reveal;
       uniforms.uMix.value = Math.min(1, reveal * 4);
@@ -438,7 +455,9 @@ function Lens({ state, small }: ObjectProps) {
     material.dispose();
   }, [geometry, material]);
 
-  useFrame((root) => {
+  const spin = useRef(0);
+
+  useFrame((root, delta) => {
     const node = group.current;
     if (!node || !dots.current) return;
     const s = state.current;
@@ -446,12 +465,18 @@ function Lens({ state, small }: ObjectProps) {
     if (!node.visible) return;
 
     const { x, y, unit } = anchor(root, s);
+    const size = unit * (small ? 0.44 : 0.42);
     node.position.set(x, y, 0);
-    node.scale.setScalar(unit * (small ? 0.44 : 0.42));
+    node.scale.setScalar(size);
+    // Scrolling winds the lens up; it keeps its own slow turn when still.
+    spin.current += input.velocity * delta * 6;
     const { uniforms } = dots.current.material as THREE.ShaderMaterial;
     uniforms.uMix.value = s.lens;
     uniforms.uTime.value = root.clock.elapsedTime;
     uniforms.uPixelRatio.value = pixelRatio;
+    uniforms.uSpin.value = spin.current;
+    uniforms.uPointer.value.set((input.x - x) / size, (input.y - y) / size);
+    uniforms.uPush.value = input.strength;
   });
 
   return (
@@ -482,6 +507,32 @@ const CLUSTER = [
 // chapter shows tappable buttons instead (CreatorButtons.tsx), so these hide.
 function Trio({ state, small }: ObjectProps) {
   const discs = useRef<(THREE.Mesh | null)[]>([]);
+  // Each badge's screen circle (for hover and click) and its eased hover amount.
+  const spots = useRef(CREATOR_ICONS.map(() => ({ x: 0, y: 0, r: 0, hover: 0 })));
+  const hovered = useRef(-1);
+
+  useEffect(() => {
+    const find = (event: MouseEvent) =>
+      isControl(event.target) || state.current.trio < 0.9
+        ? -1
+        : spots.current.findIndex(({ x, y, r }) => r > 0 && Math.hypot(event.clientX - x, event.clientY - y) < r);
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      hovered.current = find(event);
+      input.cursor.trio = hovered.current >= 0 ? "pointer" : "";
+    };
+    const onClick = (event: MouseEvent) => {
+      const index = find(event);
+      if (index >= 0) input.navigate(CREATOR_ICONS[index].href);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("click", onClick);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("click", onClick);
+      delete input.cursor.trio;
+    };
+  }, [state]);
 
   const { geometry, materials } = useMemo(() => {
     // The cap texture comes out a quarter turn off once the cylinder faces the camera.
@@ -504,22 +555,37 @@ function Trio({ state, small }: ObjectProps) {
     });
   }, [geometry, materials]);
 
-  useFrame((root) => {
+  useFrame((root, delta) => {
     const s = state.current;
     const { x, y, unit } = anchor(root, s);
     const time = root.clock.elapsedTime;
+    const ease = 1 - Math.exp(-delta * 8);
+    if (s.trio < 0.9 && input.cursor.trio) input.cursor.trio = "";
     discs.current.forEach((disc, i) => {
+      const spot = spots.current[i];
+      spot.r = 0;
       if (!disc) return;
       disc.visible = !small && s.trio > 0.001;
       if (!disc.visible) return;
+      // Hovered: grows, lifts toward you and turns to face you; the others step back a little.
+      const target = hovered.current === i ? 1 : hovered.current >= 0 ? -0.25 : 0;
+      spot.hover += (target - spot.hover) * ease;
+      const calm = 1 - Math.max(0, spot.hover);
       const [dx, dy] = CLUSTER[i];
       disc.position.set(
         x + dx * unit * s.trio,
-        y + dy * unit * s.trio + Math.sin(time * 0.9 + i * 2) * unit * 0.015,
+        y + dy * unit * s.trio + Math.sin(time * 0.9 + i * 2) * unit * 0.015 * calm,
+        spot.hover * 0.4
+      );
+      const radius = unit * 0.095 * s.trio * (1 + 0.22 * spot.hover);
+      disc.scale.setScalar(radius);
+      disc.rotation.set(
+        Math.sin(time * 0.6 + i) * 0.15 * calm,
+        (1 - s.trio) * Math.PI + Math.sin(time * 0.5 + i) * 0.25 * calm,
         0
       );
-      disc.scale.setScalar(unit * 0.095 * s.trio);
-      disc.rotation.set(Math.sin(time * 0.6 + i) * 0.15, (1 - s.trio) * Math.PI + Math.sin(time * 0.5 + i) * 0.25, 0);
+      const screen = toScreen(disc.position.x, disc.position.y, root.viewport);
+      Object.assign(spot, { x: screen.x, y: screen.y, r: radius * screen.scale });
     });
   });
 
@@ -539,8 +605,19 @@ function Trio({ state, small }: ObjectProps) {
   );
 }
 
+function subscribeToWide(onChange: () => void) {
+  const query = window.matchMedia(WIDE_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
 export default function StoryObjects({ state }: { state: RefObject<BadgeState> }) {
-  const small = useThree((three) => three.size.width < 768);
+  // Same switch as the page layout: phones held sideways get the side-by-side scene.
+  const small = !useSyncExternalStore(
+    subscribeToWide,
+    () => window.matchMedia(WIDE_QUERY).matches,
+    () => true
+  );
   return (
     <>
       <Windows state={state} small={small} />

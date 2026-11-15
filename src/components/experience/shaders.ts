@@ -350,13 +350,21 @@ export const LENS_VERTEX = /* glsl */ `
   uniform float uMix;
   uniform float uSize;
   uniform float uPixelRatio;
+  uniform float uSpin; // extra turn from scrolling
+  uniform vec2 uPointer; // pointer in lens units
+  uniform float uPush; // 0-1 pointer strength
   varying float vSeed;
   varying float vRadius;
   void main() {
     float direction = mod(floor(aSeed * 10.0), 2.0) * 2.0 - 1.0;
-    float angle = aAngle + uTime * (0.08 + 0.3 * (1.0 - aRadius)) * direction;
+    float angle = aAngle + (uTime + uSpin) * (0.08 + 0.3 * (1.0 - aRadius)) * direction;
     float radius = aRadius * (0.8 + 0.2 * uMix) * (1.0 + 0.025 * sin(uTime * 1.7 + aSeed * 40.0));
     vec3 p = vec3(cos(angle) * radius, sin(angle) * radius, 0.06 * sin(angle * 3.0 + uTime));
+    // Particles part around the pointer like water around a finger.
+    vec2 away = p.xy - uPointer;
+    float near = exp(-dot(away, away) * 9.0) * uPush;
+    p.xy += normalize(away + 1e-4) * near * (0.16 + 0.06 * aSeed);
+    p.z += near * 0.2;
     vSeed = aSeed;
     vRadius = aRadius;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);

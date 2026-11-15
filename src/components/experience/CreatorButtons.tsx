@@ -30,7 +30,7 @@ function IconButton({ icon, index }: { icon: CreatorIcon; index: number }) {
 // Phone view of the "Now" chapter: the floating badges become tappable buttons.
 export default function CreatorButtons() {
   return (
-    <nav aria-label="Creative work" className="mt-6 grid grid-cols-4 gap-2 md:hidden">
+    <nav aria-label="Creative work" className="mt-6 grid grid-cols-4 gap-2 wide:hidden compact:mt-4">
       {CREATOR_ICONS.map((icon, index) => (
         <IconButton key={icon.href} icon={icon} index={index} />
       ))}
