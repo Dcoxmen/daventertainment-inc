@@ -111,6 +111,7 @@ src/
       PlayerProvider.tsx — site-wide radio in the root layout (Web Audio): stations, tuning static, home scroll filter, analyser, Media Session
       MiniPlayer.tsx — floating controls on plain pages once the radio is started (hidden on / and /music)
       icons.tsx — drawn play/pause/next/prev icons (text symbols render as emoji on Windows)
+    art/ArtGallery.tsx — /art gallery: tilt/glare hover, spotlight, View cursor, scroll reveal; full-screen viewer that flies from the tile (GSAP), arrows/swipe/keys
     music/RadioDial.tsx — the Dial on /music: 12 stations like a clock, drag/tap/arrow keys, visualizer ring
   content/
     apps.ts           — the 4 featured apps, each with a 16:9 `image` and a square `badge` (the 3D frame shows the first four, in order)
@@ -234,13 +235,15 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
   - **Phone portrait scroll** (`ed69545`): chapter text used to slide up through the 3D objects while half faded, which made 2016+ unreadable mid-screen. Text now fades in already in place at the top
   - **Phone landscape** (`046778d`): David's real problem was an iPhone held sideways in Chrome, which gets the desktop layout (wider than 768px) in a screen only ~340px tall. Text was taller than the screen and never fully visible. Added the `short:` compact layout (see Key Conventions)
 
-- **2026-11-15** — Story, micro-animations, phone and AEO upgrade (uncommitted, not deployed):
+- **2026-11-15** — Story, micro-animations, phone and AEO upgrade, **deployed as `33e971f`** and verified live (all 16 URLs return 200; browser checks at 390×844, 667×375 and 1440×900 show no console errors; drag, click and Now badge links work):
   - Each chapter got a one-line `hook` in `story.ts` (read in order they tell the arc); bodies tightened; the 2010 sales app is now the thread that pays off in 2016 and 2018. Facts unchanged
   - Text entrances (scrubbed): the year rolls over from the previous chapter's year like an odometer (previous digits drawn by CSS so they stay out of the page text), an accent rule draws in, skill tags pop in one by one, app metrics count up
   - 3D: badge leans with scroll speed; mouse users can drag or click to spin it (tap on phones); 2005 windows move out of the cursor's way and trail the scroll; 2018 panels turn toward the cursor; 2021 particles part around the cursor (or a tap) and wind up with scrolling; Now badges grow on hover and navigate on click (client-side, radio keeps playing)
   - Story progress bar with chapter ticks (all sizes); bottom bar shows the year on phones; chapter label rises in on change
   - Phones: fixed skill tags over the 3D on 375×667 and the cramped iPhone SE landscape layout (see Key Conventions). Checked all 7 test sizes: no console errors, no sideways scroll
   - AEO: linked JSON-LD graph, ProfilePage + FAQPage and a visible FAQ on /about, SoftwareApplication on each app page, `public/llms.txt`, link preview image, home canonical, "over 20 years" wording everywhere
+
+- **2026-11-15 (later)** — `/art` upgrade, deployed at David's request: "Días de los Muertos Band" replaced with `youTube-Channel-Cover.webp`, titled "Overgrown City Self-Portrait" (title is a placeholder for David to confirm; old file still in `public/art/`). New `ArtGallery.tsx`: tiles tilt toward the mouse with a light glare and image parallax, other tiles dim, a gold "View" cursor trails the mouse, pieces rise in and a curtain lifts as they scroll into view (CSS scroll-driven, skipped where unsupported). Click opens a full-screen viewer: the image flies from its tile, blurred artwork glow behind, prev/next wipe transitions, swipe, arrow keys, Esc, clickable progress bar, focus kept inside, closes back into the tile. Reduced motion gets plain fades. Checked at 1440×900, 390×844, 375×667, 844×390: no console errors, no sideways scroll
 
 ## Contact Form — Implementation Notes
 
@@ -285,7 +288,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 ## Next Session — Pick Up Here
 
-**State (paused 2026-11-11):** Phases 1–3, the Dial on `/music`, the new work images, and the phone portrait and landscape scroll fixes are **live on daventertainment.com** (commit `046778d` on `main`, same as the branch). Only this CLAUDE.md notes update was left uncommitted at the pause. Next planned task: the Backlot on `/studio` (Phase 4), unless David picks something from the lists below. Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-15):** Everything through the `/art` gallery and viewer upgrade is **live on daventertainment.com** (`main`, same as the branch). Next planned task: the Backlot on `/studio` (Phase 4), unless David picks something from the lists below. Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Phase 4 music: decisions from David (2026-11-10)**
 - No licensing or sales: the dial just plays the music. Approach A confirmed
