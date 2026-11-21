@@ -56,7 +56,7 @@ const CODE_LINES = [
   "const room = await read(crowd); if (room.energy < peak) next.drop();",
 ];
 
-const SEAL_TEXT = "DAVENTERTAINMENT INC  ·  ESTABLISHED 2016  ·  ENTERTAINMENT & WEB DEVELOPMENT  ·  ";
+const SEAL_TEXT = "DAVENTERTAINMENT INC  ·  ESTABLISHED 2016  ·  SOUND DESIGN & WEB DEVELOPMENT  ·  ";
 
 export function cssFont(variable: string) {
   return getComputedStyle(document.documentElement).getPropertyValue(variable);

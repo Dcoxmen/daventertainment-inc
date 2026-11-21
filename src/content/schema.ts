@@ -56,7 +56,7 @@ export const SITE_GRAPH = {
       foundingDate: "2016",
       founder: { "@id": PERSON_ID },
       description:
-        "Entertainment and web development company founded by David Cox: full stack engineering, AI integration, and original music, art and video.",
+        "Sound design and web development company founded by David Cox: full stack engineering, AI integration, and original music, art and video.",
       contactPoint: {
         "@type": "ContactPoint",
         email: "davedvst@gmail.com",

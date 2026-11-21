@@ -392,7 +392,7 @@ export default function Experience() {
                       David Cox · Daventertainment Inc
                     </p>
                     <h1 className="font-display text-[44px] leading-[1.05] font-extrabold tracking-tight wide:text-[76px] short:text-[34px]">
-                      Code that plays to the room.
+                      Where code meets craft.
                     </h1>
                     <p className="mt-5 text-body-md text-on-surface-variant wide:mt-6 wide:text-body-lg short:mt-3 short:text-[14px] short:leading-normal">
                       Full stack engineer and AI integration specialist with over 20 years of experience

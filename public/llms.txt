@@ -1,6 +1,6 @@
 # Daventertainment Inc — David Cox
 
-> Portfolio of David Cox, a full stack engineer and AI integration specialist based in Tustin, California, with over 20 years of experience, and founder of Daventertainment Inc (incorporated 2016), an entertainment and web development company. He builds Next.js applications, SaaS platforms, e-commerce integrations and AI systems (agents, LLMs, RAG), and also produces music, art and video. Available for contract projects and full-time roles.
+> Portfolio of David Cox, a full stack engineer and AI integration specialist based in Tustin, California, with over 20 years of experience, and founder of Daventertainment Inc (incorporated 2016), a sound design and web development company. He builds Next.js applications, SaaS platforms, e-commerce integrations and AI systems (agents, LLMs, RAG), and also produces music, art and video. Available for contract projects and full-time roles.
 
 ## Key facts
 

@@ -245,6 +245,8 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 - **2026-11-15 (later)** — `/art` upgrade, deployed at David's request: "Días de los Muertos Band" replaced with `youTube-Channel-Cover.webp`, titled "Overgrown City Self-Portrait" (title is a placeholder for David to confirm; old file still in `public/art/`). New `ArtGallery.tsx`: tiles tilt toward the mouse with a light glare and image parallax, other tiles dim, a gold "View" cursor trails the mouse, pieces rise in and a curtain lifts as they scroll into view (CSS scroll-driven, skipped where unsupported). Click opens a full-screen viewer: the image flies from its tile, blurred artwork glow behind, prev/next wipe transitions, swipe, arrow keys, Esc, clickable progress bar, focus kept inside, closes back into the tile. Reduced motion gets plain fades. Checked at 1440×900, 390×844, 375×667, 844×390: no console errors, no sideways scroll
 
+- **2026-11-21** — Story copy refocused by David on his growth as a programmer (deployed as `e7ee4ff`, then the follow-up below): 2000 chapter retitled "The Practice". The motif "read the room" is replaced: 2000 plants "create quality work, consistently", the 2005 hook is "Every contract raised the bar, and I learned to clear it every time.", and Now pays it off with "to create quality work consistently". Home headline is now "Where code meets craft." Daventertainment Inc is now described as a "sound design and web development company" (story, 2016 seal, schema.ts, llms.txt)
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
