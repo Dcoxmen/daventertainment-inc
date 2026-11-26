@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import AppImage from "@/components/AppImage";
 import PageIntro from "@/components/PageIntro";
 import { APPS } from "@/content/apps";
 
@@ -24,14 +24,8 @@ export default function WorkPage() {
             href={`/work/${app.slug}`}
             className="glass-card group overflow-hidden rounded-xl transition-colors hover:border-primary/50"
           >
-            <div className="relative aspect-video bg-surface-container-low">
-              <Image
-                src={app.image}
-                alt={app.nda ? `${app.title} illustration` : `${app.title} screenshot`}
-                fill
-                sizes="(max-width: 768px) 100vw, 600px"
-                className="object-cover"
-              />
+            <div className="bg-surface-container-low">
+              <AppImage app={app} sizes="600px" className="block h-auto w-full object-cover" />
             </div>
             <div className="p-6">
               {app.client && (

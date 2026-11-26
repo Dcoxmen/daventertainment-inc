@@ -105,7 +105,7 @@ export const FAQ = [
   {
     question: "What does David Cox build?",
     answer:
-      "Next.js and React applications, Node.js APIs, e-commerce integrations and AI systems. Recent work includes PageScore, an AI SEO and AEO audit engine with over 10,000 active users; a conversational analytics engine on Google Cloud that automated 85% of reporting; Bundle Builder, an AI-assisted shopping assistant for The Joy Factory; and a gamified sales platform adopted nationwide by a logistics company's sales team.",
+      "Next.js and React applications, Node.js APIs, e-commerce integrations and AI systems. Recent work includes PageScore, an AI SEO and AEO audit engine with 1,000 active users; a data management and analytics dashboard on Google Cloud that unifies siloed company data in BigQuery and automated 85% of reporting; Bundle Builder, an AI-assisted shopping assistant for The Joy Factory; and a gamified sales platform adopted nationwide by a logistics company's sales team.",
   },
   {
     question: "What AI technologies does David Cox work with?",

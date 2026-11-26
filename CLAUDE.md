@@ -155,7 +155,7 @@ scripts/
 
 ## Featured Apps
 
-Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/`: `<slug>-cover.webp` (16:9, /work cards and app pages) and `<slug>-badge.webp` (square, content kept inside the circle, for the home 3D frame). Made by `node scripts/work-images/make.mjs` from originals in `scripts/work-images/source/`; the Gamified Sales Engine images are a drawn wireframe illustration (generic labels, NDA-safe). Bundle Builder (The Joy Factory, name approved for public use), PageScore (10k+ active users), Conversational Analytics Engine (85% report automation), Gamified Sales Engine (NDA: no client name or visuals). Services copy lives in `src/content/profile.ts`.
+Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/`: `<slug>-cover.webp` (16:9, /work cards and app pages) and `<slug>-badge.webp` (square, content kept inside the circle, for the home 3D frame). Made by `node scripts/work-images/make.mjs` from originals in `scripts/work-images/source/`; the Gamified Sales Engine images are a drawn wireframe illustration (generic labels, NDA-safe). An app may also have `imageSm` (square, shown on phones under 768px on its card and page, via `src/components/AppImage.tsx`); give a replaced image a new filename, since browsers and the Next image cache keep the old one for 4 hours. Optional `details` paragraphs show only on the app's own page. Bundle Builder (The Joy Factory, name approved for public use), PageScore (1k active users), Data Management & Analytics Dashboard (formerly Conversational Analytics Engine, `/work/data-analytics-dashboard`, old URL redirects in `next.config.ts`; 85% report automation; built with Gemini, prototyped in Google AI Studio; images are David's own designs), Gamified Sales Engine (NDA: no client name or visuals). Services copy lives in `src/content/profile.ts`.
 
 ---
 
@@ -259,6 +259,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
   - Voice: LemonSlice voices it (no ElevenLabs voice ID setting for hosted avatars). A 38 s sample from David's ElevenLabs professional clone (DRC-Vocal1-Dave) is at `Downloads/dcoxmen-media/voice-sample-for-lemonslice.mp3` for LemonSlice's own voice clone
 
 - **2026-11-26** — `/art` headline is now "Art & Illustrations", with a new intro (latest creations, styles, aesthetic, tools: Adobe Creative Suite, ArtCraft Suite, graphic and sound design, AI image and video) and a matching meta description
+- **2026-11-26 (later)** — Work pages: Bundle Builder, PageScore and the Data Management & Analytics Dashboard got longer `details` copy (B2B and e-commerce conversion strategy and channel partner variations; the problem PageScore solves; data silos and the six-tab API to BigQuery flow with Gemini analysis). Tools added: Vercel; Supabase, Stripe, Vercel; Gemini, Google AI Studio (Looker Studio removed from the dashboard's tools only). PageScore corrected to 1k active users everywhere. Conversational Analytics Engine renamed with new URL and David's dashboard images (wide for desktop, square wireframe for phones). Avatar knowledge updated; **paste `scripts/avatar/lemonslice-prompt.txt` into LemonSlice** to apply it. Open: the images contain placeholder text ("Bunga Rai", duplicate table row), and the square phone image is the older pipeline design
 
 ## Contact Form — Implementation Notes
 
@@ -286,7 +287,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - **2018:** the national sales team adopted the sales app, and the company offered compensation and positions; enterprise work with large teams (SCRUM, Jira, GitHub, Node.js, Python, APIs); joined the UC Irvine coding bootcamp, later taught there; began learning AI development
 - **2021:** current job at a specialized product company (The Joy Factory): web development, customer and B2B apps, AI integration, marketing workflows; AI agents, ChatGPT, Claude, Gemini, LLMs, RAG, HubSpot, BigCommerce, Shopify, NetSuite, Vercel, Next.js, Google Cloud
 - **Now:** building his own apps, art and music to stay sharp and current; coding with AI agents and optimizing agent knowledge
-- Experience wording is "over 20 years". Keep existing metrics (99.8%, 1.2M, 85%, 10k+)
+- Experience wording is "over 20 years". Keep existing metrics (99.8%, 1.2M, 85%, 1k; PageScore was corrected from 10k+ to 1k active users on 2026-11-26)
 - Art stays professional: no cannabis or POD designs here
 - No database or payments yet. Later: art and music with personal and commercial licenses through hosted checkout, plus app templates in a separate area
 - No news or blog for now. Art, music and video will update regularly

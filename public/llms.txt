@@ -11,8 +11,8 @@
 
 ## Featured work
 
-- [PageScore: AI SEO & AEO Audit Engine](https://daventertainment.com/work/pagescore): AI-powered landing page audits for search and AI engine visibility; over 10,000 active users. Live at https://page-score.com
-- [Conversational Analytics Engine](https://daventertainment.com/work/conversational-analytics): GCP environment connecting BigQuery and Looker Studio to GA4 data; automated 85% of reporting
+- [PageScore: AI SEO & AEO Audit Engine](https://daventertainment.com/work/pagescore): AI-powered landing page audits for search and AI engine visibility; 1,000 active users; built with Next.js, Supabase, Stripe and Claude on Vercel. Live at https://page-score.com
+- [Data Management & Analytics Dashboard](https://daventertainment.com/work/data-analytics-dashboard): Google Cloud platform that ingests siloed API data into BigQuery in six steps (connect, schema, validate, preview, ingest, Gemini analysis of relations, accuracy and bugs), giving one source for reporting; prototyped in Google AI Studio and built with Gemini; automated 85% of reporting
 - [Bundle Builder](https://daventertainment.com/work/bundle-builder): AI-assisted shopping assistant for The Joy Factory that recommends a bundled case, mounts and accessories
 - [Gamified Sales Engine](https://daventertainment.com/work/gamified-sales-engine): gamified SaaS sales platform that scaled to nationwide use at a national logistics company (under NDA)
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import AppImage from "@/components/AppImage";
 import { notFound } from "next/navigation";
 import { APPS, type App } from "@/content/apps";
 import { PERSON_ID, SITE, jsonLd } from "@/content/schema";
@@ -58,6 +58,11 @@ export default async function AppPage(props: PageProps<"/work/[slug]">) {
         {app.title}
       </h1>
       <p className="mt-5 text-body-md text-on-surface-variant md:text-body-lg">{app.description}</p>
+      {app.details?.map((paragraph) => (
+        <p key={paragraph} className="mt-4 text-body-md text-on-surface-variant md:text-body-lg">
+          {paragraph}
+        </p>
+      ))}
 
       {app.metric && (
         <p className="mt-6 font-headline-md text-headline-md">
@@ -82,13 +87,10 @@ export default async function AppPage(props: PageProps<"/work/[slug]">) {
         </p>
       )}
 
-      <Image
-        src={app.image}
-        alt={app.nda ? `${app.title} illustration` : `${app.title} screenshot`}
-        width={1600}
-        height={900}
-        sizes="(max-width: 768px) 100vw, 768px"
-        className="mt-10 aspect-video h-auto w-full rounded-xl border border-white/10 object-cover"
+      <AppImage
+        app={app}
+        sizes="768px"
+        className="mt-10 h-auto w-full rounded-xl border border-white/10 object-cover"
       />
 
 

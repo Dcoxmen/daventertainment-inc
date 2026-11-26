@@ -14,9 +14,10 @@ const dataUrl = (file, type) => `data:${type};base64,${fs.readFileSync(path.join
 const font = (name) => dataUrl(`../../src/app/fonts/${name}`, "font/woff2");
 
 const SRC = {
-  analytics: { url: dataUrl("source/analytics.png", "image/png"), w: 1200, h: 630 },
   pagescore: { url: dataUrl("source/pagescore.png", "image/png"), w: 1200, h: 630 },
   bundle: { url: dataUrl("source/bundle-builder.webp", "image/webp"), w: 850, h: 1089 },
+  dataLrg: { url: dataUrl("source/data-management-dashboard-app-large.png", "image/png"), w: 1920, h: 1080 },
+  dataSm: { url: dataUrl("source/wireframe-data-management-app-sm.png", "image/png"), w: 2048, h: 2048 },
 };
 
 // A piece of a source image: [x, y, w, h] in source pixels, drawn at `scale`.
@@ -131,6 +132,28 @@ function headToHead({ left, top, width, height, tilt }) {
     <div style="padding:30px 34px;display:flex;flex-direction:column;gap:26px">${duel()}</div></div>`;
 }
 
+// ---------- Data Management & Analytics Dashboard: a drawn wireframe of the six-tab pipeline ----------
+const STEPS = ["CONNECT", "SCHEMA", "VALIDATE", "PREVIEW", "INGEST", "AI ANALYZE"];
+const STEP_COLORS = [BLUE, BLUE, BLUE, BLUE, BLUE, GOLD];
+
+// A database cylinder (BigQuery-style dataset), drawn generic.
+const database = (size, c = GOLD) => `<svg width="${size}" height="${size * 1.15}" viewBox="0 0 100 115">
+  <path d="M10 18v79c0 9 18 15 40 15s40-6 40-15V18" fill="#121b33" stroke="${c}" stroke-width="3.5"/>
+  <ellipse cx="50" cy="18" rx="40" ry="14" fill="#1a2645" stroke="${c}" stroke-width="3.5"/>
+  <path d="M10 45c0 9 18 15 40 15s40-6 40-15M10 72c0 9 18 15 40 15s40-6 40-15" fill="none" stroke="${c}" stroke-width="3" opacity="0.6"/>
+</svg>`;
+
+// Badge: the six steps around a central dataset.
+function stepRing(radius, size) {
+  return STEPS.map((s, i) => {
+    const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+    const x = Math.cos(a) * radius, y = Math.sin(a) * radius;
+    const c = STEP_COLORS[i];
+    return `<div class="center" style="position:absolute;left:50%;top:50%;width:${size}px;height:${size}px;margin:${-size / 2}px 0 0 ${-size / 2}px;transform:translate(${x}px,${y}px);border-radius:50%;background:#121b33;border:3px solid ${c};box-shadow:0 0 30px ${c}40;gap:4px">
+      <span style="font:800 34px Sora;color:${c}">0${i + 1}</span><span class="label" style="font-size:12px;color:${CREAM}">${s}</span></div>`;
+  }).join("");
+}
+
 const IMAGES = {
   "gamified-sales-engine-cover": [1600, 900, `<div class="navy" style="position:absolute;inset:0"></div><div class="grid"></div>
     ${leaderboard({ left: 110, top: 125, width: 880, height: 650, tilt: 7 })}
@@ -154,14 +177,17 @@ const IMAGES = {
     ${crop(SRC.pagescore, [848, 52, 316, 126], 1.5)}
     ${crop(SRC.pagescore, [680, 208, 480, 64], 1.15, "margin-top:10px;border-radius:12px")}</div>`],
 
-  // ---------- Conversational Analytics: original banner, rearranged ----------
-  "conversational-analytics-cover": [1200, 675, `<div class="center" style="position:absolute;inset:0;background:#333">${crop(SRC.analytics, [0, 0, 1200, 630], 1)}</div>`],
+  // ---------- Data Management & Analytics Dashboard: David's wireframes (wide for desktop, square for phones) ----------
+  "data-management-dashboard-cover": [1920, 1080, crop(SRC.dataLrg, [0, 0, 1920, 1080], 1)],
 
-  "conversational-analytics-badge": [1200, 1200, `<div class="center" style="position:absolute;inset:0;background:#333;gap:24px">
-    ${crop(SRC.analytics, [30, 60, 162, 176], 1.5)}
-    ${crop(SRC.analytics, [195, 104, 468, 88], 1.65)}
-    ${crop(SRC.analytics, [675, 104, 498, 88], 1.65)}
-    ${crop(SRC.analytics, [187, 242, 590, 78], 1.4, "margin-top:10px")}</div>`],
+  "data-analytics-dashboard-sm": [1200, 1200, crop(SRC.dataSm, [0, 0, 2048, 2048], 1200 / 2048)],
+
+  // Badge stays drawn: the round frame would cut off the square wireframe's corners.
+
+  "data-analytics-dashboard-badge": [1200, 1200, `<div class="navy" style="position:absolute;inset:0"></div><div class="grid"></div>
+    <svg style="position:absolute;left:50%;top:50%;margin:-300px 0 0 -300px" width="600" height="600"><circle cx="300" cy="300" r="290" fill="none" stroke="${GOLD}" stroke-width="2.5" stroke-dasharray="8 9" opacity="0.6"/></svg>
+    ${stepRing(290, 170)}
+    <div class="center" style="position:absolute;inset:0;gap:14px">${database(150)}<span class="label" style="font-size:16px;color:${GOLD}">ONE SOURCE</span></div>`, SALES_CSS],
 };
 
 const only = process.argv[2];
