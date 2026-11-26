@@ -116,7 +116,7 @@ src/
     art/ArtGallery.tsx — /art gallery: tilt/glare hover, spotlight, View cursor, scroll reveal; full-screen viewer that flies from the tile (GSAP), arrows/swipe/keys
     music/RadioDial.tsx — the Dial on /music: 12 stations like a clock, drag/tap/arrow keys, visualizer ring
   content/
-    apps.ts           — the 4 featured apps, each with a 16:9 `image` and a square `badge` (the 3D frame shows the first four, in order)
+    apps.ts           — the 4 featured apps, each with a 16:9 `image` and a square `badge` (the 3D frame shows the first four, in order); optional `imageSm` (phones) and `details` (app page only)
     story.ts          — home chapter copy and skills
     stations.ts       — the 12 radio stations (loop file, exact length, YouTube link)
     catalog.ts        — videos (12 placeholders); ART lists David's 12 artworks (files in public/art/)
@@ -304,7 +304,15 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 ## Next Session — Pick Up Here
 
-**State (2026-11-15):** Everything through the `/art` gallery and viewer upgrade is **live on daventertainment.com** (`main`, same as the branch). Next planned task: the Backlot on `/studio` (Phase 4), unless David picks something from the lists below. Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
+**State (2026-11-26):** Everything through the work page upgrade (`c656988`) is **live on daventertainment.com** (`main`, same as the branch). On 2026-11-26 David started a pass to improve the work content one app at a time: Bundle Builder, PageScore and the Data Management & Analytics Dashboard are done; **the Gamified Sales Engine page is the natural next one** (NDA rules apply), unless David picks something else. The Backlot on `/studio` (Phase 4) is still planned.
+
+**Open from 2026-11-26**
+- [ ] David to paste `scripts/avatar/lemonslice-prompt.txt` into the LemonSlice avatar's personality box (the live avatar still says 10,000 users and the old dashboard name until he does)
+- [ ] Dashboard images contain placeholder text: "Bunga Rai" user name (both images), duplicated "AirFlex Sneakers" row and identical 28,390 values (wide image). David may send fixed versions
+- [ ] The square phone image (`wireframe-data-management-app-sm.png`) is the older pipeline design, unlike the new wide dashboard. Waiting on a square version of the new design, or use the wide image on phones too
+- [ ] Unconfirmed wording David may want to check: Bundle Builder "can order it in one step"; PageScore uses Supabase for accounts and audit history; the dashboard paragraph "kept the whole stack inside Google Cloud"
+- [ ] Bundle Builder could name channel partners or a conversion result if David can share them
+- [ ] The other three apps could get square `imageSm` phone images too (only the dashboard has one, so its card is taller on phones) Work continues on `redesign/phase-1-prototype`; merge to `main` to deploy. To view locally: `npm run build`, `npx next start`, open `http://localhost:3000`.
 
 **Phase 4 music: decisions from David (2026-11-10)**
 - No licensing or sales: the dial just plays the music. Approach A confirmed
@@ -333,7 +341,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
   3. Bundle Builder walkthrough (90 s)
   4. "How I built this portfolio with AI agents" (3–4 min: 3D story, radio dial loops, work images)
   5. Gamified Sales Engine story (60–90 s, to camera only; NDA: no client name or product screens; may cut in the wireframe illustration). Arc: begun 2010, tested 2016, national 2018
-- Next: Conversational Analytics walkthrough, then 2–3 min explainers (AEO, RAG in plain English, AI agents connected to store data)
+- Next: Data Management & Analytics Dashboard walkthrough (formerly Conversational Analytics), then 2–3 min explainers (AEO, RAG in plain English, AI agents connected to store data)
 - Later, creative row: music visualizer cuts linking to full YouTube mixes, art time-lapses, yacht/DJ archive clips if any
 - Leave out: full-length mixes as main content, anything employers haven't cleared, a grid of 12 placeholders
 - Walkthrough formula: hook with the result (5 s) → problem (15 s) → one real task demoed (40 s) → one technical decision (20 s) → "let's talk" close (10 s)
