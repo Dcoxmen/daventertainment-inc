@@ -258,6 +258,8 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
   - Known harmless console 404 for `/0` during calls: it is a fetch from Daily's own eval'd call bundle, not site code
   - Voice: LemonSlice voices it (no ElevenLabs voice ID setting for hosted avatars). A 38 s sample from David's ElevenLabs professional clone (DRC-Vocal1-Dave) is at `Downloads/dcoxmen-media/voice-sample-for-lemonslice.mp3` for LemonSlice's own voice clone
 
+- **2026-11-26** — `/art` headline is now "Art & Illustrations", with a new intro (latest creations, styles, aesthetic, tools: Adobe Creative Suite, ArtCraft Suite, graphic and sound design, AI image and video) and a matching meta description
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
