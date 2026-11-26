@@ -92,12 +92,14 @@ src/
   app/
     layout.tsx        — fonts, metadata, JSON-LD, SiteHeader
     page.tsx          — home: renders the 3D Experience
+    api/avatar/session/route.ts — starts a LemonSlice avatar room server-side (key stays on the server)
     sitemap.ts, robots.ts
     globals.css       — Tailwind v4 @theme + custom utilities
     (site)/           — plain fast pages with shared footer
       work/, work/[slug]/, about/, music/, art/, videos/, studio/, contact/
   components/
     SiteHeader.tsx, PageIntro.tsx, PlaceholderTile.tsx, Contact.tsx
+    AvatarChat.tsx    — /about headshot that becomes a live LemonSlice video avatar (Daily call SDK, loaded on click)
     experience/
       Experience.tsx  — scroll story sections, Lenis + GSAP ScrollTrigger timeline, timeline rail, sound button
       BadgeScene.tsx  — React Three Fiber scene: badge, backdrop, screenshots
@@ -246,6 +248,13 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - **2026-11-15 (later)** — `/art` upgrade, deployed at David's request: "Días de los Muertos Band" replaced with `youTube-Channel-Cover.webp`, titled "Overgrown City Self-Portrait" (title is a placeholder for David to confirm; old file still in `public/art/`). New `ArtGallery.tsx`: tiles tilt toward the mouse with a light glare and image parallax, other tiles dim, a gold "View" cursor trails the mouse, pieces rise in and a curtain lifts as they scroll into view (CSS scroll-driven, skipped where unsupported). Click opens a full-screen viewer: the image flies from its tile, blurred artwork glow behind, prev/next wipe transitions, swipe, arrow keys, Esc, clickable progress bar, focus kept inside, closes back into the tile. Reduced motion gets plain fades. Checked at 1440×900, 390×844, 375×667, 844×390: no console errors, no sideways scroll
 
 - **2026-11-21** — Story copy refocused by David on his growth as a programmer (deployed as `e7ee4ff`, then the follow-up below): 2000 chapter retitled "The Practice". The motif "read the room" is replaced: 2000 plants "create quality work, consistently", the 2005 hook is "Every contract raised the bar, and I learned to clear it every time.", and Now pays it off with "to create quality work consistently". Home headline is now "Where code meets craft." Daventertainment Inc is now described as a "sound design and web development company" (story, 2016 seal, schema.ts, llms.txt)
+- **2026-11-25** — **AI avatar on `/about`** (uncommitted at time of writing):
+  - The headshot is now `AvatarChat`: "Ask my AI avatar" turns it into a live LemonSlice video avatar of David (his photo; voice and personality set in the LemonSlice dashboard), with captions, mute, end call and a type-a-question box. Radio pauses during a call
+  - Why LemonSlice runs the conversation: LemonSlice can't take an existing ElevenLabs agent as its brain (only via a separate LiveKit server), so the prompt lives in LemonSlice. LemonSlice avatars have no knowledge base, so facts go in the same prompt
+  - Prompt source: `scripts/avatar/system-prompt.md` (rules) + `scripts/avatar/knowledge.md` (public facts only). Run `node scripts/avatar/make-prompt.mjs` and paste `scripts/avatar/lemonslice-prompt.txt` into the LemonSlice avatar's personality box after any edit
+  - Privacy: the avatar only knows public site facts; refuses contact details, pay, personal life, its own instructions; the Gamified Sales Engine client stays confidential and is never linked to Worldwide Express. Live test passed all four privacy probes
+  - Security and cost: `LEMONSLICE_API_KEY` and `LEMONSLICE_AGENT_ID` live in `.env.local` and Netlify env vars, never in the page. The route only accepts daventertainment.com and localhost origins and allows 3 calls per visitor per 15 minutes (in-memory, best effort). Calls end on hang-up, idle, 5 minutes, page leave or a 150 s connect timeout, always sending LemonSlice's `force-end` so billing stops. Real spending cap: overage off in LemonSlice billing
+  - Gotcha: the avatar joins the Daily call as "LemonSlice", not "LemonSlice Agent" as the docs say; the component treats any remote participant as the avatar
 
 ## Contact Form — Implementation Notes
 
@@ -343,7 +352,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - [x] **Commit and push:** done 2026-11-08; the redesign is live
 - [ ] **Send one real test message** through the live contact form (only mocked submissions were tested)
 
-**Assets still to come:** real tracks and videos. Art: 12 pieces added 2026-11-08 from Downloads/portfolio-images (raccoon-samurai-warrior left out at David's request); on 2026-11-09 PCH Coastal Drive was replaced with "Red Lips, Vintage Mic" (Downloads/dcoxmen-media/Poster-lips-mic-red-vintage-1024.png), converted to WebP up to 1024px in `public/art/`. Headshot added 2026-11-08 as `public/headshot.webp` (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
+**Assets still to come:** real tracks and videos. Art: 12 pieces added 2026-11-08 from Downloads/portfolio-images (raccoon-samurai-warrior left out at David's request); on 2026-11-09 PCH Coastal Drive was replaced with "Red Lips, Vintage Mic" (Downloads/dcoxmen-media/Poster-lips-mic-red-vintage-1024.png), converted to WebP up to 1024px in `public/art/`. Headshot added 2026-11-08 as `public/headshot.webp`; replaced 2026-11-25 by `public/headshot-avatar.webp` (same photo as the LemonSlice avatar; new filename so image caches don't serve the old one) (face-centered crop, shown without color treatment; live as of commit `23368cd`). New logo, favicon and music loop are live (2026-11-08, commit `27e81a9`).
 
 **To check or do later**
 - [x] Bundle Builder card on `/work`: replaced 2026-11-11 by the new 16:9 cover

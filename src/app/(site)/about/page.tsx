@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import AvatarChat from "@/components/AvatarChat";
 import PageIntro from "@/components/PageIntro";
 import { EDUCATION, EXPERIENCE, FAQ, HEADSHOT, RESUME_FILE, SERVICES, STATS } from "@/content/profile";
 import { PERSON_ID, SITE, jsonLd } from "@/content/schema";
@@ -67,15 +67,7 @@ export default function AboutPage() {
             </Link>
           </div>
         </div>
-        <div className="relative mx-auto aspect-square w-64 overflow-hidden rounded-full border-2 border-primary md:w-80">
-          <Image
-            src={HEADSHOT}
-            alt="David Cox"
-            fill
-            sizes="320px"
-            className="object-cover"
-          />
-        </div>
+        <AvatarChat headshot={HEADSHOT} />
       </div>
 
       <dl className="mb-16 grid grid-cols-2 gap-4 md:max-w-md">

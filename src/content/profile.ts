@@ -1,4 +1,4 @@
-export const HEADSHOT = "/headshot.webp";
+export const HEADSHOT = "/headshot-avatar.webp";
 
 // Add this file to public/ and the download link appears on the About page.
 export const RESUME_FILE = "David_Cox_Resume_2026.pdf";

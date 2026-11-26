@@ -21,7 +21,7 @@ export const SITE_GRAPH = {
       "@id": PERSON_ID,
       name: "David Cox",
       url: SITE,
-      image: `${SITE}/headshot.webp`,
+      image: `${SITE}/headshot-avatar.webp`,
       jobTitle: "Full Stack Engineer & AI Integration Specialist",
       description:
         "Full stack engineer and AI integration specialist with over 20 years of experience building SaaS platforms, e-commerce systems, Next.js applications and AI-powered tools. Founder of Daventertainment Inc. Also a music producer, DJ and artist.",
