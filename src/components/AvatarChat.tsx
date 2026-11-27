@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { DailyCall } from "@daily-co/daily-js";
-import { usePlayer } from "@/components/player/PlayerProvider";
+import { claim, release } from "@/components/player/mediaFocus";
 
 const CONNECT_TIMEOUT_MS = 150_000; // a cold start can take up to 2.5 minutes
 const MAX_CALL_MS = 5 * 60_000;
@@ -24,7 +24,6 @@ export default function AvatarChat({ headshot }: { headshot: string }) {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const video = useRef<HTMLVideoElement>(null);
   const audio = useRef<HTMLAudioElement>(null);
-  const player = usePlayer();
 
   const end = useCallback(async (next: Status = "ended", message = "") => {
     timers.current.forEach(clearTimeout);
@@ -38,6 +37,7 @@ export default function AvatarChat({ headshot }: { headshot: string }) {
       } catch {}
       current.destroy().catch(() => {});
     }
+    release("avatar", { finished: true }); // the radio picks up again if the call paused it
     setError(message);
     setStatus(next);
   }, []);
@@ -47,7 +47,8 @@ export default function AvatarChat({ headshot }: { headshot: string }) {
     setError("");
     setCaption("");
     setMicOn(true);
-    if (player.status !== "off") player.toggle(); // pause the radio while David talks
+    // Stops the radio and any video while David talks; starting the radio ends the call.
+    claim({ id: "avatar", sound: true, video: true, stop: () => void end() });
 
     try {
       const res = await fetch("/api/avatar/session", { method: "POST" });
@@ -82,7 +83,7 @@ export default function AvatarChat({ headshot }: { headshot: string }) {
     } catch {
       end("error", "The avatar could not connect. Please try again.");
     }
-  }, [end, player]);
+  }, [end]);
 
   // The first video frame means the avatar is on screen.
   const onPlaying = useCallback(() => {

@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { STATIONS } from "@/content/stations";
+import { claim, release } from "./mediaFocus";
 
 // One site-wide radio. It lives in the root layout, so the music keeps playing
 // while visitors move between pages. The home story and the /music dial both drive it.
@@ -198,6 +199,18 @@ export default function PlayerProvider({ children }: { children: React.ReactNode
     }
     tune(stationRef.current);
   }, [stop, tune, unlock, setStatus]);
+
+  // Take part in the site-wide media rules: a video or the avatar starting stops
+  // the radio, and the radio starting stops them. It resumes when they finish.
+  useEffect(() => {
+    if (status === "off") return release("radio");
+    claim({
+      id: "radio",
+      sound: true,
+      stop,
+      resume: () => statusRef.current === "off" && toggle(),
+    });
+  }, [status, stop, toggle]);
 
   const setFilter = useCallback((progress: number | null) => {
     filterProgress.current = progress;

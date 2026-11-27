@@ -98,7 +98,8 @@ src/
     (site)/           — plain fast pages with shared footer
       work/, work/[slug]/, about/, music/, art/, videos/, studio/, contact/
   components/
-    SiteHeader.tsx, PageIntro.tsx, PlaceholderTile.tsx, Contact.tsx
+    SiteHeader.tsx, PageIntro.tsx, Contact.tsx
+    videos/VideoCard.tsx — /videos card: MP4 clips autoplay muted while on screen and step aside while another video plays (pause button; poster only with reduced motion or data saver); YouTube behind a click-to-load facade, then YouTube's IFrame API (youtube-nocookie) so its own play/pause/end follow mediaFocus
     AvatarChat.tsx    — /about headshot that becomes a live LemonSlice video avatar (Daily call SDK, loaded on click)
     experience/
       Experience.tsx  — scroll story sections, Lenis + GSAP ScrollTrigger timeline, timeline rail, sound button
@@ -111,6 +112,7 @@ src/
       shaders.ts      — badge face, harbor backdrop, windows and particle shaders
     player/
       PlayerProvider.tsx — site-wide radio in the root layout (Web Audio): stations, tuning static, home scroll filter, analyser, Media Session
+      mediaFocus.ts — site-wide media rules: sound never overlaps sound, video never overlaps video; starting one stops the clash; when a video or avatar call finishes (not paused) the radio resumes. Radio, avatar, clips and YouTube all claim/release here
       MiniPlayer.tsx — floating controls on plain pages once the radio is started (hidden on / and /music)
       icons.tsx — drawn play/pause/next/prev icons (text symbols render as emoji on Windows)
     art/ArtGallery.tsx — /art gallery: tilt/glare hover, spotlight, View cursor, scroll reveal; full-screen viewer that flies from the tile (GSAP), arrows/swipe/keys
@@ -119,7 +121,7 @@ src/
     apps.ts           — the 4 featured apps, each with a 16:9 `image` and a square `badge` (the 3D frame shows the first four, in order); optional `imageSm` (phones) and `details` (app page only)
     story.ts          — home chapter copy and skills
     stations.ts       — the 12 radio stations (loop file, exact length, YouTube link)
-    catalog.ts        — videos (12 placeholders); ART lists David's 12 artworks (files in public/art/)
+    catalog.ts        — VIDEOS (real entries: MP4 file or YouTube id, local poster in public/videos/); ART lists David's 12 artworks (files in public/art/)
     profile.ts        — headshot path, resume filename, stats, experience, services, FAQ (shown on /about)
     schema.ts         — JSON-LD: site graph (Person, Organization, ProfessionalService, WebSite linked by @id)
 public/               — static assets; audio/soul-swellin-loop-30sec.mp3 is David's music loop
@@ -260,6 +262,9 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 - **2026-11-26** — `/art` headline is now "Art & Illustrations", with a new intro (latest creations, styles, aesthetic, tools: Adobe Creative Suite, ArtCraft Suite, graphic and sound design, AI image and video) and a matching meta description
 - **2026-11-26 (later)** — Work pages: Bundle Builder, PageScore and the Data Management & Analytics Dashboard got longer `details` copy (B2B and e-commerce conversion strategy and channel partner variations; the problem PageScore solves; data silos and the six-tab API to BigQuery flow with Gemini analysis). Tools added: Vercel; Supabase, Stripe, Vercel; Gemini, Google AI Studio (Looker Studio removed from the dashboard's tools only). PageScore corrected to 1k active users everywhere. Conversational Analytics Engine renamed with new URL and David's dashboard images (wide for desktop, square wireframe for phones). Avatar knowledge updated; **paste `scripts/avatar/lemonslice-prompt.txt` into LemonSlice** to apply it. Open: the images contain placeholder text ("Bunga Rai", duplicate table row), and the square phone image is the older pipeline design
+- **2026-11-26 (evening)** — `/videos` (local only, not committed): the 12 placeholders are replaced by two real videos. The Joy Factory aXtion brand film (16 s, 1080p, no audio, 16.8 MB) is hotlinked from thejoyfactory.com (CORS open, range requests, fast start) and loops muted while on screen; the PageScore walkthrough (YouTube `1aQoHSzgmKg`, 4:47) loads only on click. Posters are local WebPs, VideoObject JSON-LD added, "More videos on the way" links to the YouTube channel. Checked at 1440×900, 390×844, 844×390 and reduced motion: no console errors, no sideways scroll, no YouTube requests before the click
+- **2026-11-26 (night)** — Media rules (local only): new `mediaFocus.ts` coordinates the radio, avatar call, clips and YouTube. Tested in Chromium: radio stops when YouTube plays (including play inside YouTube's controls), one video at a time, the silent clip leaves the radio alone and resumes after YouTube pauses, starting the radio pauses YouTube, the radio returns when YouTube ends. Starting the radio during an avatar call ends the call (not live-tested, to avoid LemonSlice cost)
+- **2026-11-26 (night, 2)** — `/videos` headline is now "Videos & Motion Graphics", with a new intro (all videos made by David; product support, brand awareness, marketing media, education; tools: CapCut, Premiere Pro, HyperFrames, Claude AI, Google Flow, ElevenLabs, Suno, LemonSlice; "Fight AI slop with quality content.") and a matching meta description
 
 ## Contact Form — Implementation Notes
 
