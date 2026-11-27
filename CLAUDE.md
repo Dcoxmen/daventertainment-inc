@@ -266,6 +266,8 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 - **2026-11-26 (night)** — Media rules (deployed as `3b44d06`; live test passed): new `mediaFocus.ts` coordinates the radio, avatar call, clips and YouTube. Tested in Chromium: radio stops when YouTube plays (including play inside YouTube's controls), one video at a time, the silent clip leaves the radio alone and resumes after YouTube pauses, starting the radio pauses YouTube, the radio returns when YouTube ends. Starting the radio during an avatar call ends the call (not live-tested, to avoid LemonSlice cost)
 - **2026-11-26 (night, 2)** — `/videos` headline is now "Videos & Motion Graphics", with a new intro (all videos made by David; product support, brand awareness, marketing media, education; tools: CapCut, Premiere Pro, HyperFrames, Claude AI, Google Flow, ElevenLabs, Suno, LemonSlice; "Fight AI slop with quality content.") and a matching meta description
 
+- **2026-11-27** — `/about` intro and meta description: "a background in live entertainment" → "a background in development and design" (committed on the branch, **not deployed**). "Live entertainment" left as is in the FAQ answer in `profile.ts` and the avatar knowledge (they describe the music career); David may want those changed too
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)

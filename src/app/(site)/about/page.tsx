@@ -10,7 +10,7 @@ import { PERSON_ID, SITE, jsonLd } from "@/content/schema";
 export const metadata: Metadata = {
   title: "About | David Cox",
   description:
-    "David Cox is a full stack engineer and AI integration specialist with over 20 years of experience and a background in live entertainment.",
+    "David Cox is a full stack engineer and AI integration specialist with over 20 years of experience and a background in development and design.",
   alternates: { canonical: "/about" },
 };
 
@@ -47,7 +47,7 @@ export default function AboutPage() {
           <PageIntro label="About" title="David Cox">
             Full stack engineer and AI integration specialist with over 20 years
             of experience. I build scalable web platforms, e-commerce systems, and
-            AI-powered tools, with a background in live entertainment and a
+            AI-powered tools, with a background in development and design, and a
             passion for emerging technology.
           </PageIntro>
           <div className="-mt-6 mb-10 flex flex-wrap gap-3 md:-mt-8">
