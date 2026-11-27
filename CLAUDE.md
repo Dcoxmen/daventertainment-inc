@@ -268,6 +268,8 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 
 - **2026-11-27** — `/about` intro and meta description: "a background in live entertainment" → "a background in development and design" (committed on the branch, **not deployed**). "Live entertainment" left as is in the FAQ answer in `profile.ts` and the avatar knowledge (they describe the music career); David may want those changed too
 
+- **2026-11-27 (later)** — **Image speed pass**, deployed as `e99f5ae` and verified live. Cause: Netlify sent every image with `max-age=0, must-revalidate`, so browsers re-checked each image on every visit and the edge kept forwarding to the Image CDN (0.25–0.5 s per image). New `netlify.toml` (headers only; build settings stay in the dashboard): browsers cache media 7 days plus stale-while-revalidate, edge keeps `/_next/image` until the next deploy. Live edge hits now ~0.06 s. Top images load eagerly at high priority (first two /work cards, app page image, first 4 art tiles, /about headshot preloaded, header logo). "Overgrown City Self-Portrait" re-encoded from 5.4 MB to 721 KB at the same 1920px (`overgrown-city-self-portrait.webp`, PSNR 40.9 dB); the old `youTube-Channel-Cover.webp` stays in `public/art/` unused. Open: Bundle Builder cover is only 640×360 (soft on desktop); a 1920×1080 version would fix it
+
 ## Contact Form — Implementation Notes
 
 - **Service:** formsubmit.co (free, no account needed)
@@ -377,7 +379,7 @@ Source of truth: `src/content/apps.ts`. Each app has two images in `public/work/
 **To check or do later**
 - [x] Bundle Builder card on `/work`: replaced 2026-11-11 by the new 16:9 cover
 - [ ] Add the full-screen art view and video player when real media exists
-- [ ] Reconcile the Netlify status below: `netlify.toml` and `@netlify/plugin-nextjs` are not in the repo, though the site deploys fine
+- [ ] Reconcile the Netlify status below: `netlify.toml` exists since 2026-11-27 (caching headers only); `@netlify/plugin-nextjs` is not in the repo, though the site deploys fine
 - [ ] Old links to `/#projects` and `/#contact` no longer lead to those sections after launch
 - [ ] David to confirm on his iPhone (landscape, Chrome) that the 2016+ chapters now read well
 - [x] Small phones in portrait (375×667): fixed 2026-11-15 (`compact:` variant)
