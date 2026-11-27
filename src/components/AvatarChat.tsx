@@ -133,6 +133,7 @@ export default function AvatarChat({ headshot }: { headshot: string }) {
           alt="David Cox"
           fill
           sizes="320px"
+          preload
           className={`object-cover ${inCall ? "object-center" : "object-[50%_15%]"}`}
         />
         {inCall && (

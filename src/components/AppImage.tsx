@@ -7,16 +7,19 @@ type AppImageProps = {
   className: string;
   /** `sizes` for the wide image on screens 768px and up. */
   sizes: string;
+  /** On screen when the page opens: load right away at high priority instead of lazily. */
+  eager?: boolean;
 };
 
 // The app's 16:9 image. When the app has a square phone version, phones (under 768px) get that instead.
-export default function AppImage({ app, className, sizes }: AppImageProps) {
+export default function AppImage({ app, className, sizes, eager }: AppImageProps) {
   const alt = app.nda ? `${app.title} illustration` : `${app.title} screenshot`;
+  const load = eager ? ({ loading: "eager", fetchPriority: "high" } as const) : {};
   const wide = { src: app.image, alt, width: 1600, height: 900, sizes: `(max-width: 768px) 100vw, ${sizes}` };
-  if (!app.imageSm) return <Image {...wide} className={`${className} aspect-video`} />;
+  if (!app.imageSm) return <Image {...wide} {...load} className={`${className} aspect-video`} />;
 
   const { props: { srcSet: desktop } } = getImageProps(wide);
-  const { props: phone } = getImageProps({ src: app.imageSm, alt, width: 1200, height: 1200, sizes: "100vw" });
+  const { props: phone } = getImageProps({ src: app.imageSm, alt, width: 1200, height: 1200, sizes: "100vw", ...load });
   return (
     <picture>
       <source media="(min-width: 768px)" srcSet={desktop} sizes={wide.sizes} />

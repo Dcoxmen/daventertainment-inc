@@ -18,14 +18,14 @@ export default function WorkPage() {
         AI assistants, audit engines, analytics platforms, and SaaS products.
       </PageIntro>
       <div className="grid gap-6 md:grid-cols-2">
-        {APPS.map((app) => (
+        {APPS.map((app, i) => (
           <Link
             key={app.slug}
             href={`/work/${app.slug}`}
             className="glass-card group overflow-hidden rounded-xl transition-colors hover:border-primary/50"
           >
             <div className="bg-surface-container-low">
-              <AppImage app={app} sizes="600px" className="block h-auto w-full object-cover" />
+              <AppImage app={app} sizes="600px" eager={i < 2} className="block h-auto w-full object-cover" />
             </div>
             <div className="p-6">
               {app.client && (

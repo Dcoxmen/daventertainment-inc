@@ -90,6 +90,7 @@ export default async function AppPage(props: PageProps<"/work/[slug]">) {
       <AppImage
         app={app}
         sizes="768px"
+        eager
         className="mt-10 h-auto w-full rounded-xl border border-white/10 object-cover"
       />
 

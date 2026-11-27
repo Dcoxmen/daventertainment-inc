@@ -109,7 +109,7 @@ export default function ArtGallery({ items }: { items: Artwork[] }) {
             >
               <span ref={(el) => { frames.current[i] = el; }} className="art-frame">
                 <span className="art-zoom">
-                  <Image src={art.src} alt={art.title} fill sizes={TILE_SIZES} className="art-img object-cover" />
+                  <Image src={art.src} alt={art.title} fill sizes={TILE_SIZES} loading={i < 4 ? "eager" : "lazy"} className="art-img object-cover" />
                 </span>
                 <span className="art-shade" aria-hidden />
                 <span className="art-glare" aria-hidden />

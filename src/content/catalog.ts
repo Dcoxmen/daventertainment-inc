@@ -12,7 +12,7 @@ export const ART: CatalogItem[] = [
   { title: "Chilled Rainbow Martini", src: "/art/chilled-rainbow-martini.webp" },
   { title: "Cityside Underglow Pink", src: "/art/cityside-underglow-pink.webp" },
   { title: "Day of the Dead Guitarist", src: "/art/day-of-dead-guitarist.webp" },
-  { title: "Overgrown City Self-Portrait", src: "/art/youTube-Channel-Cover.webp" },
+  { title: "Overgrown City Self-Portrait", src: "/art/overgrown-city-self-portrait.webp" },
   { title: "Red Lips, Vintage Mic", src: "/art/red-lips-vintage-mic.webp" },
   { title: "Psychedelic City", src: "/art/psychedelic-city-painting.webp" },
   { title: "Rainbow Volcano Eruption", src: "/art/rainbow-volcano-eruption.webp" },

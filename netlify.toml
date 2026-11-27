@@ -1,0 +1,54 @@
+# Build settings stay in the Netlify dashboard; this file only adds caching headers.
+#
+# Without these, Netlify sends images with "max-age=0, must-revalidate": browsers re-check
+# every image on every visit, and the edge never serves its stored copy.
+# Browser: fresh for 7 days, then shown at once while it re-checks in the background.
+# Edge: kept until the next deploy (each deploy clears it).
+# Replaced media still needs a new filename (see CLAUDE.md), so visitors never see an old file.
+
+[[headers]]
+  for = "/_next/image"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+    Netlify-CDN-Cache-Control = "public, durable, max-age=31536000"
+
+[[headers]]
+  for = "/.netlify/images"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+    Netlify-CDN-Cache-Control = "public, durable, max-age=31536000"
+
+[[headers]]
+  for = "/work/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/art/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/headshot-avatar.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/badge-face.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/Daventertainment-logo.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"

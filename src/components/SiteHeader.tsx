@@ -33,6 +33,7 @@ export default function SiteHeader() {
             alt="Daventertainment Inc logo"
             width={40}
             height={40}
+            loading="eager"
           />
           <span className="hidden font-headline-md font-semibold sm:block">
             Daventertainment Inc
